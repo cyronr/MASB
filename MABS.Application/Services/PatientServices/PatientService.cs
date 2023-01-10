@@ -2,8 +2,9 @@
 using MABS.Application.DTOs.PatientDtos;
 using MABS.Domain.Models.PatientModels;
 using MABS.Application.Services.Helpers.PatientHelpers;
-using MABS.Application.Repositories;
 using Microsoft.Extensions.Logging;
+using MABS.Application.DataAccess.Repositories;
+using MABS.Application.DataAccess.Common;
 
 namespace MABS.Application.Services.PatientServices
 {

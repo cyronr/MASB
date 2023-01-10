@@ -1,5 +1,5 @@
-﻿using MABS.Application.Common.Exceptions;
-using MABS.Application.Repositories;
+﻿using MABS.Application.DataAccess.Repositories;
+using MABS.Domain.Exceptions;
 using MABS.Domain.Models.ProfileModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;

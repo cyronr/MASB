@@ -1,9 +1,9 @@
 using MABS.Application.Common.Pagination;
 using MABS.Application.DTOs.DoctorDtos;
-using MABS.Application.Common.Exceptions;
 using MABS.Domain.Models.DoctorModels;
 using MABS.Application.Services.Helpers;
-using MABS.Application.Repositories;
+using MABS.Application.DataAccess.Repositories;
+using MABS.Domain.Exceptions;
 
 namespace MABS.Application.Services.DoctorServices
 {

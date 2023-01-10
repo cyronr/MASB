@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MABS.Application.Repositories;
+using MABS.Application.DataAccess.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;

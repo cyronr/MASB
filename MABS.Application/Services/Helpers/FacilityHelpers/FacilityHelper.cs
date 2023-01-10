@@ -1,8 +1,8 @@
-﻿using MABS.Application.Common.Exceptions;
-using MABS.Domain.Models.FacilityModels;
-using MABS.Application.Repositories;
+﻿using MABS.Domain.Models.FacilityModels;
 using MABS.Domain.Models.DictionaryModels;
 using Microsoft.Extensions.Logging;
+using MABS.Application.DataAccess.Repositories;
+using MABS.Domain.Exceptions;
 
 namespace MABS.Application.Services.Helpers.FacilityHelpers
 {

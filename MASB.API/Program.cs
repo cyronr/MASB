@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using MABS.Infrastructure;
 using MABS.Application;
 using MABS.Domain;
-using MABS.Application.Middleware;
+using MABS.Application.Common.Middleware.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 

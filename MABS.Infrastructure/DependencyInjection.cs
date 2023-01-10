@@ -1,12 +1,8 @@
-﻿using MABS.API.Data.Repositories.PatientRepositories;
-using MABS.API.Data.Repositories.ProfileRepositories;
-using MABS.Application.Repositories;
-using MABS.Application.Services.Helpers;
+﻿using MABS.Application.DataAccess.Common;
+using MABS.Application.DataAccess.Repositories;
 using MABS.Infrastructure.Data;
-using MABS.Infrastructure.Data.CurrentLoggedProfile;
-using MABS.Infrastructure.Data.DbOperations;
-using MABS.Infrastructure.Data.Repositories.DoctorRepositories;
-using MABS.Infrastructure.Data.Repositories.FacilityRepositories;
+using MABS.Infrastructure.DataAccess.Common;
+using MABS.Infrastructure.DataAccess.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MABS.Infrastructure

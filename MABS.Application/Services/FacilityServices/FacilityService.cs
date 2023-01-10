@@ -2,13 +2,14 @@ using AutoMapper;
 using MABS.Application.Common.Pagination;
 using MABS.Application.DTOs.DoctorDtos;
 using MABS.Application.DTOs.FacilityDtos;
-using MABS.Application.Common.Exceptions;
 using MABS.Domain.Models.FacilityModels;
 using MABS.Application.Services.Helpers.DoctorHelpers;
 using MABS.Application.Services.Helpers.FacilityHelpers;
 using System.Net;
-using MABS.Application.Repositories;
 using Microsoft.Extensions.Logging;
+using MABS.Application.DataAccess.Repositories;
+using MABS.Application.DataAccess.Common;
+using MABS.Domain.Exceptions;
 
 namespace MABS.Application.Services.FacilityServices
 {

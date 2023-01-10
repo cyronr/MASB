@@ -1,5 +1,5 @@
-﻿using MABS.Application.Common.Exceptions;
-using MABS.Application.Repositories;
+﻿using MABS.Application.DataAccess.Repositories;
+using MABS.Domain.Exceptions;
 using MABS.Domain.Models.DoctorModels;
 using Microsoft.Extensions.Logging;
 

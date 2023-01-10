@@ -1,7 +1,6 @@
 using FluentValidation;
-using MABS.Application.Common.Extensions;
 using MABS.Application.DTOs.FacilityDtos;
-using System.Text.RegularExpressions;
+using MABS.Domain.Extensions;
 
 namespace MABS.Application.DTOs.Validators.FacilityValidators
 {
