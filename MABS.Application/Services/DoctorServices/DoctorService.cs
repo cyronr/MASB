@@ -15,7 +15,7 @@ namespace MABS.Application.Services.DoctorServices
         public DoctorService(
             IServicesDependencyAggregate<DoctorService> aggregate,
             IDoctorRepository doctorRepository, 
-            IHelpers helpers) :base(aggregate)
+            IHelpers helpers) : base(aggregate)
         {
             _doctorRepository = doctorRepository;
             _helpers = helpers;
@@ -26,13 +26,13 @@ namespace MABS.Application.Services.DoctorServices
         {
             var profile = LoggedProfile;
             var title = await _helpers.Doctor.GetTitleById(request.TitleId);
-            var specalties = await _helpers.Doctor.GetSpecialtiesByIds(request.Specialties);
+            var specialties = await _helpers.Doctor.GetSpecialtiesByIds(request.Specialties);
 
             var doctor = _mapper.Map<Doctor>(request);
             doctor.StatusId = DoctorStatus.Status.Active;
             doctor.UUID = Guid.NewGuid();
             doctor.Title = title;
-            doctor.Specialties = specalties;
+            doctor.Specialties = specialties;
 
             await DoCreate(doctor);
 
@@ -43,11 +43,11 @@ namespace MABS.Application.Services.DoctorServices
         {
             var doctor = await _helpers.Doctor.GetDoctorByUUID(request.Id);
             var title = await _helpers.Doctor.GetTitleById(request.TitleId);
-            var specalties = await _helpers.Doctor.GetSpecialtiesByIds(request.Specialties);
+            var specialties = await _helpers.Doctor.GetSpecialtiesByIds(request.Specialties);
 
             _mapper.Map(request, doctor);
             doctor.Title = title;
-            doctor.Specialties = specalties;
+            doctor.Specialties = specialties;
             
             await DoUpdate(doctor);
 

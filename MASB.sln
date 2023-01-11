@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MABS.Application", "MABS.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MABS.Infrastructure", "MABS.Infrastructure\MABS.Infrastructure.csproj", "{F79D1965-7925-4A5F-A34B-EA82EC122BD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MABS.Extensions", "Extensions\MABS.Extensions.csproj", "{00350898-0DC4-43FF-9E83-0207DCC26667}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MABS.Extensions", "MABS.Extensions\MABS.Extensions.csproj", "{00350898-0DC4-43FF-9E83-0207DCC26667}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

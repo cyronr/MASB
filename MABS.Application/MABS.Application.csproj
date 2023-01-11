@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Extensions\MABS.Extensions.csproj" />
     <ProjectReference Include="..\MABS.Domain\MABS.Domain.csproj" />
+    <ProjectReference Include="..\MABS.Extensions\MABS.Extensions.csproj" />
   </ItemGroup>
 
 </Project>
