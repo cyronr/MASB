@@ -1,9 +1,9 @@
 ﻿using MABS.Domain.Models.ProfileModels;
 
-namespace MABS.Application.DataAccess.Common
+namespace MABS.Application.Common.AppProfile
 {
     public interface ICurrentLoggedProfile
     {
-        Profile GetByUUID(Guid uuid);
+        Profile? GetCurrentLoggedProfile();
     }
 }

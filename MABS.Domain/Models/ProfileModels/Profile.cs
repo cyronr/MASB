@@ -39,10 +39,5 @@ namespace MABS.Domain.Models.ProfileModels
             return JsonSerializer.Serialize(profile);
         }
 
-        public bool IsAdmin()
-        {
-            return TypeId == ProfileType.Type.Admin;
-        }
-
     }
 }

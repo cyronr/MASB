@@ -4,12 +4,13 @@ namespace MABS.Application.DataAccess.Repositories
 {
     public interface IProfileRepository
     {
-        Task<Profile> GetByUUID(Guid uuid);
-        Task<Profile> GetByEmail(string email);
+        Profile? GetByUUID(Guid uuid);
+        Task<Profile?> GetByUUIDAsync(Guid uuid);
+        Task<Profile?> GetByEmailAsync(string email);
         void Create(Profile profile);
         void CreateEvent(ProfileEvent profileEvent);
 
 
-        Task<List<ProfileType>> GetAllTypes();
+        Task<List<ProfileType>> GetAllTypesAsync();
     }
 }

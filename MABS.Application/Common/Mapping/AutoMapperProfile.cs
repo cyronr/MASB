@@ -7,9 +7,9 @@ using MABS.Domain.Models.DictionaryModels;
 using MABS.Domain.Models.DoctorModels;
 using MABS.Domain.Models.FacilityModels;
 using MABS.Domain.Models.PatientModels;
-using AppProfile = MABS.Domain.Models.ProfileModels.Profile;
+using ProfileEntity = MABS.Domain.Models.ProfileModels.Profile;
 
-namespace MABS.Application.Common
+namespace MABS.Application.Common.Mapping
 {
     public class AutoMapperProfile : Profile
     {
@@ -51,10 +51,10 @@ namespace MABS.Application.Common
                 .ForMember(d => d.Id, opt => opt.Ignore());
 
             ///Profiles
-            CreateMap<AppProfile, ProfileDto>().ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID));
-            CreateMap<RegisterPatientProfileDto, AppProfile>();
-            CreateMap<RegisterDoctorProfileDto, AppProfile>();
-            CreateMap<RegisterFacilityProfileDto, AppProfile>();
+            CreateMap<ProfileEntity, ProfileDto>().ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID));
+            CreateMap<RegisterPatientProfileDto, ProfileEntity>();
+            CreateMap<RegisterDoctorProfileDto, ProfileEntity>();
+            CreateMap<RegisterFacilityProfileDto, ProfileEntity>();
 
         }
     }

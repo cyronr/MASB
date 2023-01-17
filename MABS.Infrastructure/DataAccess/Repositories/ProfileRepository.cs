@@ -28,13 +28,13 @@ namespace MABS.Infrastructure.DataAccess.Repositories
             _context.ProfileEvents.Add(profileEvent);
         }
 
-        public async Task<Profile> GetByEmail(string email)
+        public async Task<Profile?> GetByEmailAsync(string email)
         {
             return await _context.Profiles
                 .FirstOrDefaultAsync(p => p.StatusId != ProfileStatus.Status.Deleted && p.Email == email);
         }
 
-        public async Task<Profile> GetByUUID(Guid uuid)
+        public async Task<Profile?> GetByUUIDAsync(Guid uuid)
         {
             return await _context.Profiles
                 .Include(p => p.Status)
@@ -43,8 +43,17 @@ namespace MABS.Infrastructure.DataAccess.Repositories
                 .FirstOrDefaultAsync(p => p.StatusId != ProfileStatus.Status.Deleted && p.UUID == uuid);
         }
 
+        public Profile? GetByUUID(Guid uuid)
+        {
+            return _context.Profiles
+                .Include(p => p.Status)
+                .Include(p => p.Type)
+                .Include(p => p.Events)
+                .FirstOrDefault(p => p.StatusId != ProfileStatus.Status.Deleted && p.UUID == uuid);
+        }
 
-        public Task<List<ProfileType>> GetAllTypes()
+
+        public Task<List<ProfileType>> GetAllTypesAsync()
         {
             throw new NotImplementedException();
         }

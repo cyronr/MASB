@@ -1,37 +1,37 @@
 ﻿using MABS.Application.DTOs.ProfileDtos;
-using MABS.Application.Services.ProfileServices;
+using MABS.Application.Services.AuthenticationServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MABS.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class ProfilesController : ControllerBase
+    [Route("api/auth")]
+    public class AuthenticationController : ControllerBase
     {
-        private readonly ILogger<ProfilesController> _logger;
-        private readonly IProfileService _profileService;
+        private readonly ILogger<AuthenticationController> _logger;
+        private readonly IAuthenticationService _authenticationService;
 
-        public ProfilesController(ILogger<ProfilesController> logger, IProfileService profileService)
+        public AuthenticationController(ILogger<AuthenticationController> logger, IAuthenticationService authenticationService)
         {
             _logger = logger;
-            _profileService = profileService;
+            _authenticationService = authenticationService;
         }
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task<ActionResult<string>> Login(LoginProfileDto request)
         {
             _logger.LogInformation($"Logging {request.Email}.");
-            var response = await _profileService.Login(request);
+            var response = await _authenticationService.Login(request);
             _logger.LogInformation($"{request.Email} logged with token {response}.");
 
             return Ok(response);
         }
 
-        [HttpPost("Register/Patient")]
+        [HttpPost("register/patient")]
         public async Task<ActionResult<ProfileDto>> RegisterPatient(RegisterPatientProfileDto request)
         {
             _logger.LogInformation($"Registering new Patient profile {request.Email}.");
-            var response = await _profileService.RegisterPatientProfile(request);
+            var response = await _authenticationService.RegisterPatientProfile(request);
             _logger.LogInformation($"Registered new Patient profile for {request.Email} ({response.Id}).");
 
             return Created(Request.Path, response);

@@ -20,7 +20,7 @@ builder.Logging.AddSerilog(logger);
 
 
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddDomain();
 
 
@@ -31,7 +31,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8
-                .GetBytes("dupa_i_chuj_a_nie_apka")),//builder.Configuration.GetSection("AppSettings:Token").Value)),
+                .GetBytes(builder.Configuration.GetSection("JwtSettings:Key").Value)),
             ValidateIssuer = false,
             ValidateAudience = false
         };

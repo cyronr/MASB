@@ -3,18 +3,19 @@ using MABS.Domain.Models.DoctorModels;
 using MABS.Domain.Models.FacilityModels;
 using MABS.Domain.Models.PatientModels;
 using MABS.Domain.Models.ProfileModels;
+using MABS.Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
+using Microsoft.Extensions.Options;
 
 namespace MABS.Infrastructure.Data
 {
     public class DataContext : DbContext
     {
-        //private readonly IConfiguration _config;
+        private readonly ConnectionStrings _connectionStrings;
 
-        public DataContext(DbContextOptions<DataContext> options/*, IConfiguration config*/) : base(options)
+        public DataContext(DbContextOptions<DataContext> options, IOptions<ConnectionStrings> connectionOptions) : base(options)
         {
-            //_config = config;
+            _connectionStrings = connectionOptions.Value;
         }
 
         //Doctors
@@ -51,8 +52,7 @@ namespace MABS.Infrastructure.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer(_config.GetConnectionString("DefaultConnection"));
-            optionsBuilder.UseSqlServer("server=localhost\\MSSQLSERVER01;database=mabs;trusted_connection=true;user id=api;password=1qaz!QAZ;TrustServerCertificate=True");
+            optionsBuilder.UseSqlServer(_connectionStrings.DefaultConnection);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

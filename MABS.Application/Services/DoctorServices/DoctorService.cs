@@ -4,62 +4,102 @@ using MABS.Domain.Models.DoctorModels;
 using MABS.Application.Services.Helpers;
 using MABS.Application.DataAccess.Repositories;
 using MABS.Domain.Exceptions;
+using MABS.Application.CRUD.Creators.DoctorCreator;
+using MABS.Application.CRUD;
 
 namespace MABS.Application.Services.DoctorServices
 {
     public class DoctorService : BaseService<DoctorService>, IDoctorService
     {
+        private readonly IDoctorCRUD _doctorCRUD;
         private readonly IDoctorRepository _doctorRepository;
-        private readonly IHelpers _helpers;
 
         public DoctorService(
             IServicesDependencyAggregate<DoctorService> aggregate,
-            IDoctorRepository doctorRepository, 
-            IHelpers helpers) : base(aggregate)
+            IDoctorCRUD doctorCRUD,
+            IDoctorRepository doctorRepository) : base(aggregate)
         {
+            _doctorCRUD = doctorCRUD;
             _doctorRepository = doctorRepository;
-            _helpers = helpers;
         }
 
 
         public async Task<DoctorDto> Create(CreateDoctorDto request)
         {
-            var profile = LoggedProfile;
-            var title = await _helpers.Doctor.GetTitleById(request.TitleId);
-            var specialties = await _helpers.Doctor.GetSpecialtiesByIds(request.Specialties);
+            var title = await _doctorCRUD.Reader.GetTitleById(request.TitleId);
+            var specialties = await _doctorCRUD.Reader.GetSpecialtiesByIds(request.Specialties);
 
-            var doctor = _mapper.Map<Doctor>(request);
-            doctor.StatusId = DoctorStatus.Status.Active;
-            doctor.UUID = Guid.NewGuid();
-            doctor.Title = title;
-            doctor.Specialties = specialties;
+            Doctor doctor;
+            using (var tran = _db.BeginTransaction())
+            {
+                try
+                {
+                    doctor = _mapper.Map<Doctor>(request);
+                    doctor.StatusId = DoctorStatus.Status.Active;
+                    doctor.UUID = Guid.NewGuid();
+                    doctor.Title = title;
+                    doctor.Specialties = specialties;
+ 
+                    await _doctorCRUD.Creator.CreateDoctor(doctor, LoggedProfile);
 
-            await DoCreate(doctor);
+                    tran.Commit();
+                }
+                catch (Exception)
+                {
+                    tran.Rollback();
+                    throw;
+                }
+            };
 
             return _mapper.Map<DoctorDto>(doctor);
         }
 
         public async Task<DoctorDto> Update(UpdateDoctorDto request)
         {
-            var doctor = await _helpers.Doctor.GetDoctorByUUID(request.Id);
-            var title = await _helpers.Doctor.GetTitleById(request.TitleId);
-            var specialties = await _helpers.Doctor.GetSpecialtiesByIds(request.Specialties);
+            var doctor = await _doctorCRUD.Reader.GetDoctorByUUID(request.Id);
+            var title = await _doctorCRUD.Reader.GetTitleById(request.TitleId);
+            var specialties = await _doctorCRUD.Reader.GetSpecialtiesByIds(request.Specialties);
 
-            _mapper.Map(request, doctor);
-            doctor.Title = title;
-            doctor.Specialties = specialties;
-            
-            await DoUpdate(doctor);
+            using (var tran = _db.BeginTransaction())
+            {
+                try
+                {
+                    _mapper.Map(request, doctor);
+                    doctor.Title = title;
+                    doctor.Specialties = specialties;
+
+                    await _doctorCRUD.Updater.UpdateDoctor(doctor, LoggedProfile);
+
+                    tran.Commit();
+                }
+                catch (Exception)
+                {
+                    tran.Rollback();
+                    throw;
+                }
+            };
 
             return _mapper.Map<DoctorDto>(doctor);
         }
 
         public async Task Delete(Guid id)
         {
-            var doctor = await _helpers.Doctor.GetDoctorByUUID(id);
-            doctor.StatusId = DoctorStatus.Status.Deleted;
+            var doctor = await _doctorCRUD.Reader.GetDoctorByUUID(id);
+            
+            using (var tran = _db.BeginTransaction())
+            {
+                try
+                {
+                    await _doctorCRUD.Deleter.DeleteDoctor(doctor, LoggedProfile);
 
-            await DoDelete(doctor);
+                    tran.Commit();
+                }
+                catch (Exception)
+                {
+                    tran.Rollback();
+                    throw;
+                }
+            };
         }
 
         public async Task<PagedList<DoctorDto>> GetAll(PagingParameters pagingParameters)
@@ -74,7 +114,7 @@ namespace MABS.Application.Services.DoctorServices
 
         public async Task<PagedList<DoctorDto>> GetBySpecalties(List<int> ids, PagingParameters pagingParameters)
         {
-            var specalties = await _helpers.Doctor.GetSpecialtiesByIds(ids);
+            var specalties = await _doctorCRUD.Reader.GetSpecialtiesByIds(ids);
             if (specalties.Count == 0)
                 throw new MustBeAtLeastOneException("Must specify at least one Specialty.");
 
@@ -88,7 +128,7 @@ namespace MABS.Application.Services.DoctorServices
 
         public async Task<DoctorDto> GetById(Guid id)
         {
-            var doctor = await _helpers.Doctor.GetDoctorByUUID(id);
+            var doctor = await _doctorCRUD.Reader.GetDoctorByUUID(id);
             return _mapper.Map<DoctorDto>(doctor);
         }
         public async Task<List<SpecialityExtendedDto>> GetAllSpecalties()
@@ -101,75 +141,6 @@ namespace MABS.Application.Services.DoctorServices
         {
             var titles = await _doctorRepository.GetAllTitles();
             return titles.Select(t => _mapper.Map<TitleExtendedDto>(t)).ToList();
-        }
-
-        private async Task DoCreate(Doctor doctor)
-        {
-            using (var tran = _db.BeginTransaction())
-            {
-                try
-                {
-                    _doctorRepository.Create(doctor);
-                    await _db.Save();
-
-                    _doctorRepository.CreateEvent(new DoctorEvent
-                    {
-                        TypeId = DoctorEventType.Type.Created,
-                        Doctor = doctor
-                    });
-                    await _db.Save();
-                    tran.Commit();
-                }
-                catch (Exception ex)
-                {
-                    tran.Rollback();
-                    throw;
-                }
-            };
-        }
-
-        private async Task DoUpdate(Doctor doctor)
-        {
-            using (var tran = _db.BeginTransaction())
-            {
-                try
-                {
-                    _doctorRepository.CreateEvent(new DoctorEvent
-                    {
-                        TypeId = DoctorEventType.Type.Updated,
-                        Doctor = doctor
-                    });
-                    await _db.Save();
-                    tran.Commit();
-                }
-                catch
-                {
-                    tran.Rollback();
-                    throw;
-                }
-            }
-        }
-
-        private async Task DoDelete(Doctor doctor)
-        {
-            using (var tran = _db.BeginTransaction())
-            {
-                try
-                {
-                    _doctorRepository.CreateEvent(new DoctorEvent
-                    {
-                        TypeId = DoctorEventType.Type.Deleted,
-                        Doctor = doctor
-                    });
-                    await _db.Save();
-                    tran.Commit();
-                }
-                catch
-                {
-                    tran.Rollback();
-                    throw;
-                }
-            }
         }
     }
 }

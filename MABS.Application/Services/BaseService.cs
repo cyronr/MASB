@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using MABS.Application.Common.AppProfile;
+//using MABS.Application.Common.AppProfileProfile;
 using MABS.Application.DataAccess.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -13,11 +15,9 @@ namespace MABS.Application.Services
         protected readonly IMapper _mapper;
         protected readonly IDbOperation _db;
 
-
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICurrentLoggedProfile _currentLoggedProfile;
 
-        protected Profile LoggedProfile { get; }
+        protected CallerProfile LoggedProfile { get; }
 
         public BaseService(IServicesDependencyAggregate<T> aggregate)
         {
@@ -25,20 +25,9 @@ namespace MABS.Application.Services
             _logger = aggregate.logger;
             _db = aggregate.dbOperation;
 
-            _httpContextAccessor = aggregate.httpContextAccessor;
             _currentLoggedProfile = aggregate.currentLoggedProfile;
 
-            LoggedProfile = TryGetLoggedProfile();
-        }
-
-        private Profile TryGetLoggedProfile()
-        {
-            _logger.LogInformation("Try getting logged user.");
-            var loggerUserUUID = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (loggerUserUUID == null)
-                return null;
-
-            return _currentLoggedProfile.GetByUUID(Guid.Parse(loggerUserUUID));
+            LoggedProfile = CallerProfile.GetCurrentLoggedProfile(_currentLoggedProfile);
         }
     }
 }

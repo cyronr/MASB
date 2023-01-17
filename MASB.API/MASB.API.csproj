@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Extensions\MABS.Extensions.csproj" />
     <ProjectReference Include="..\MABS.Application\MABS.Application.csproj" />
     <ProjectReference Include="..\MABS.Domain\MABS.Domain.csproj" />
     <ProjectReference Include="..\MABS.Infrastructure\MABS.Infrastructure.csproj" />

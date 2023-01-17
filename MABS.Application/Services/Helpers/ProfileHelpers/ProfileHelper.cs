@@ -26,14 +26,14 @@ namespace MABS.Application.Services.Helpers.ProfileHelpers
             if (loggerUserUUID == null)
                 return null;
 
-            return await _profileRepository.GetByUUID(Guid.Parse(loggerUserUUID));
+            return await _profileRepository.GetByUUIDAsync(Guid.Parse(loggerUserUUID));
         }
 
         public async Task CheckProfileAlreadyExists(Profile profile)
         {
             _logger.LogInformation($"Checking if profile with email = {profile.Email} already exists.");
 
-            if (await _profileRepository.GetByEmail(profile.Email) != null)
+            if (await _profileRepository.GetByEmailAsync(profile.Email) != null)
                 throw new AlreadyExistsException($"Profile with Email {profile.Email} already exists.");
         }
 
@@ -41,7 +41,7 @@ namespace MABS.Application.Services.Helpers.ProfileHelpers
         {
             _logger.LogInformation($"Getting profile by email {email}.");
 
-            var profile = await _profileRepository.GetByEmail(email);
+            var profile = await _profileRepository.GetByEmailAsync(email);
             if (profile == null)
                 throw new NotFoundException($"Profile with email = {email} was not found.");
 
@@ -52,7 +52,7 @@ namespace MABS.Application.Services.Helpers.ProfileHelpers
         {
             _logger.LogInformation($"Getting profile by id {uuid}.");
 
-            var profile = await _profileRepository.GetByUUID(uuid);
+            var profile = await _profileRepository.GetByUUIDAsync(uuid);
             if (profile == null)
                 throw new NotFoundException($"Profile with id = {uuid} was not found.");
 
