@@ -5,8 +5,8 @@ namespace MABS.Application.DataAccess.Repositories
 {
     public interface IPatientRepository
     {
-        Task<Patient> GetByUUID(Guid uuid);
-        Task<Patient> GetByProfile(Profile profile);
+        Task<Patient?> GetByUUIDAsync(Guid uuid);
+        Task<Patient?> GetByProfileAsync(Profile profile);
         void Create(Patient patient);
         void CreateEvent(PatientEvent patientEvent);
     }

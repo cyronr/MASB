@@ -31,7 +31,7 @@ namespace MABS.Infrastructure.DataAccess.Repositories
             _context.FacilityEvents.Add(facilityEvent);
         }
 
-        public async Task<List<Facility>> GetAll()
+        public async Task<List<Facility>> GetAllAsync()
         {
             return await _context.Facilites
                 .Include(f => f.Status)
@@ -47,7 +47,7 @@ namespace MABS.Infrastructure.DataAccess.Repositories
                 .Where(f => f.StatusId != FacilityStatus.Status.Deleted)
                 .ToListAsync();
         }
-        public async Task<Facility> GetByUUID(Guid uuid)
+        public async Task<Facility?> GetByUUIDAsync(Guid uuid)
         {
             return await _context.Facilites
                 .Include(f => f.Status)
@@ -61,13 +61,13 @@ namespace MABS.Infrastructure.DataAccess.Repositories
                 .FirstOrDefaultAsync(f => f.StatusId != FacilityStatus.Status.Deleted && f.UUID == uuid);
         }
 
-        public async Task<Facility> GetByTIN(string taxIdentificationNumber)
+        public async Task<Facility?> GetByTINAsync(string taxIdentificationNumber)
         {
             return await _context.Facilites
                 .FirstOrDefaultAsync(f => f.StatusId != FacilityStatus.Status.Deleted && f.TaxIdentificationNumber == taxIdentificationNumber);
         }
 
-        public async Task<Facility> GetWithAllDoctorsByUUID(Guid uuid)
+        public async Task<Facility?> GetWithAllDoctorsByUUIDAsync(Guid uuid)
         {
             return await _context.Facilites
                 .Include(f => f.Doctors.Where(d => d.StatusId == DoctorStatus.Status.Active))
@@ -77,17 +77,17 @@ namespace MABS.Infrastructure.DataAccess.Repositories
                 .FirstOrDefaultAsync(f => f.StatusId != FacilityStatus.Status.Deleted && f.UUID == uuid);
         }
 
-        public async Task<Country> GetCountryById(string id)
+        public async Task<Country?> GetCountryByIdAsync(string id)
         {
             return await _context.Countries.FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<List<Country>> GetAllCountries()
+        public async Task<List<Country>> GetAllCountriesAsync()
         {
             return await _context.Countries.ToListAsync();
         }
 
-        public async Task<Address> GetAddressByProperties(string streetName, int houseNumber, int? flatNumber, string city, string postalCode, Country country)
+        public async Task<Address?> GetAddressByPropertiesAsync(string streetName, int houseNumber, int? flatNumber, string city, string postalCode, Country country)
         {
             return await _context.Addresses
                 .Include(a => a.Country)
@@ -103,7 +103,7 @@ namespace MABS.Infrastructure.DataAccess.Repositories
                 );
         }
 
-        public async Task<List<AddressStreetType>> GetAllStreetTypes()
+        public async Task<List<AddressStreetType>> GetAllStreetTypesAsync()
         {
             return await _context.AddressStreetType.ToListAsync();
         }

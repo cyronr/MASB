@@ -29,7 +29,7 @@ namespace MABS.Infrastructure.DataAccess.Repositories
             _context.DoctorEvents.Add(doctorEvent);
         }
 
-        public async Task<List<Doctor>> GetAll()
+        public async Task<List<Doctor>> GetAllAsync()
         {
             return await _context.Doctors
                 .Include(d => d.Specialties)
@@ -40,7 +40,7 @@ namespace MABS.Infrastructure.DataAccess.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Doctor> GetByUUID(Guid uuid)
+        public async Task<Doctor?> GetByUUIDAsync(Guid uuid)
         {
             return await _context.Doctors
                 .Include(d => d.Specialties)
@@ -50,7 +50,7 @@ namespace MABS.Infrastructure.DataAccess.Repositories
                 .FirstOrDefaultAsync(d => d.StatusId == DoctorStatus.Status.Active && d.UUID == uuid);
         }
 
-        public async Task<List<Doctor>> GetBySpecalties(List<int> ids)
+        public async Task<List<Doctor>> GetBySpecaltiesAsync(List<int> ids)
         {
             return await _context.Doctors
                 .Include(d => d.Title)
@@ -65,24 +65,24 @@ namespace MABS.Infrastructure.DataAccess.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<Specialty>> GetAllSpecialties()
+        public async Task<List<Specialty>> GetAllSpecialtiesAsync()
         {
             return await _context.Specialties.ToListAsync();
         }
 
-        public async Task<List<Title>> GetAllTitles()
+        public async Task<List<Title>> GetAllTitlesAsync()
         {
             return await _context.Titles.ToListAsync();
         }
 
-        public async Task<List<Specialty>> GetSpecialtiesByIds(List<int> ids)
+        public async Task<List<Specialty>> GetSpecialtiesByIdsAsync(List<int> ids)
         {
             return await _context.Specialties
                 .Where(s => ids.Contains(s.Id))
                 .ToListAsync();
         }
 
-        public async Task<Title> GetTitleById(int id)
+        public async Task<Title?> GetTitleByIdAsync(int id)
         {
             return await _context.Titles.FirstOrDefaultAsync(t => t.Id == id);
         }

@@ -1,4 +1,4 @@
-﻿using MABS.Application.Common.Interfaces.Authentication;
+﻿using MABS.Application.Common.Authentication;
 using MABS.Domain.Models.ProfileModels;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

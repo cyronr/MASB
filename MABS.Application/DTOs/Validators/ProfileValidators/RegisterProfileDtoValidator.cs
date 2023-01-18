@@ -46,7 +46,7 @@ namespace MABS.Application.DTOs.Validators.ProfileValidators
 
         private bool IsPasswordValid(string password)
         {
-            if (password == null || password.Equals(String.Empty))
+            if (password is null || password.Equals(String.Empty))
                 return false;
             
             ///At least 8 characters
@@ -63,7 +63,7 @@ namespace MABS.Application.DTOs.Validators.ProfileValidators
 
         private bool IsPhoneNumberValid(string phoneNumber)
         {
-            if (phoneNumber == null || phoneNumber.Equals(String.Empty))
+            if (phoneNumber is null || phoneNumber.Equals(String.Empty))
                 return false;
 
             ///At least 8 characters

@@ -4,14 +4,14 @@ namespace MABS.Application.DataAccess.Repositories
 {
     public interface IDoctorRepository
     {
-        Task<List<Doctor>> GetAll();
-        Task<Doctor> GetByUUID(Guid uuid);
-        Task<List<Doctor>> GetBySpecalties(List<int> ids);
+        Task<List<Doctor>> GetAllAsync();
+        Task<Doctor?> GetByUUIDAsync(Guid uuid);
+        Task<List<Doctor>> GetBySpecaltiesAsync(List<int> ids);
         void Create(Doctor doctor);
         void CreateEvent(DoctorEvent doctorEvent);
-        Task<Title> GetTitleById(int id);
-        Task<List<Title>> GetAllTitles();
-        Task<List<Specialty>> GetSpecialtiesByIds(List<int> ids);
-        Task<List<Specialty>> GetAllSpecialties();
+        Task<Title?> GetTitleByIdAsync(int id);
+        Task<List<Title>> GetAllTitlesAsync();
+        Task<List<Specialty>> GetSpecialtiesByIdsAsync(List<int> ids);
+        Task<List<Specialty>> GetAllSpecialtiesAsync();
     }
 }

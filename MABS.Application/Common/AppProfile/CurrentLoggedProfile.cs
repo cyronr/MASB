@@ -23,7 +23,7 @@ namespace MABS.Application.Common.AppProfile
         {
             _logger.LogInformation("Try getting logged user.");
             var loggerUserUUID = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (loggerUserUUID == null)
+            if (loggerUserUUID is null)
                 return null;
 
             return _profileRepository.GetByUUID(Guid.Parse(loggerUserUUID));

@@ -1,12 +1,7 @@
-﻿using AutoMapper;
-using MABS.Application.Common.AppProfile;
-using MABS.Application.CRUD.Creators.DoctorCreator;
-using MABS.Application.CRUD.Deleters.DoctorDeleter;
-using MABS.Application.CRUD.Readers.DoctorReader;
-using MABS.Application.CRUD.Updaters.DoctorUpdater;
-using MABS.Application.DataAccess.Common;
-using MABS.Application.Services;
-using Microsoft.Extensions.Logging;
+﻿using MABS.Application.CRUD.Creators.DoctorCreators;
+using MABS.Application.CRUD.Deleters.DoctorDeleters;
+using MABS.Application.CRUD.Readers.DoctorReaders;
+using MABS.Application.CRUD.Updaters.DoctorUpdaters;
 
 namespace MABS.Application.CRUD
 {

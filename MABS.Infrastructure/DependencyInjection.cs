@@ -1,8 +1,10 @@
-﻿using MABS.Application.Common.Interfaces.Authentication;
+﻿using MABS.Application.Common.Authentication;
+using MABS.Application.Common.Http;
 using MABS.Application.DataAccess.Common;
 using MABS.Application.DataAccess.Repositories;
 using MABS.Infrastructure.Common;
 using MABS.Infrastructure.Common.Authentication;
+using MABS.Infrastructure.Common.Http;
 using MABS.Infrastructure.Data;
 using MABS.Infrastructure.DataAccess.Common;
 using MABS.Infrastructure.DataAccess.Repositories;
@@ -18,7 +20,6 @@ namespace MABS.Infrastructure
             services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
             services.Configure<ConnectionStrings>(configuration.GetSection(ConnectionStrings.SectionName));
 
-
             services.AddScoped<IDbOperation, DbOperation>();
             services.AddScoped<IInternalDbTransaction, InternalDbTransaction>();
             services.AddScoped<IDoctorRepository, DoctorRepository>();
@@ -28,6 +29,8 @@ namespace MABS.Infrastructure
 
             services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
+
+            services.AddSingleton<IHttpRequester, HttpRequester>();
 
             services.AddDbContext<DataContext>();
 

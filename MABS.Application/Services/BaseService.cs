@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
 using MABS.Application.Common.AppProfile;
-//using MABS.Application.Common.AppProfileProfile;
 using MABS.Application.DataAccess.Common;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System.Security.Claims;
-using Profile = MABS.Domain.Models.ProfileModels.Profile;
 
 namespace MABS.Application.Services
 {

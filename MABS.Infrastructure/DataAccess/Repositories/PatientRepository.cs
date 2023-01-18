@@ -29,7 +29,7 @@ namespace MABS.Infrastructure.DataAccess.Repositories
             _context.PatientEvents.Add(patientEvent);
         }
 
-        public async Task<Patient> GetByProfile(Profile profile)
+        public async Task<Patient?> GetByProfileAsync(Profile profile)
         {
             return await _context.Patients
                 .Include(p => p.Status)
@@ -37,7 +37,7 @@ namespace MABS.Infrastructure.DataAccess.Repositories
                 .FirstOrDefaultAsync(p => p.StatusId == PatientStatus.Status.Active && p.Profile.Equals(profile));
         }
 
-        public async Task<Patient> GetByUUID(Guid uuid)
+        public async Task<Patient?> GetByUUIDAsync(Guid uuid)
         {
             return await _context.Patients
                 .Include(p => p.Status)

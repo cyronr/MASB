@@ -1,4 +1,4 @@
-﻿using MABS.Application.Common.Interfaces.Authentication;
+﻿using MABS.Application.Common.Authentication;
 using Microsoft.Extensions.Logging;
 
 namespace MABS.Infrastructure.Common.Authentication

@@ -38,7 +38,7 @@ namespace MABS.Application.DTOs.Validators.FacilityValidators
                 .GreaterThan(0)
                 .WithMessage("HouseNumber must be greater than 0.");
 
-            When(obj => obj.FlatNumber != null, () =>
+            When(obj => obj.FlatNumber is not null, () =>
             {
                 RuleFor(obj => obj.FlatNumber)
                     .GreaterThan(0)

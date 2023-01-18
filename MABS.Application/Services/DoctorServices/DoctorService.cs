@@ -1,33 +1,28 @@
 using MABS.Application.Common.Pagination;
 using MABS.Application.DTOs.DoctorDtos;
 using MABS.Domain.Models.DoctorModels;
-using MABS.Application.Services.Helpers;
-using MABS.Application.DataAccess.Repositories;
 using MABS.Domain.Exceptions;
-using MABS.Application.CRUD.Creators.DoctorCreator;
 using MABS.Application.CRUD;
+
 
 namespace MABS.Application.Services.DoctorServices
 {
     public class DoctorService : BaseService<DoctorService>, IDoctorService
     {
         private readonly IDoctorCRUD _doctorCRUD;
-        private readonly IDoctorRepository _doctorRepository;
 
         public DoctorService(
             IServicesDependencyAggregate<DoctorService> aggregate,
-            IDoctorCRUD doctorCRUD,
-            IDoctorRepository doctorRepository) : base(aggregate)
+            IDoctorCRUD doctorCRUD) : base(aggregate)
         {
             _doctorCRUD = doctorCRUD;
-            _doctorRepository = doctorRepository;
         }
 
 
         public async Task<DoctorDto> Create(CreateDoctorDto request)
         {
-            var title = await _doctorCRUD.Reader.GetTitleById(request.TitleId);
-            var specialties = await _doctorCRUD.Reader.GetSpecialtiesByIds(request.Specialties);
+            var title = await _doctorCRUD.Reader.GetTitleByIdAsync(request.TitleId);
+            var specialties = await _doctorCRUD.Reader.GetSpecialtiesByIdsAsync(request.Specialties);
 
             Doctor doctor;
             using (var tran = _db.BeginTransaction())
@@ -40,7 +35,8 @@ namespace MABS.Application.Services.DoctorServices
                     doctor.Title = title;
                     doctor.Specialties = specialties;
  
-                    await _doctorCRUD.Creator.CreateDoctor(doctor, LoggedProfile);
+                    await _doctorCRUD.Creator.CreateAsync(doctor, LoggedProfile);
+                    await _doctorCRUD.Creator.CreateEventAsync(doctor, DoctorEventType.Type.Created, LoggedProfile, doctor.ToString());
 
                     tran.Commit();
                 }
@@ -56,9 +52,9 @@ namespace MABS.Application.Services.DoctorServices
 
         public async Task<DoctorDto> Update(UpdateDoctorDto request)
         {
-            var doctor = await _doctorCRUD.Reader.GetDoctorByUUID(request.Id);
-            var title = await _doctorCRUD.Reader.GetTitleById(request.TitleId);
-            var specialties = await _doctorCRUD.Reader.GetSpecialtiesByIds(request.Specialties);
+            var doctor = await _doctorCRUD.Reader.GetByUUIDAsync(request.Id);
+            var title = await _doctorCRUD.Reader.GetTitleByIdAsync(request.TitleId);
+            var specialties = await _doctorCRUD.Reader.GetSpecialtiesByIdsAsync(request.Specialties);
 
             using (var tran = _db.BeginTransaction())
             {
@@ -68,7 +64,8 @@ namespace MABS.Application.Services.DoctorServices
                     doctor.Title = title;
                     doctor.Specialties = specialties;
 
-                    await _doctorCRUD.Updater.UpdateDoctor(doctor, LoggedProfile);
+                    await _doctorCRUD.Updater.UpdateAsync(doctor, LoggedProfile);
+                    await _doctorCRUD.Creator.CreateEventAsync(doctor, DoctorEventType.Type.Updated, LoggedProfile, doctor.ToString());
 
                     tran.Commit();
                 }
@@ -84,13 +81,14 @@ namespace MABS.Application.Services.DoctorServices
 
         public async Task Delete(Guid id)
         {
-            var doctor = await _doctorCRUD.Reader.GetDoctorByUUID(id);
+            var doctor = await _doctorCRUD.Reader.GetByUUIDAsync(id);
             
             using (var tran = _db.BeginTransaction())
             {
                 try
                 {
-                    await _doctorCRUD.Deleter.DeleteDoctor(doctor, LoggedProfile);
+                    await _doctorCRUD.Deleter.DeleteAsync(doctor, LoggedProfile);
+                    await _doctorCRUD.Creator.CreateEventAsync(doctor, DoctorEventType.Type.Deleted, LoggedProfile, doctor.ToString());
 
                     tran.Commit();
                 }
@@ -104,7 +102,7 @@ namespace MABS.Application.Services.DoctorServices
 
         public async Task<PagedList<DoctorDto>> GetAll(PagingParameters pagingParameters)
         {
-            var doctors = await _doctorRepository.GetAll();
+            var doctors = await _doctorCRUD.Reader.GetAllAsync();
             return PagedList<DoctorDto>.ToPagedList(
                 doctors.Select(d => _mapper.Map<DoctorDto>(d)).ToList(),
                 pagingParameters.PageNumber,
@@ -114,11 +112,11 @@ namespace MABS.Application.Services.DoctorServices
 
         public async Task<PagedList<DoctorDto>> GetBySpecalties(List<int> ids, PagingParameters pagingParameters)
         {
-            var specalties = await _doctorCRUD.Reader.GetSpecialtiesByIds(ids);
+            var specalties = await _doctorCRUD.Reader.GetSpecialtiesByIdsAsync(ids);
             if (specalties.Count == 0)
                 throw new MustBeAtLeastOneException("Must specify at least one Specialty.");
 
-            var doctors = await _doctorRepository.GetBySpecalties(ids);
+            var doctors = await _doctorCRUD.Reader.GetBySpecaltiesAsync(ids);
             return PagedList<DoctorDto>.ToPagedList(
                 doctors.Select(d => _mapper.Map<DoctorDto>(d)).ToList(),
                 pagingParameters.PageNumber,
@@ -128,18 +126,18 @@ namespace MABS.Application.Services.DoctorServices
 
         public async Task<DoctorDto> GetById(Guid id)
         {
-            var doctor = await _doctorCRUD.Reader.GetDoctorByUUID(id);
+            var doctor = await _doctorCRUD.Reader.GetByUUIDAsync(id);
             return _mapper.Map<DoctorDto>(doctor);
         }
         public async Task<List<SpecialityExtendedDto>> GetAllSpecalties()
         {
-            var specialties = await _doctorRepository.GetAllSpecialties();
+            var specialties = await _doctorCRUD.Reader.GetAllSpecialtiesAsync();
             return specialties.Select(s => _mapper.Map<SpecialityExtendedDto>(s)).ToList();
         }
 
         public async Task<List<TitleExtendedDto>> GetAllTitles()
         {
-            var titles = await _doctorRepository.GetAllTitles();
+            var titles = await _doctorCRUD.Reader.GetAllTitlesAsync();
             return titles.Select(t => _mapper.Map<TitleExtendedDto>(t)).ToList();
         }
     }

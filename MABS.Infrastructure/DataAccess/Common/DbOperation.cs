@@ -30,7 +30,7 @@ namespace MABS.Infrastructure.DataAccess.Common
 
         public bool IsActiveTransaction()
         {
-            if (_context.Database.CurrentTransaction == null)
+            if (_context.Database.CurrentTransaction is null)
                 return false;
 
             return true;

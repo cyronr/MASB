@@ -1,33 +1,31 @@
-﻿using AutoMapper;
-using MABS.Application.DTOs.ProfileDtos;
+﻿using MABS.Application.DTOs.ProfileDtos;
 using MABS.Domain.Models.ProfileModels;
-using MABS.Application.Services.Helpers.ProfileHelpers;
 using Profile = MABS.Domain.Models.ProfileModels.Profile;
-using MABS.Application.DataAccess.Repositories;
 using MABS.Domain.Exceptions;
-using MABS.Application.Common.Interfaces.Authentication;
-using MABS.Application.Services.Helpers;
+using MABS.Application.Common.Authentication;
+using MABS.Application.CRUD;
+using MABS.Application.Checkers.ProfileCheckers;
 
 namespace MABS.Application.Services.AuthenticationServices
 {
     public class AuthenticationService : BaseService<AuthenticationService>, IAuthenticationService
     {
-        private readonly IProfileRepository _profileRepository;
-        private readonly IHelpers _helpers;
+        private readonly IProfileCRUD _profileCRUD;
+        private readonly IProfileChecker _profileChecker;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
-        private readonly IPasswordHasher _passwordHash;
+        private readonly IPasswordHasher _passwordHasher;
 
         public AuthenticationService(
             IServicesDependencyAggregate<AuthenticationService> aggregate,
-            IProfileRepository profileRepository,
-            IHelpers helpers,
+            IProfileCRUD profileCRUD,
+            IProfileChecker profileChecker,
             IJwtTokenGenerator jwtTokenGenerator,
-            IPasswordHasher passwordHash) : base(aggregate)
+            IPasswordHasher passwordHasher) : base(aggregate)
         {
-            _profileRepository = profileRepository;
-            _helpers = helpers;
+            _profileCRUD = profileCRUD;
+            _profileChecker = profileChecker;
             _jwtTokenGenerator = jwtTokenGenerator;
-            _passwordHash = passwordHash;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<ProfileDto> RegisterPatientProfile(RegisterPatientProfileDto request)
@@ -38,10 +36,10 @@ namespace MABS.Application.Services.AuthenticationServices
                 PhoneNumber = request.PhoneNumber
             };
 
-            await _helpers.Profile.CheckProfileAlreadyExists(profile);
+            await _profileChecker.CheckProfileAlreadyExistsAsync(profile);
 
-            _passwordHash.GeneratePassword(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
-            profile.PasswordHash = passwordHash;
+            _passwordHasher.GeneratePassword(request.Password, out byte[] passwordHasher, out byte[] passwordSalt);
+            profile.PasswordHash = passwordHasher;
             profile.PasswordSalt = passwordSalt;
             profile.UUID = Guid.NewGuid();
             profile.StatusId = ProfileStatus.Status.Prepared;
@@ -51,7 +49,8 @@ namespace MABS.Application.Services.AuthenticationServices
             {
                 try
                 {
-                    await DoCreate(profile);
+                    await _profileCRUD.Creator.CreateAsync(profile, LoggedProfile);
+                    await _profileCRUD.Creator.CreateEventAsync(profile, ProfileEventType.Type.Created, LoggedProfile, profile.ToString());
 
                     tran.Commit();
                 }
@@ -67,25 +66,11 @@ namespace MABS.Application.Services.AuthenticationServices
 
         public async Task<string> Login(LoginProfileDto request)
         {
-            var profile = await _helpers.Profile.GetByEmail(request.Email);
-            if (!_passwordHash.VerifyPassword(request.Password, profile.PasswordHash, profile.PasswordSalt))
+            var profile = await _profileCRUD.Reader.GetByEmailAsync(request.Email);
+            if (!_passwordHasher.VerifyPassword(request.Password, profile.PasswordHash, profile.PasswordSalt))
                 throw new WrongPasswordException("Wrong password.");
 
             return _jwtTokenGenerator.GenerateToken(profile);
-        }
-
-        private async Task DoCreate(Profile profile)
-        {
-            _profileRepository.Create(profile);
-            await _db.Save();
-
-            _profileRepository.CreateEvent(new ProfileEvent
-            {
-                TypeId = ProfileEventType.Type.Created,
-                Profile = profile,
-                AddInfo = profile.ToString()
-            });
-            await _db.Save();
         }
     }
 }
