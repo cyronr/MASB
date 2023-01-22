@@ -1,5 +1,11 @@
-﻿using MABS.Application.DTOs.ProfileDtos;
-using MABS.Application.Services.AuthenticationServices;
+﻿using AutoMapper;
+using MABS.API.Requests.AuthenticationRequests;
+using MABS.Application.Services.AuthenticationServices.Queries.Login;
+using MABS.Application.Services.AuthenticationServices.RegisterDoctor;
+using MABS.Application.Services.DoctorServices.Commands.CreateDoctor;
+using MASB.API.Requests.AuthenticationRequests;
+using MASB.API.Requests.AuthenticationResponses;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MABS.API.Controllers
@@ -9,32 +15,45 @@ namespace MABS.API.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly ILogger<AuthenticationController> _logger;
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public AuthenticationController(ILogger<AuthenticationController> logger, IAuthenticationService authenticationService)
+        public AuthenticationController(ILogger<AuthenticationController> logger, IMediator mediator, IMapper mapper)
         {
             _logger = logger;
-            _authenticationService = authenticationService;
+            _mediator = mediator;
+            _mapper = mapper;
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(LoginProfileDto request)
+        public async Task<ActionResult<AuthenticationResponse>> Login(LoginRequest request)
         {
             _logger.LogInformation($"Logging {request.Email}.");
-            var response = await _authenticationService.Login(request);
+
+            var query = new LoginQuery(request.Email, request.Password);
+            var response = await _mediator.Send(query);
+
             _logger.LogInformation($"{request.Email} logged with token {response}.");
 
-            return Ok(response);
+            return Ok(_mapper.Map<AuthenticationResponse>(response));
         }
 
-        [HttpPost("register/patient")]
-        public async Task<ActionResult<ProfileDto>> RegisterPatient(RegisterPatientProfileDto request)
+        [HttpPost("register/doctor")]
+        public async Task<ActionResult<AuthenticationResponse>> RegisterDoctor(RegisterDoctorProfileRequest request)
         {
-            _logger.LogInformation($"Registering new Patient profile {request.Email}.");
-            var response = await _authenticationService.RegisterPatientProfile(request);
-            _logger.LogInformation($"Registered new Patient profile for {request.Email} ({response.Id}).");
+            _logger.LogInformation($"Registering new doctor profile {request.Email}.");
 
-            return Created(Request.Path, response);
+            var command = new RegisterDoctorCommand(
+                request.Email,
+                request.Password,
+                request.PhoneNumber,
+                _mapper.Map<CreateDoctorCommand>(request.Doctor)
+            );
+            var response = await _mediator.Send(command);
+
+            _logger.LogInformation($"Registered new doctor profile for {request.Email} ({response.Profile.Id}).");
+
+            return Created(Request.Path, _mapper.Map<AuthenticationResponse>(response));
         }
     }
 }

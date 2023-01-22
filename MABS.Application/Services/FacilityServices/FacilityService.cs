@@ -1,16 +1,12 @@
 using AutoMapper;
 using MABS.Application.Common.Pagination;
-using MABS.Application.DTOs.DoctorDtos;
 using MABS.Application.DTOs.FacilityDtos;
 using MABS.Domain.Models.FacilityModels;
-using System.Net;
-using Microsoft.Extensions.Logging;
 using MABS.Domain.Exceptions;
 using MABS.Application.CRUD;
-using MABS.Application.CRUD.Readers.DoctorReaders;
-using MABS.Domain.Models.DoctorModels;
 using MABS.Application.Checkers.FacilityCheckers;
-using System.Numerics;
+using MABS.Application.Services.DoctorServices.Common;
+using MABS.Domain.Models.DoctorModels;
 
 namespace MABS.Application.Services.FacilityServices
 {
@@ -18,17 +14,14 @@ namespace MABS.Application.Services.FacilityServices
     {
         private readonly IFacilityCRUD _facilityCRUD;
         private readonly IFacilityChecker _facilityChecker;
-        private readonly IDoctorReader _doctorReader;
 
         public FacilityService(
             IServicesDependencyAggregate<FacilityService> aggregate,
             IFacilityCRUD facilityCRUD,
-            IFacilityChecker facilityChecker,
-            IDoctorReader doctorReader) : base(aggregate)
+            IFacilityChecker facilityChecker) : base(aggregate)
         {
             _facilityCRUD = facilityCRUD;
             _facilityChecker = facilityChecker;
-            _doctorReader = doctorReader;
         }
 
         public async Task<PagedList<FacilityDto>> GetAll(PagingParameters pagingParameters)
@@ -76,7 +69,7 @@ namespace MABS.Application.Services.FacilityServices
             if (facility.Doctors.FirstOrDefault(d => d.UUID == doctorId) is not null)
                 throw new AlreadyExistsException($"Doctor is already added to this facility.", $"DoctorId = {doctorId}, FacilityId = {facilityId}");
 
-            var doctor = await _doctorReader.GetByUUIDAsync(doctorId);
+            var doctor = new Doctor();//await _doctorReader.GetByUUIDAsync(doctorId);
 
             using (var tran = _db.BeginTransaction())
             {

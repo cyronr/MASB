@@ -7,6 +7,7 @@ using MABS.Infrastructure;
 using MABS.Application;
 using MABS.Domain;
 using MABS.Application.Common.Middleware.Exceptions;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,9 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddDomain();
 
+
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 //Add Authentication and HttpContextAccessor
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -1,8 +1,8 @@
 using AutoMapper;
-using MABS.Application.DTOs.DoctorDtos;
 using MABS.Application.DTOs.FacilityDtos;
 using MABS.Application.DTOs.PatientDtos;
-using MABS.Application.DTOs.ProfileDtos;
+using MABS.Application.Services.AuthenticationServices.Common;
+using MABS.Application.Services.DoctorServices.Common;
 using MABS.Domain.Models.DictionaryModels;
 using MABS.Domain.Models.DoctorModels;
 using MABS.Domain.Models.FacilityModels;
@@ -17,11 +17,6 @@ namespace MABS.Application.Common.Mapping
         {
             ///Doctors
             CreateMap<Doctor, DoctorDto>().ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID));
-            CreateMap<CreateDoctorDto, Doctor>().ForMember(d => d.Specialties, opt => opt.Ignore());
-            CreateMap<UpdateDoctorDto, Doctor>()
-                .ForMember(d => d.Specialties, opt => opt.Ignore())
-                .ForMember(d => d.UUID, opt => opt.MapFrom(s => s.Id))
-                .ForMember(d => d.Id, opt => opt.Ignore());
             CreateMap<Specialty, SpecialityDto>();
             CreateMap<Specialty, SpecialityExtendedDto>();
             CreateMap<Title, TitleDto>();
@@ -36,7 +31,7 @@ namespace MABS.Application.Common.Mapping
             CreateMap<CreateFacilityDto, Facility>();
             CreateMap<UpdateFacilityDto, Facility>()
                 .ForMember(d => d.UUID, opt => opt.MapFrom(s => s.Id))
-                .ForMember(d => d.Id, opt => opt.Ignore()); ;
+                .ForMember(d => d.Id, opt => opt.Ignore()); 
             CreateMap<CreateAddressDto, Address>();
             CreateMap<UpdateAddressDto, Address>()
                 .ForMember(d => d.UUID, opt => opt.MapFrom(s => s.Id))
@@ -52,9 +47,6 @@ namespace MABS.Application.Common.Mapping
 
             ///Profiles
             CreateMap<ProfileEntity, ProfileDto>().ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID));
-            CreateMap<RegisterPatientProfileDto, ProfileEntity>();
-            CreateMap<RegisterDoctorProfileDto, ProfileEntity>();
-            CreateMap<RegisterFacilityProfileDto, ProfileEntity>();
 
         }
     }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MABS.Infrastructure.Data;
 using MABS.Application.DataAccess.Repositories;
+using MABS.Domain.Exceptions;
 
 namespace MABS.Infrastructure.DataAccess.Repositories
 {
@@ -20,12 +21,16 @@ namespace MABS.Infrastructure.DataAccess.Repositories
         public void Create(Doctor doctor)
         {
             _logger.LogInformation("Saving doctor to databse.");
+
+            EnsureIsInTransaction();
             _context.Doctors.Add(doctor);
         }
 
         public void CreateEvent(DoctorEvent doctorEvent)
         {
             _logger.LogInformation($"Saving to database event {doctorEvent.TypeId} for doctor with id = {doctorEvent.Doctor.Id}.");
+
+            EnsureIsInTransaction();
             _context.DoctorEvents.Add(doctorEvent);
         }
 
@@ -87,5 +92,15 @@ namespace MABS.Infrastructure.DataAccess.Repositories
             return await _context.Titles.FirstOrDefaultAsync(t => t.Id == id);
         }
 
+        public async Task<Specialty?> GetSpecialtyByIdAsync(int id)
+        {
+            return await _context.Specialties.FirstOrDefaultAsync(t => t.Id == id);
+        }
+
+        private void EnsureIsInTransaction()
+        {
+            if (_context.Database.CurrentTransaction is null)
+                throw new TransactionMissingException("Operation needs to be in transaction.");
+        }
     }
 }

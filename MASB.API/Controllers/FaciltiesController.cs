@@ -1,6 +1,6 @@
 using MABS.Application.Common.Pagination;
-using MABS.Application.DTOs.DoctorDtos;
 using MABS.Application.DTOs.FacilityDtos;
+using MABS.Application.Services.DoctorServices.Common;
 using MABS.Application.Services.FacilityServices;
 using Microsoft.AspNetCore.Mvc;
 

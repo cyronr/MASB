@@ -1,4 +1,6 @@
-﻿namespace MABS.Application.Common.Pagination
+﻿using System.Text.Json;
+
+namespace MABS.Application.Common.Pagination
 {
     public class PagingParameters
     {
@@ -16,6 +18,11 @@
             {
                 _pageSize = value > MAX_PAGE_SIZE ? MAX_PAGE_SIZE : value;
             }
+        }
+
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this);
         }
     }
 }
