@@ -2,8 +2,8 @@
 using AutoMapper;
 using MABS.Application.Common.Authentication;
 using MABS.Application.DataAccess.Repositories;
+using MABS.Application.ModelsExtensions.ProfileModelsExtensions;
 using MABS.Application.Services.AuthenticationServices.Common;
-using MABS.Application.ServicesExtensions.AuthenticationServiceExtensions;
 using MABS.Domain.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;

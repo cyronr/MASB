@@ -1,4 +1,4 @@
-﻿namespace MABS.Domain.Extensions
+﻿namespace MABS.Extensions
 {
     public static class CharExtensions
     {

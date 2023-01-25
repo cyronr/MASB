@@ -3,11 +3,12 @@ using MediatR;
 
 namespace MABS.Application.Services.DoctorServices.Commands.CreateDoctor
 {
-    public record CreateDoctorCommand
-    (
-        string Firstname,
-        string Lastname,
-        int TitleId,
-        List<int> Specialties
-    ) : IRequest<DoctorDto>;
+    public record CreateDoctorCommand : IRequest<DoctorDto>
+    {
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
+        public int TitleId { get; set; }
+        public List<int> Specialties { get; set; }
+        public Guid? ProfileId { get; set; }
+    }
 }

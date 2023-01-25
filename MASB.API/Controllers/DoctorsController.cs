@@ -1,6 +1,8 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MASB.API.Requests.DoctorRequests;
+using MASB.API.Responses.DoctorResponses;
 using MABS.Application.Common.Pagination;
 using MABS.Application.Services.DoctorServices.Commands.CreateDoctor;
 using MABS.Application.Services.DoctorServices.Commands.DeleteDoctor;
@@ -10,8 +12,6 @@ using MABS.Application.Services.DoctorServices.Queries.AllSpecialties;
 using MABS.Application.Services.DoctorServices.Queries.AllTitles;
 using MABS.Application.Services.DoctorServices.Queries.DoctorById;
 using MABS.Application.Services.DoctorServices.Queries.DoctorsBySpecialties;
-using MASB.API.Requests.DoctorRequests;
-using MASB.API.Responses.DoctorResponses;
 
 
 namespace MABS.API.Controllers
@@ -36,7 +36,7 @@ namespace MABS.API.Controllers
         {
             _logger.LogInformation("Fetching all doctors.");
 
-            var query = new AllDoctorsQuery(pagingParameters);
+            var query = new GetAllDoctorsQuery(pagingParameters);
             var response = await _mediator.Send(query);
 
             _logger.LogInformation($"Returning {response.Count} doctors.");
@@ -50,7 +50,7 @@ namespace MABS.API.Controllers
         {
             _logger.LogInformation($"Fetching doctor of Id = {id}.");
 
-            var query = new DoctorByIdQuery(id);
+            var query = new GetDoctorByIdQuery(id);
             var response = await _mediator.Send(query);
 
             _logger.LogInformation($"Returning doctor of Id = {id}.");
@@ -63,7 +63,7 @@ namespace MABS.API.Controllers
         {
             _logger.LogInformation($"Fetching doctors for specalties Ids = {String.Join(", ", ids.ToArray())}.");
 
-            var query = new DoctorsBySpecialtiesQuery(pagingParameters, ids);
+            var query = new GetDoctorsBySpecialtiesQuery(pagingParameters, ids);
             var response = await _mediator.Send(query);
 
             _logger.LogInformation($"Returning {response.Count} doctors.");
@@ -117,7 +117,7 @@ namespace MABS.API.Controllers
         {
             _logger.LogInformation("Fetching all specialities.");
 
-            var command = new AllSpecialtiesQuery();
+            var command = new GetAllSpecialtiesQuery();
             var response = await _mediator.Send(command);
 
             _logger.LogInformation($"Returning {response.Count} specialities.");
@@ -130,7 +130,7 @@ namespace MABS.API.Controllers
         {
             _logger.LogInformation("Fetching all titles.");
 
-            var command = new AllTitlesQuery();
+            var command = new GetAllTitlesQuery();
             var response = await _mediator.Send(command);
 
             _logger.LogInformation($"Returning {response.Count} titles.");

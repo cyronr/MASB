@@ -5,8 +5,13 @@ using MABS.Application.Common.AppProfile;
 using MABS.Application.DataAccess.Common;
 using MABS.Application.DataAccess.Repositories;
 using MABS.Application.Services.DoctorServices.Common;
-using MABS.Application.ServicesExtensions.DoctorServiceExtensions;
 using MABS.Domain.Models.DoctorModels;
+using Profile = MABS.Domain.Models.ProfileModels.Profile;
+using System.Numerics;
+using MABS.Domain.Models.ProfileModels;
+using System;
+using MABS.Application.ModelsExtensions.DoctorModelsExtensions;
+using MABS.Application.ModelsExtensions.ProfileModelsExtensions;
 
 namespace MABS.Application.Services.DoctorServices.Commands.CreateDoctor
 {
@@ -17,25 +22,27 @@ namespace MABS.Application.Services.DoctorServices.Commands.CreateDoctor
         private readonly IDbOperation _db;
         private readonly IDoctorRepository _doctorRepository;
         private readonly ICurrentLoggedProfile _currentLoggedProfile;
+        private readonly IProfileRepository _profileRepository;
 
         public CreateDoctorCommandHandler(
-            ILogger<CreateDoctorCommandHandler> logger, 
+            ILogger<CreateDoctorCommandHandler> logger,
             IMapper mapper,
             IDbOperation db,
             IDoctorRepository doctorRepository,
-            ICurrentLoggedProfile currentLoggedProfile)
+            ICurrentLoggedProfile currentLoggedProfile,
+            IProfileRepository profileRepository)
         {
             _doctorRepository = doctorRepository;
             _logger = logger;
             _mapper = mapper;
             _db = db;
             _currentLoggedProfile = currentLoggedProfile;
+            _profileRepository = profileRepository;
         }
+
 
         public async Task<DoctorDto> Handle(CreateDoctorCommand command, CancellationToken cancellationToken)
         {
-            var loggedProfile = CallerProfile.GetCurrentLoggedProfile(_currentLoggedProfile);
-
             _logger.LogDebug($"Fetching title with id = {command.TitleId}.");
             var title = await new Title().GetByIdAsync(_doctorRepository, command.TitleId);
 
@@ -46,40 +53,68 @@ namespace MABS.Application.Services.DoctorServices.Commands.CreateDoctor
                 specialties.Add(await new Specialty().GetByIdsAsync(_doctorRepository, specialityId));
             }
 
-            Doctor doctor = new Doctor();
-            using (var tran = _db.BeginTransaction())
+            Profile profile;
+            if (command.ProfileId is null)
+                profile = CallerProfile.GetCurrentLoggedProfile(_currentLoggedProfile).GetProfileEntity();
+            else
+                profile = await new Profile().GetByUUIDAsync(_profileRepository, (Guid)command.ProfileId);
+
+            Doctor doctor;
+            if (!_db.IsActiveTransaction())
             {
-                try
+                using (var tran = _db.BeginTransaction())
                 {
-                    doctor.Firstname = command.Firstname;
-                    doctor.Lastname = command.Lastname;
-                    doctor.StatusId = DoctorStatus.Status.Active;
-                    doctor.UUID = Guid.NewGuid();
-                    doctor.Title = title;
-                    doctor.Specialties = specialties;
-
-                    _doctorRepository.Create(doctor);
-                    await _db.Save();
-
-                    _doctorRepository.CreateEvent(new DoctorEvent
+                    try
                     {
-                        TypeId = DoctorEventType.Type.Created,
-                        Doctor = doctor,
-                        AddInfo = doctor.ToString(),
-                        CallerProfile = loggedProfile.GetProfileEntity()
-                    });
-                    await _db.Save();
-
-                    tran.Commit();
+                        doctor = await DoCreate(command.Firstname, command.Lastname, title, specialties, profile);
+                        tran.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        tran.Rollback();
+                        throw;
+                    }
                 }
-                catch (Exception)
-                {
-                    tran.Rollback();
-                    throw;
-                }
-            };
+            }
+            else
+                doctor = await DoCreate(command.Firstname, command.Lastname, title, specialties, profile);
 
             return _mapper.Map<DoctorDto>(doctor);
         }
+
+
+        private async Task<Doctor> DoCreate(
+            string firstname,
+            string lastname,
+            Title title,
+            List<Specialty> specialties,
+            Profile profile)
+        {
+            Doctor doctor = new Doctor
+            {
+                UUID = Guid.NewGuid(),
+                StatusId = DoctorStatus.Status.Active,
+                Firstname = firstname,
+                Lastname = lastname,
+                Title = title,
+                Specialties = specialties,
+                Profile = profile
+            };
+
+            _doctorRepository.Create(doctor);
+            await _db.Save();
+
+            _doctorRepository.CreateEvent(new DoctorEvent
+            {
+                TypeId = DoctorEventType.Type.Created,
+                Doctor = doctor,
+                AddInfo = doctor.ToString(),
+                CallerProfile = profile
+            });
+            await _db.Save();
+
+            return doctor;
+        }
+
     }
 }

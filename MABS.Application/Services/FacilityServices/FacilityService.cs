@@ -7,6 +7,7 @@ using MABS.Application.CRUD;
 using MABS.Application.Checkers.FacilityCheckers;
 using MABS.Application.Services.DoctorServices.Common;
 using MABS.Domain.Models.DoctorModels;
+using MABS.Application.Services.FacilityServices.Common;
 
 namespace MABS.Application.Services.FacilityServices
 {

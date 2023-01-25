@@ -7,7 +7,7 @@ using MABS.Application.Services.AuthenticationServices.Common;
 using MABS.Domain.Models.ProfileModels;
 using MABS.Application.Common.Authentication;
 using Profile = MABS.Domain.Models.ProfileModels.Profile;
-using MABS.Application.ServicesExtensions.AuthenticationServiceExtensions;
+using MABS.Application.ModelsExtensions.ProfileModelsExtensions;
 
 namespace MABS.Application.Services.AuthenticationServices.RegisterDoctor
 {
@@ -71,6 +71,7 @@ namespace MABS.Application.Services.AuthenticationServices.RegisterDoctor
                     });
                     await _db.Save();
 
+                    command.Doctor.ProfileId = profile.UUID;
                     await _mediator.Send(command.Doctor);
 
                     tran.Commit();

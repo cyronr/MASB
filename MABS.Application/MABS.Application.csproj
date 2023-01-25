@@ -20,4 +20,8 @@
     <ProjectReference Include="..\MABS.Extensions\MABS.Extensions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\PatientServices\" />
+  </ItemGroup>
+
 </Project>

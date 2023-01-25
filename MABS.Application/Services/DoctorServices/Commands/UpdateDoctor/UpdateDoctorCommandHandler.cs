@@ -5,8 +5,9 @@ using MABS.Application.Common.AppProfile;
 using MABS.Application.DataAccess.Common;
 using MABS.Application.DataAccess.Repositories;
 using MABS.Application.Services.DoctorServices.Common;
-using MABS.Application.ServicesExtensions.DoctorServiceExtensions;
 using MABS.Domain.Models.DoctorModels;
+using MABS.Application.ModelExtensions;
+using MABS.Application.ModelsExtensions.DoctorModelsExtensions;
 
 namespace MABS.Application.Services.DoctorServices.Commands.UpdateDoctor
 {
