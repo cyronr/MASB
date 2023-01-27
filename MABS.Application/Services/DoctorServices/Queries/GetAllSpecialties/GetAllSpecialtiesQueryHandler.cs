@@ -6,14 +6,14 @@ using Microsoft.Extensions.Logging;
 
 namespace MABS.Application.Services.DoctorServices.Queries.GetAllSpecialties
 {
-    public class AllSpecialtiesQueryHandler : IRequestHandler<AllSpecialtiesQuery, List<SpecialityExtendedDto>>
+    public class GetAllSpecialtiesQueryHandler : IRequestHandler<GetAllSpecialtiesQuery, List<SpecialityExtendedDto>>
     {
-        private readonly ILogger<AllSpecialtiesQueryHandler> _logger;
+        private readonly ILogger<GetAllSpecialtiesQueryHandler> _logger;
         private readonly IMapper _mapper;
         private readonly IDoctorRepository _doctorRepository;
 
-        public AllSpecialtiesQueryHandler(
-            ILogger<AllSpecialtiesQueryHandler> logger,
+        public GetAllSpecialtiesQueryHandler(
+            ILogger<GetAllSpecialtiesQueryHandler> logger,
             IMapper mapper,
             IDoctorRepository doctorRepository)
         {
@@ -22,7 +22,7 @@ namespace MABS.Application.Services.DoctorServices.Queries.GetAllSpecialties
             _mapper = mapper;
         }
 
-        public async Task<List<SpecialityExtendedDto>> Handle(AllSpecialtiesQuery query, CancellationToken cancellationToken)
+        public async Task<List<SpecialityExtendedDto>> Handle(GetAllSpecialtiesQuery query, CancellationToken cancellationToken)
         {
             _logger.LogDebug($"Fetching all specialties.");
 

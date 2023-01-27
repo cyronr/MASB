@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MABS.Application.DataAccess.Repositories;
-using MABS.Application.ModelExtensions;
 using MABS.Application.ModelsExtensions.DoctorModelsExtensions;
 using MABS.Application.Services.DoctorServices.Common;
 using MABS.Domain.Models.DoctorModels;

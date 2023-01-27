@@ -6,14 +6,14 @@ using Microsoft.Extensions.Logging;
 
 namespace MABS.Application.Services.DoctorServices.Queries.GetAllTitles
 {
-    public class AllTitlesQueryHandler : IRequestHandler<GetAllTitlesQuery, List<TitleExtendedDto>>
+    public class GetAllTitlesQueryHandler : IRequestHandler<GetAllTitlesQuery, List<TitleExtendedDto>>
     {
-        private readonly ILogger<AllTitlesQueryHandler> _logger;
+        private readonly ILogger<GetAllTitlesQueryHandler> _logger;
         private readonly IMapper _mapper;
         private readonly IDoctorRepository _doctorRepository;
 
-        public AllTitlesQueryHandler(
-            ILogger<AllTitlesQueryHandler> logger,
+        public GetAllTitlesQueryHandler(
+            ILogger<GetAllTitlesQueryHandler> logger,
             IMapper mapper,
             IDoctorRepository doctorRepository)
         {

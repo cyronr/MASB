@@ -3,5 +3,5 @@ using MediatR;
 
 namespace MABS.Application.Services.DoctorServices.Queries.GetAllTitles
 {
-    public record AllTitlesQuery() : IRequest<List<TitleExtendedDto>>;
+    public record GetAllTitlesQuery() : IRequest<List<TitleExtendedDto>>;
 }

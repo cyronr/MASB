@@ -2,7 +2,7 @@
 using MABS.Application.Services.FacilityServices.Common;
 using MABS.Application.Services.FacilityServices.Commands.CreateFacilityAddress;
 
-namespace MABS.Services.FacilityServices.Commands.CreateFacility
+namespace MABS.Application.Services.FacilityServices.Commands.CreateFacility
 {
     public record CreateFacilityCommand : IRequest<FacilityDto>
     {

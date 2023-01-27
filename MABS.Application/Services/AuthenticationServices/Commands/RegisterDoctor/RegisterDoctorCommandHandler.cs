@@ -9,7 +9,7 @@ using MABS.Application.Common.Authentication;
 using Profile = MABS.Domain.Models.ProfileModels.Profile;
 using MABS.Application.ModelsExtensions.ProfileModelsExtensions;
 
-namespace MABS.Application.Services.AuthenticationServices.RegisterDoctor
+namespace MABS.Application.Services.AuthenticationServices.Commands.RegisterDoctor
 {
     public class RegisterDoctorCommandHandler : IRequestHandler<RegisterDoctorCommand, AuthenticationResultDto>
     {
@@ -54,11 +54,11 @@ namespace MABS.Application.Services.AuthenticationServices.RegisterDoctor
                     profile.UUID = Guid.NewGuid();
                     profile.StatusId = ProfileStatus.Status.Prepared;
                     profile.TypeId = ProfileType.Type.Doctor;
-                    
+
                     _passwordHasher.GeneratePassword(command.Password, out byte[] passwordHasher, out byte[] passwordSalt);
                     profile.PasswordHash = passwordHasher;
                     profile.PasswordSalt = passwordSalt;
-                    
+
                     _profileRepository.Create(profile);
                     await _db.Save();
 

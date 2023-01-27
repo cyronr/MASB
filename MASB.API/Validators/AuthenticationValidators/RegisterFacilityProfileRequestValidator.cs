@@ -1,5 +1,4 @@
 ﻿using MABS.API.Requests.AuthenticationRequests;
-using MABS.Application.DTOs.Validators.FacilityValidators;
 
 namespace MABS.API.Validators.AuthenticationValidators
 {

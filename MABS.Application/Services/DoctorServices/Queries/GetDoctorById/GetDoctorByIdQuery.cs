@@ -3,7 +3,7 @@ using MediatR;
 
 namespace MABS.Application.Services.DoctorServices.Queries.GetDoctorById
 {
-    public record DoctorByIdQuery
+    public record GetDoctorByIdQuery
     (
         Guid Id
     ) : IRequest<DoctorDto>;

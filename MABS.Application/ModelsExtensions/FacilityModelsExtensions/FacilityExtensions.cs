@@ -16,6 +16,15 @@ namespace MABS.Application.ModelsExtensions.FacilityModelsExtensions
             return facility;
         }
 
+        public static async Task<Facility> GetWithDoctorsByUUIDAsync(this Facility facility, IFacilityRepository facilityRepository, Guid uuid)
+        {
+            facility = await facilityRepository.GetWithAllDoctorsByUUIDAsync(uuid);
+            if (facility is null)
+                throw new NotFoundException($"Facility not found.", $"FacilityId = {uuid}");
+
+            return facility;
+        }
+
         public static async Task CheckTINWithVATRegisterAsync(this Facility facility, IHttpRequester httpRequester)
         {
             string url = $@"https://wl-api.mf.gov.pl//api/search/nip/{facility.TaxIdentificationNumber}?date={DateTime.Now.ToString("yyyy-MM-dd")}";

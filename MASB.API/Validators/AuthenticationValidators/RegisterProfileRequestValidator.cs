@@ -66,11 +66,6 @@ namespace MABS.API.Validators.AuthenticationValidators
             if (phoneNumber is null || phoneNumber.Equals(String.Empty))
                 return false;
 
-            ///At least 8 characters
-            ///At least one uppercase
-            ///At least one lowercase
-            ///At least one digit
-            ///At least one special character
             var phoneNumberRules = new Regex("[0-9]$");
             if (phoneNumberRules.IsMatch(phoneNumber))
                 return true;

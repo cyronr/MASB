@@ -2,11 +2,11 @@
 using MABS.Application.Services.DoctorServices.Common;
 using MediatR;
 
-namespace MABS.Application.Services.DoctorServices.Queries.GetDoctorsBySpecialties
+namespace MABS.Application.Services.FacilityServices.Queries.GetFacilityDoctors
 {
-    public record GetDoctorsBySpecialtiesQuery
+    public record GetFacilityDoctorsQuery
     (
         PagingParameters PagingParameters,
-        List<int> Specialties
+        Guid FacilityId
     ) : IRequest<PagedList<DoctorDto>>;
 }

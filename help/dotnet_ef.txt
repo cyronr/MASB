@@ -1,0 +1,4 @@
+dotnet ef migrations add InitOnNewServer --startup-project "D:\Project\_Temp\__MASB\MASB.API\MASB.API.csproj"
+dotnet ef migrations remove --startup-project "D:\Project\_Temp\__MASB\MASB.API\MASB.API.csproj"
+
+dotnet ef database update --startup-project "D:\Project\_Temp\__MASB\MASB.API\MASB.API.csproj"

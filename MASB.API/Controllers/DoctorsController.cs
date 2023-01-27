@@ -7,12 +7,11 @@ using MABS.Application.Common.Pagination;
 using MABS.Application.Services.DoctorServices.Commands.CreateDoctor;
 using MABS.Application.Services.DoctorServices.Commands.DeleteDoctor;
 using MABS.Application.Services.DoctorServices.Commands.UpdateDoctor;
-using MABS.Application.Services.DoctorServices.Queries.AllDoctors;
-using MABS.Application.Services.DoctorServices.Queries.AllSpecialties;
-using MABS.Application.Services.DoctorServices.Queries.AllTitles;
-using MABS.Application.Services.DoctorServices.Queries.DoctorById;
-using MABS.Application.Services.DoctorServices.Queries.DoctorsBySpecialties;
-
+using MABS.Application.Services.DoctorServices.Queries.GetAllDoctors;
+using MABS.Application.Services.DoctorServices.Queries.GetDoctorById;
+using MABS.Application.Services.DoctorServices.Queries.GetDoctorsBySpecialties;
+using MABS.Application.Services.DoctorServices.Queries.GetAllSpecialties;
+using MABS.Application.Services.DoctorServices.Queries.GetAllTitles;
 
 namespace MABS.API.Controllers
 {

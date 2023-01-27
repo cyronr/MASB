@@ -52,7 +52,8 @@ namespace MABS.Infrastructure.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_connectionStrings.DefaultConnection);
+            optionsBuilder.UseSqlServer(
+                _connectionStrings.UseSecondary ? _connectionStrings.SecondaryConnection : _connectionStrings.DefaultConnection);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

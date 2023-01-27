@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using MABS.Application.Services.FacilityServices.Common;
-using MABS.Services.FacilityServices.Commands.CreateFacility;
 using AutoMapper;
 using MABS.Application.DataAccess.Common;
 using Microsoft.Extensions.Logging;
@@ -15,7 +14,7 @@ using MABS.Domain.Models.DoctorModels;
 
 namespace MABS.Application.Services.FacilityServices.Commands.CreateFacilityAddress
 {
-    public class CreateFacilityAddressCommandHandler : IRequestHandler<CreateFacilityAddressCommand, AddressDto>
+    public class CreateFacilityAddressCommandHandler : IRequestHandler<CreateFacilityAddressCommand, FacilityDto>
     {
         private readonly ILogger<CreateFacilityAddressCommandHandler> _logger;
         private readonly IMapper _mapper;
@@ -40,7 +39,7 @@ namespace MABS.Application.Services.FacilityServices.Commands.CreateFacilityAddr
             _profileRepository = profileRepository;
         }
 
-        public async Task<AddressDto> Handle(CreateFacilityAddressCommand command, CancellationToken cancellationToken)
+        public async Task<FacilityDto> Handle(CreateFacilityAddressCommand command, CancellationToken cancellationToken)
         {
             Profile profile;
             if (command.ProfileId is null)
@@ -60,7 +59,7 @@ namespace MABS.Application.Services.FacilityServices.Commands.CreateFacilityAddr
                 {
                     try
                     {
-                        address = await DoCreate(
+                        await DoCreate(
                             command.Name, 
                             (AddressStreetType.StreetType)command.StreetTypeId, 
                             command.StreetName,
@@ -83,7 +82,7 @@ namespace MABS.Application.Services.FacilityServices.Commands.CreateFacilityAddr
                 }
             }
             else
-                address = await DoCreate(
+                await DoCreate(
                     command.Name,
                     (AddressStreetType.StreetType)command.StreetTypeId,
                     command.StreetName,
@@ -96,7 +95,7 @@ namespace MABS.Application.Services.FacilityServices.Commands.CreateFacilityAddr
                     profile
                 );
 
-            return _mapper.Map<AddressDto>(address);
+            return _mapper.Map<FacilityDto>(facility);
         }
 
         private async Task<Address> DoCreate(
@@ -129,6 +128,7 @@ namespace MABS.Application.Services.FacilityServices.Commands.CreateFacilityAddr
             _logger.LogInformation($"Checking if address ({address.ToString()}) already exists.");
             await address.CheckAlreadyExistsAsync(_facilityRepository);
 
+            facility.Addresses.Add(address);
             await _db.Save();
 
             _facilityRepository.CreateEvent(new FacilityEvent

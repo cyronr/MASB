@@ -4,7 +4,7 @@ using MediatR;
 
 namespace MABS.Application.Services.DoctorServices.Queries.GetAllDoctors
 {
-    public record AllDoctorsQuery
+    public record GetAllDoctorsQuery
     (
         PagingParameters PagingParameters
     ) : IRequest<PagedList<DoctorDto>>;

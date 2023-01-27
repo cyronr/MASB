@@ -7,14 +7,14 @@ using Microsoft.Extensions.Logging;
 
 namespace MABS.Application.Services.DoctorServices.Queries.GetAllDoctors
 {
-    public class AllDoctorsQueryHandler : IRequestHandler<GetAllDoctorsQuery, PagedList<DoctorDto>>
+    public class GetAllDoctorsQueryHandler : IRequestHandler<GetAllDoctorsQuery, PagedList<DoctorDto>>
     {
-        private readonly ILogger<AllDoctorsQueryHandler> _logger;
+        private readonly ILogger<GetAllDoctorsQueryHandler> _logger;
         private readonly IMapper _mapper;
         private readonly IDoctorRepository _doctorRepository;
 
-        public AllDoctorsQueryHandler(
-            ILogger<AllDoctorsQueryHandler> logger,
+        public GetAllDoctorsQueryHandler(
+            ILogger<GetAllDoctorsQueryHandler> logger,
             IMapper mapper,
             IDoctorRepository doctorRepository)
         {

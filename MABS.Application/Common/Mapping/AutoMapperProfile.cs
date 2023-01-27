@@ -1,6 +1,4 @@
 using AutoMapper;
-using MABS.Application.DTOs.FacilityDtos;
-using MABS.Application.DTOs.PatientDtos;
 using MABS.Application.Services.AuthenticationServices.Common;
 using MABS.Application.Services.DoctorServices.Common;
 using MABS.Application.Services.FacilityServices.Common;

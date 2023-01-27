@@ -2,7 +2,7 @@
 using MABS.Application.Services.DoctorServices.Commands.CreateDoctor;
 using MediatR;
 
-namespace MABS.Application.Services.AuthenticationServices.RegisterDoctor
+namespace MABS.Application.Services.AuthenticationServices.Commands.RegisterDoctor
 {
     public record RegisterDoctorCommand
     (

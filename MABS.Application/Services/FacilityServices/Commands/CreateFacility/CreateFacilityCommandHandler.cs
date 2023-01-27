@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using MABS.Application.Services.FacilityServices.Common;
-using MABS.Services.FacilityServices.Commands.CreateFacility;
 using AutoMapper;
 using MABS.Application.DataAccess.Common;
 using Microsoft.Extensions.Logging;
@@ -105,7 +104,7 @@ namespace MABS.Application.Services.FacilityServices.Commands.CreateFacility
             await facility.CheckAlreadyExistsAsync(_facilityRepository);
 
             _logger.LogInformation($"Checking facility's TIN with VAT Register.");
-            await facility.CheckFacilityAlreadyExistsAsync(_facilityRepository);
+            await facility.CheckAlreadyExistsAsync(_facilityRepository);
 
             facility.Profile= profile;
             _facilityRepository.Create(facility);

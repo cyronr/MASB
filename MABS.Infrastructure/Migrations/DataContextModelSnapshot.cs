@@ -34,7 +34,7 @@ namespace MABSAPI.Migrations
 
                     b.HasIndex("FacilityId");
 
-                    b.ToTable("DoctorsFacilities");
+                    b.ToTable("DoctorsFacilities", (string)null);
                 });
 
             modelBuilder.Entity("DoctorsSpecialties", b =>
@@ -49,7 +49,7 @@ namespace MABSAPI.Migrations
 
                     b.HasIndex("SpecialtyId");
 
-                    b.ToTable("DoctorsSpecialties");
+                    b.ToTable("DoctorsSpecialties", (string)null);
                 });
 
             modelBuilder.Entity("MABS.Domain.Models.DoctorModels.Doctor", b =>
@@ -92,7 +92,7 @@ namespace MABSAPI.Migrations
 
                     b.HasIndex("TitleId");
 
-                    b.ToTable("Doctors");
+                    b.ToTable("Doctors", (string)null);
                 });
 
             modelBuilder.Entity("MABS.Domain.Models.DoctorModels.DoctorEvent", b =>
@@ -124,7 +124,7 @@ namespace MABSAPI.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("DoctorEvents");
+                    b.ToTable("DoctorEvents", (string)null);
                 });
 
             modelBuilder.Entity("MABS.Domain.Models.DoctorModels.DoctorEventType", b =>
@@ -139,7 +139,7 @@ namespace MABSAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DoctorEventType");
+                    b.ToTable("DoctorEventType", (string)null);
 
                     b.HasData(
                         new
@@ -171,7 +171,7 @@ namespace MABSAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DoctorStatus");
+                    b.ToTable("DoctorStatus", (string)null);
 
                     b.HasData(
                         new
@@ -201,7 +201,7 @@ namespace MABSAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Specialties");
+                    b.ToTable("Specialties", (string)null);
                 });
 
             modelBuilder.Entity("MABS.Domain.Models.DoctorModels.Title", b =>
@@ -223,7 +223,7 @@ namespace MABSAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Titles");
+                    b.ToTable("Titles", (string)null);
                 });
 
             modelBuilder.Entity("MABS.Domain.Models.FacilityModels.Address", b =>
@@ -285,7 +285,7 @@ namespace MABSAPI.Migrations
 
                     b.HasIndex("StreetTypeId");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("MABS.Domain.Models.FacilityModels.AddressStatus", b =>
@@ -300,7 +300,7 @@ namespace MABSAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AddressStatus");
+                    b.ToTable("AddressStatus", (string)null);
 
                     b.HasData(
                         new
@@ -332,7 +332,7 @@ namespace MABSAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AddressStreetType");
+                    b.ToTable("AddressStreetType", (string)null);
 
                     b.HasData(
                         new
@@ -362,7 +362,7 @@ namespace MABSAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries");
+                    b.ToTable("Countries", (string)null);
                 });
 
             modelBuilder.Entity("MABS.Domain.Models.FacilityModels.Facility", b =>
@@ -404,7 +404,7 @@ namespace MABSAPI.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Facilites");
+                    b.ToTable("Facilites", (string)null);
                 });
 
             modelBuilder.Entity("MABS.Domain.Models.FacilityModels.FacilityEvent", b =>
@@ -436,7 +436,7 @@ namespace MABSAPI.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("FacilityEvents");
+                    b.ToTable("FacilityEvents", (string)null);
                 });
 
             modelBuilder.Entity("MABS.Domain.Models.FacilityModels.FacilityEventType", b =>
@@ -451,7 +451,7 @@ namespace MABSAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FacilityEventType");
+                    b.ToTable("FacilityEventType", (string)null);
 
                     b.HasData(
                         new
@@ -488,7 +488,7 @@ namespace MABSAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FacilityStatus");
+                    b.ToTable("FacilityStatus", (string)null);
 
                     b.HasData(
                         new
@@ -542,7 +542,7 @@ namespace MABSAPI.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Patients");
+                    b.ToTable("Patients", (string)null);
                 });
 
             modelBuilder.Entity("MABS.Domain.Models.PatientModels.PatientEvent", b =>
@@ -574,7 +574,7 @@ namespace MABSAPI.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("PatientEvents");
+                    b.ToTable("PatientEvents", (string)null);
                 });
 
             modelBuilder.Entity("MABS.Domain.Models.PatientModels.PatientEventType", b =>
@@ -589,7 +589,7 @@ namespace MABSAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PatientEventType");
+                    b.ToTable("PatientEventType", (string)null);
 
                     b.HasData(
                         new
@@ -621,7 +621,7 @@ namespace MABSAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PatientStatus");
+                    b.ToTable("PatientStatus", (string)null);
 
                     b.HasData(
                         new
@@ -676,7 +676,7 @@ namespace MABSAPI.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("Profiles");
+                    b.ToTable("Profiles", (string)null);
                 });
 
             modelBuilder.Entity("MABS.Domain.Models.ProfileModels.ProfileEvent", b =>
@@ -708,7 +708,7 @@ namespace MABSAPI.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("ProfileEvents");
+                    b.ToTable("ProfileEvents", (string)null);
                 });
 
             modelBuilder.Entity("MABS.Domain.Models.ProfileModels.ProfileEventType", b =>
@@ -723,7 +723,7 @@ namespace MABSAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProfileEventType");
+                    b.ToTable("ProfileEventType", (string)null);
 
                     b.HasData(
                         new
@@ -755,7 +755,7 @@ namespace MABSAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProfileStatus");
+                    b.ToTable("ProfileStatus", (string)null);
 
                     b.HasData(
                         new
@@ -792,7 +792,7 @@ namespace MABSAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProfileType");
+                    b.ToTable("ProfileType", (string)null);
 
                     b.HasData(
                         new

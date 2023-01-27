@@ -2,21 +2,19 @@
 using MABS.Application.Common.Pagination;
 using MABS.Application.DataAccess.Repositories;
 using MABS.Application.Services.DoctorServices.Common;
-using MABS.Application.ServicesExtensions.DoctorServiceExtensions;
-using MABS.Domain.Models.DoctorModels;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace MABS.Application.Services.DoctorServices.Queries.GetDoctorsBySpecialties
 {
-    public class DoctorsBySpecialtiesQueryHandler : IRequestHandler<GetDoctorsBySpecialtiesQuery, PagedList<DoctorDto>>
+    public class GetDoctorsBySpecialtiesQueryHandler : IRequestHandler<GetDoctorsBySpecialtiesQuery, PagedList<DoctorDto>>
     {
-        private readonly ILogger<DoctorsBySpecialtiesQueryHandler> _logger;
+        private readonly ILogger<GetDoctorsBySpecialtiesQueryHandler> _logger;
         private readonly IMapper _mapper;
         private readonly IDoctorRepository _doctorRepository;
 
-        public DoctorsBySpecialtiesQueryHandler(
-            ILogger<DoctorsBySpecialtiesQueryHandler> logger,
+        public GetDoctorsBySpecialtiesQueryHandler(
+            ILogger<GetDoctorsBySpecialtiesQueryHandler> logger,
             IMapper mapper,
             IDoctorRepository doctorRepository)
         {
