@@ -80,13 +80,6 @@ namespace MABS.Infrastructure.DataAccess.Repositories
             return await _context.Titles.ToListAsync();
         }
 
-        public async Task<List<Specialty>> GetSpecialtiesByIdsAsync(List<int> ids)
-        {
-            return await _context.Specialties
-                .Where(s => ids.Contains(s.Id))
-                .ToListAsync();
-        }
-
         public async Task<Title?> GetTitleByIdAsync(int id)
         {
             return await _context.Titles.FirstOrDefaultAsync(t => t.Id == id);

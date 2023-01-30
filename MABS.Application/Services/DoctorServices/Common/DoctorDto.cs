@@ -1,3 +1,4 @@
+using MABS.Domain.Models.DoctorModels;
 using System.Text.Json;
 
 namespace MABS.Application.Services.DoctorServices.Common
@@ -7,6 +8,7 @@ namespace MABS.Application.Services.DoctorServices.Common
         public Guid Id { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
+        public DoctorStatus.Status Status { get; set; }
         public TitleDto Title { get; set; }
         public List<SpecialityDto> Specialties { get; set; }
 

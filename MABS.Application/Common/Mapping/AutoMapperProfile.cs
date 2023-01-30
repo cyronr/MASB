@@ -16,7 +16,9 @@ namespace MABS.Application.Common.Mapping
         public AutoMapperProfile()
         {
             ///Doctors
-            CreateMap<Doctor, DoctorDto>().ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID));
+            CreateMap<Doctor, DoctorDto>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID))
+                .ForMember(d => d.Status, opt => opt.MapFrom(s => s.StatusId));
             CreateMap<Specialty, SpecialityDto>();
             CreateMap<Specialty, SpecialityExtendedDto>();
             CreateMap<Title, TitleDto>();

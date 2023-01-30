@@ -12,7 +12,6 @@ namespace MABS.Application.DataAccess.Repositories
         Task<Title?> GetTitleByIdAsync(int id);
         Task<List<Title>> GetAllTitlesAsync();
         Task<Specialty?> GetSpecialtyByIdAsync(int id);
-        Task<List<Specialty>> GetSpecialtiesByIdsAsync(List<int> ids);
         Task<List<Specialty>> GetAllSpecialtiesAsync();
     }
 }

@@ -2,7 +2,6 @@
 using MABS.Application.Common.Pagination;
 using MABS.Application.DataAccess.Repositories;
 using MABS.Application.Services.DoctorServices.Common;
-using MABS.Application.Services.FacilityServices.Common;
 using MABS.Domain.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;
