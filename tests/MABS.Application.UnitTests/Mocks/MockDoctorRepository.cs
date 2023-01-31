@@ -1,6 +1,6 @@
 ﻿namespace MABS.Application.UnitTests.Mocks;
 
-public class MockDoctorRepository
+public static class MockDoctorRepository
 {
     public static Mock<IDoctorRepository> GetDoctorRepository()
     {
@@ -49,7 +49,7 @@ public class MockDoctorRepository
             new Doctor
             {
                 Id = 2,
-                UUID= Guid.Parse("5AD3615D-D4FD-48D1-9112-21F3EB69FE75"),
+                UUID= Guid.Parse(Consts.Active_Doctor_UUID),
                 StatusId = DoctorStatus.Status.Active,
                 Status = new DoctorStatus
                 {

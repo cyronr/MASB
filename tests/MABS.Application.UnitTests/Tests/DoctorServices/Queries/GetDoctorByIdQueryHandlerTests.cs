@@ -9,8 +9,6 @@ public class GetDoctorByIdQueryHandlerTests
     private readonly IMapper _mapper;
     private readonly Mock<IDoctorRepository> _mockDoctorRepsitory;
 
-    private readonly Guid correctUUID = Guid.Parse("5AD3615D-D4FD-48D1-9112-21F3EB69FE75");
-
     public GetDoctorByIdQueryHandlerTests()
     {
         _logger = new LoggerFactory().CreateLogger<GetDoctorByIdQueryHandler>();
@@ -24,7 +22,7 @@ public class GetDoctorByIdQueryHandlerTests
     public async Task CheckReturnType()
     {
         var handler = new GetDoctorByIdQueryHandler(_logger, _mapper, _mockDoctorRepsitory.Object);
-        var result = await handler.Handle(new GetDoctorByIdQuery(correctUUID), CancellationToken.None);
+        var result = await handler.Handle(new GetDoctorByIdQuery(Guid.Parse(Consts.Active_Doctor_UUID)), CancellationToken.None);
 
         result.Should().BeOfType<DoctorDto>();
     }
@@ -33,7 +31,7 @@ public class GetDoctorByIdQueryHandlerTests
     public async Task ShouldFind()
     {
         var handler = new GetDoctorByIdQueryHandler(_logger, _mapper, _mockDoctorRepsitory.Object);
-        var result = await handler.Handle(new GetDoctorByIdQuery(correctUUID), CancellationToken.None);
+        var result = await handler.Handle(new GetDoctorByIdQuery(Guid.Parse(Consts.Active_Doctor_UUID)), CancellationToken.None);
 
         result.Should().NotBeNull();
     }

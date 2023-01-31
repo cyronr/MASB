@@ -7,9 +7,6 @@ using MABS.Application.DataAccess.Repositories;
 using MABS.Application.Services.DoctorServices.Common;
 using MABS.Domain.Models.DoctorModels;
 using Profile = MABS.Domain.Models.ProfileModels.Profile;
-using System.Numerics;
-using MABS.Domain.Models.ProfileModels;
-using System;
 using MABS.Application.ModelsExtensions.DoctorModelsExtensions;
 using MABS.Application.ModelsExtensions.ProfileModelsExtensions;
 

@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MABS.Application\MABS.Application.csproj" />
+    <ProjectReference Include="..\..\src\MABS.Application\MABS.Application.csproj" />
   </ItemGroup>
 
 </Project>
