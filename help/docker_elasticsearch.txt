@@ -1,0 +1,1 @@
+docker run --name es01 --net elastic -p 9200:9200 -e "xpack.security.enabled=false" -e "discovery.type=single-node" -it docker.elastic.co/elasticsearch/elasticsearch:8.6.1

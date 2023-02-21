@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using MABS.Application.Common.AppProfile;
-using MABS.Application.Services;
-using MABS.Application.Services.FacilityServices;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace MABS.Application
 {
@@ -18,7 +17,7 @@ namespace MABS.Application
             services.AddValidatorsFromAssemblyContaining<Application>();
 
             services.AddAutoMapper(typeof(Application).Assembly);
-            services.AddMediatR(typeof(Application).Assembly);
+            services.AddMediatR(typeof(Application).GetTypeInfo().Assembly);
 
             return services;
         }

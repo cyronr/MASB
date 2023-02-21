@@ -1,4 +1,4 @@
-﻿using MABS.Application.Services.DoctorServices.Common;
+﻿using MABS.Application.Features.DoctorFeatures.Common;
 
 namespace MASB.API.Responses.DoctorResponses
 {

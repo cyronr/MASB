@@ -1,4 +1,4 @@
-﻿using MABS.Application.Services.FacilityServices.Common;
+﻿using MABS.Application.Features.FacilityFeatures.Common;
 
 namespace MABS.API.Responses.FacilityResponses
 {

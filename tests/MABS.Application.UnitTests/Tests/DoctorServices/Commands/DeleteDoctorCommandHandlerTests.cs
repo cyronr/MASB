@@ -1,7 +1,7 @@
-﻿using MABS.Application.Services.DoctorServices.Commands.DeleteDoctor;
-using MABS.Application.Services.DoctorServices.Common;
+﻿using MABS.Application.Features.DoctorFeatures.Commands.DeleteDoctor;
+using MABS.Application.Features.DoctorFeatures.Common;
 
-namespace MABS.Application.UnitTests.Tests.DoctorServices.Commands;
+namespace MABS.Application.UnitTests.Tests.DoctorFeatures.Commands;
 
 public class DeleteDoctorCommandHandlerTests
 {

@@ -4,14 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using MASB.API.Requests.DoctorRequests;
 using MASB.API.Responses.DoctorResponses;
 using MABS.Application.Common.Pagination;
-using MABS.Application.Services.DoctorServices.Commands.CreateDoctor;
-using MABS.Application.Services.DoctorServices.Commands.DeleteDoctor;
-using MABS.Application.Services.DoctorServices.Commands.UpdateDoctor;
-using MABS.Application.Services.DoctorServices.Queries.GetAllDoctors;
-using MABS.Application.Services.DoctorServices.Queries.GetDoctorById;
-using MABS.Application.Services.DoctorServices.Queries.GetDoctorsBySpecialties;
-using MABS.Application.Services.DoctorServices.Queries.GetAllSpecialties;
-using MABS.Application.Services.DoctorServices.Queries.GetAllTitles;
+using MABS.Application.Features.DoctorFeatures.Commands.DeleteDoctor;
+using MABS.Application.Features.DoctorFeatures.Queries.GetDoctorById;
+using MABS.Application.Features.DoctorFeatures.Queries.GetDoctorsBySpecialties;
+using MABS.Application.Features.DoctorFeatures.Queries.GetAllSpecialties;
+using MABS.Application.Features.DoctorFeatures.Queries.GetAllTitles;
+using MABS.Application.Features.DoctorFeatures.Queries.SearchAllDoctorsByText;
+using MABS.Application.Features.DoctorFeatures.Commands.CreateDoctor;
+using MABS.Application.Features.DoctorFeatures.Commands.UpdateDoctor;
 
 namespace MABS.API.Controllers
 {
@@ -31,11 +31,11 @@ namespace MABS.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedList<DoctorResponse>>> GetAll([FromQuery] PagingParameters pagingParameters)
+        public async Task<ActionResult<PagedList<DoctorResponse>>> SearchAll([FromQuery] PagingParameters pagingParameters, string searchText)
         {
             _logger.LogInformation("Fetching all doctors.");
 
-            var query = new GetAllDoctorsQuery(pagingParameters);
+            var query = new SearchAllDoctorsByTextQuery(pagingParameters, searchText);
             var response = await _mediator.Send(query);
 
             _logger.LogInformation($"Returning {response.Count} doctors.");

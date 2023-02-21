@@ -1,8 +1,8 @@
 using AutoMapper;
-using MABS.Application.Services.AuthenticationServices.Common;
-using MABS.Application.Services.DoctorServices.Common;
-using MABS.Application.Services.FacilityServices.Common;
-using MABS.Application.Services.PatientServices.Common;
+using MABS.Application.Features.AuthenticationFeatures.Common;
+using MABS.Application.Features.DoctorFeatures.Common;
+using MABS.Application.Features.FacilityFeatures.Common;
+using MABS.Application.Features.PatientFeatures.Common;
 using MABS.Domain.Models.DictionaryModels;
 using MABS.Domain.Models.DoctorModels;
 using MABS.Domain.Models.FacilityModels;

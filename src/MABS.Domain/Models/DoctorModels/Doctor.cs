@@ -6,7 +6,7 @@ namespace MABS.Domain.Models.DoctorModels
 {
     public class Doctor
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public Guid UUID { get; set; }
         public DoctorStatus.Status StatusId { get; set; }
         public DoctorStatus Status { get; set; }

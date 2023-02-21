@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using MABS.API.Requests.AuthenticationRequests;
-using MABS.Application.Services.AuthenticationServices.Commands.RegisterDoctor;
-using MABS.Application.Services.AuthenticationServices.Queries.Login;
-using MABS.Application.Services.DoctorServices.Commands.CreateDoctor;
+using MABS.Application.Features.DoctorFeatures.Commands.CreateDoctor;
+using MABS.Application.Features.AuthenticationFeatures.Commands.RegisterDoctor;
+using MABS.Application.Features.AuthenticationFeatures.Queries.Login;
 using MASB.API.Requests.AuthenticationRequests;
 using MASB.API.Requests.AuthenticationResponses;
 using MediatR;

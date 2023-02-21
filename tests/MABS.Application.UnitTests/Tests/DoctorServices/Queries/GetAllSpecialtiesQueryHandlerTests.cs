@@ -1,7 +1,7 @@
-﻿using MABS.Application.Services.DoctorServices.Common;
-using MABS.Application.Services.DoctorServices.Queries.GetAllSpecialties;
+﻿using MABS.Application.Features.DoctorFeatures.Common;
+using MABS.Application.Features.DoctorFeatures.Queries.GetAllSpecialties;
 
-namespace MABS.Application.UnitTests.Tests.DoctorServices.Queries;
+namespace MABS.Application.UnitTests.Tests.DoctorFeatures.Queries;
 
 public class GetAllSpecialtiesQueryHandlerTests
 {

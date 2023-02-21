@@ -13,5 +13,6 @@ namespace MABS.Application.DataAccess.Repositories
         Task<List<Title>> GetAllTitlesAsync();
         Task<Specialty?> GetSpecialtyByIdAsync(int id);
         Task<List<Specialty>> GetAllSpecialtiesAsync();
+        Task SetElasticsearchSyncNeeded(long doctorId);
     }
 }

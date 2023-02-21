@@ -95,5 +95,10 @@ namespace MABS.Infrastructure.DataAccess.Repositories
             if (_context.Database.CurrentTransaction is null)
                 throw new TransactionMissingException("Operation needs to be in transaction.");
         }
+
+        public async Task SetElasticsearchSyncNeeded(long doctorId)
+        {
+            await _context.Database.ExecuteSqlAsync($"update Doctors set synced_with_elasticsearch = 0 where Id = {doctorId}");
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using MABS.Application.Services.AuthenticationServices.Common;
+﻿using MABS.Application.Features.AuthenticationFeatures.Common;
 
 namespace MASB.API.Requests.AuthenticationResponses
 {
