@@ -3,6 +3,9 @@ using MABS.Application.Elasticsearch;
 using MABS.Application.Features.DoctorFeatures.Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
+using System.Net;
+using System.Net.Mail;
 
 namespace MABS.Application.Features.DoctorFeatures.Queries.SearchAllDoctorsByText
 {
