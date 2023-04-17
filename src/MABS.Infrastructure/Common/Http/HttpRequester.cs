@@ -1,7 +1,5 @@
-﻿using Azure;
-using MABS.Application.Common.Http;
+﻿using MABS.Application.Common.Http;
 using Microsoft.Extensions.Logging;
-using System.Net;
 
 namespace MABS.Infrastructure.Common.Http
 {
@@ -23,11 +21,37 @@ namespace MABS.Infrastructure.Common.Http
 
             try
             {
-                HttpResponseMessage response = await client.GetAsync(url);
-                await LogHTTPResponse(response);
-                
-                return response;
+                using (var request = new HttpRequestMessage(HttpMethod.Get, url))
+                {
+                    HttpResponseMessage response = await client.SendAsync(request);
+                    await LogHTTPResponse(response);
+                    return response;
+                }  
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogWarning(e.Message);
+                return new HttpResponseMessage();
+            }
+        }
 
+        public async Task<HttpResponseMessage> HttpGet(string url, Dictionary<string, string> headers)
+        {
+            _logger.LogInformation($"Sending a HTTP Get request ({url}).");
+
+            try
+            {
+                using (var request = new HttpRequestMessage(HttpMethod.Get, url))
+                {
+                    foreach (var header in headers)
+                    {
+                        request.Headers.Add(header.Key, header.Value);
+                    }
+
+                    HttpResponseMessage response = await client.SendAsync(request);
+                    await LogHTTPResponse(response);
+                    return response;
+                }
             }
             catch (HttpRequestException e)
             {

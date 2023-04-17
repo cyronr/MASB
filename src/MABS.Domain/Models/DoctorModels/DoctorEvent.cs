@@ -10,5 +10,6 @@ namespace MABS.Domain.Models.DoctorModels
         public Doctor Doctor { get; set; }
         public string AddInfo { get; set; } = String.Empty;
         public Profile? CallerProfile { get; set; }
+        public DateTime Timestamp { get; set; } = DateTime.Now;
     }
 }

@@ -18,6 +18,9 @@ namespace MABS.Infrastructure.Data
             _connectionStrings = connectionOptions.Value;
         }
 
+        //Dictionaries
+        public DbSet<City> Cities { get; set; }
+
         //Doctors
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<DoctorStatus> DoctorStatus { get; set; }
@@ -27,7 +30,7 @@ namespace MABS.Infrastructure.Data
         public DbSet<Specialty> Specialties { get; set; }
 
         //Facilites
-        public DbSet<Facility> Facilites { get; set; }
+        public DbSet<Facility> Facilities { get; set; }
         public DbSet<FacilityStatus> FacilityStatus { get; set; }
         public DbSet<FacilityEvent> FacilityEvents { get; set; }
         public DbSet<FacilityEventType> FacilityEventType { get; set; }

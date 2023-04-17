@@ -22,7 +22,7 @@ namespace MABS.Infrastructure.DataAccess.Repositories
         public void Create(Facility facility)
         {
             _logger.LogInformation("Saving facility to databse.");
-            _context.Facilites.Add(facility);
+            _context.Facilities.Add(facility);
         }
 
         public void CreateEvent(FacilityEvent facilityEvent)
@@ -33,7 +33,7 @@ namespace MABS.Infrastructure.DataAccess.Repositories
 
         public async Task<List<Facility>> GetAllAsync()
         {
-            return await _context.Facilites
+            return await _context.Facilities
                 .Include(f => f.Status)
                 .Include(f => f.Events)
                     .ThenInclude(e => e.Type)
@@ -49,7 +49,7 @@ namespace MABS.Infrastructure.DataAccess.Repositories
         }
         public async Task<Facility?> GetByUUIDAsync(Guid uuid)
         {
-            return await _context.Facilites
+            return await _context.Facilities
                 .Include(f => f.Status)
                 .Include(f => f.Events)
                     .ThenInclude(e => e.Type)
@@ -63,13 +63,13 @@ namespace MABS.Infrastructure.DataAccess.Repositories
 
         public async Task<Facility?> GetByTINAsync(string taxIdentificationNumber)
         {
-            return await _context.Facilites
+            return await _context.Facilities
                 .FirstOrDefaultAsync(f => f.StatusId != FacilityStatus.Status.Deleted && f.TaxIdentificationNumber == taxIdentificationNumber);
         }
 
         public async Task<Facility?> GetWithAllDoctorsByUUIDAsync(Guid uuid)
         {
-            return await _context.Facilites
+            return await _context.Facilities
                 .Include(f => f.Doctors.Where(d => d.StatusId == DoctorStatus.Status.Active))
                     .ThenInclude(d => d.Title)
                 .Include(f => f.Doctors)

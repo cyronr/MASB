@@ -10,5 +10,6 @@ namespace MABS.Domain.Models.FacilityModels
         public Facility Facility { get; set; }
         public string AddInfo { get; set; } = String.Empty;
         public Profile? CallerProfile { get; set; }
+        public DateTime Timestamp { get; set; } = DateTime.Now;
     }
 }

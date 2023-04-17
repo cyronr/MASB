@@ -9,6 +9,7 @@ using Profile = MABS.Domain.Models.ProfileModels.Profile;
 using MABS.Application.ModelsExtensions.FacilityModelsExtensions;
 using MABS.Application.ModelsExtensions.ProfileModelsExtensions;
 using MABS.Application.Features.FacilityFeatures.Common;
+using MABS.Application.Common.Http;
 
 namespace MABS.Application.Features.FacilityFeatures.Commands.CreateFacility
 {
@@ -21,6 +22,7 @@ namespace MABS.Application.Features.FacilityFeatures.Commands.CreateFacility
         private readonly IFacilityRepository _facilityRepository;
         private readonly ICurrentLoggedProfile _currentLoggedProfile;
         private readonly IProfileRepository _profileRepository;
+        private readonly IHttpRequester _httpRequester;
 
         public CreateFacilityCommandHandler(
             ILogger<CreateFacilityCommandHandler> logger,
@@ -29,7 +31,8 @@ namespace MABS.Application.Features.FacilityFeatures.Commands.CreateFacility
             IFacilityRepository facilityRepository,
             ICurrentLoggedProfile currentLoggedProfile,
             IProfileRepository profileRepository,
-            IMediator mediator)
+            IMediator mediator,
+            IHttpRequester httpRequester)
         {
             _logger = logger;
             _mapper = mapper;
@@ -38,6 +41,7 @@ namespace MABS.Application.Features.FacilityFeatures.Commands.CreateFacility
             _currentLoggedProfile = currentLoggedProfile;
             _profileRepository = profileRepository;
             _mediator = mediator;
+            _httpRequester = httpRequester;
         }
 
         public async Task<FacilityDto> Handle(CreateFacilityCommand command, CancellationToken cancellationToken)
@@ -104,7 +108,7 @@ namespace MABS.Application.Features.FacilityFeatures.Commands.CreateFacility
             await facility.CheckAlreadyExistsAsync(_facilityRepository);
 
             _logger.LogInformation($"Checking facility's TIN with VAT Register.");
-            await facility.CheckAlreadyExistsAsync(_facilityRepository);
+            await facility.CheckTINWithVATRegisterAsync(_httpRequester);
 
             facility.Profile = profile;
             _facilityRepository.Create(facility);

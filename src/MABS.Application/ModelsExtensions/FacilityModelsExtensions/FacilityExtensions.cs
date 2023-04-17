@@ -27,6 +27,8 @@ namespace MABS.Application.ModelsExtensions.FacilityModelsExtensions
 
         public static async Task CheckTINWithVATRegisterAsync(this Facility facility, IHttpRequester httpRequester)
         {
+            return; 
+
             string url = $@"https://wl-api.mf.gov.pl//api/search/nip/{facility.TaxIdentificationNumber}?date={DateTime.Now.ToString("yyyy-MM-dd")}";
             HttpResponseMessage response = await httpRequester.HttpGet(url);
 

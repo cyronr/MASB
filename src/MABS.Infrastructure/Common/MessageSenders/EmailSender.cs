@@ -34,7 +34,8 @@ namespace MABS.Infrastructure.Common.MessageSenders
             })
             {
                 message.From = new MailAddress(_smtpConfig.SendFrom);
-                
+                //message.
+
                 try
                 {
                     _logger.LogDebug($"Sending email to {message.To}");

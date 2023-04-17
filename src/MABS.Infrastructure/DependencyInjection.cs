@@ -1,5 +1,6 @@
 ﻿using Elasticsearch.Net;
 using MABS.Application.Common.Authentication;
+using MABS.Application.Common.Geolocation;
 using MABS.Application.Common.Http;
 using MABS.Application.Common.MessageSenders;
 using MABS.Application.DataAccess.Common;
@@ -7,6 +8,7 @@ using MABS.Application.DataAccess.Repositories;
 using MABS.Application.Elasticsearch;
 using MABS.Infrastructure.Common;
 using MABS.Infrastructure.Common.Authentication;
+using MABS.Infrastructure.Common.Geolocation;
 using MABS.Infrastructure.Common.Http;
 using MABS.Infrastructure.Common.MessageSenders;
 using MABS.Infrastructure.Data;
@@ -62,6 +64,7 @@ namespace MABS.Infrastructure
         {
             services.AddScoped<IDbOperation, DbOperation>();
             services.AddScoped<IInternalDbTransaction, InternalDbTransaction>();
+            services.AddScoped<IDictionaryRepository, DictionaryRepository>();
             services.AddScoped<IDoctorRepository, DoctorRepository>();
             services.AddScoped<IFacilityRepository, FacilityRepository>();
             services.AddScoped<IPatientRepository, PatientRepository>();
@@ -83,6 +86,7 @@ namespace MABS.Infrastructure
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
             services.AddSingleton<IHttpRequester, HttpRequester>();
             services.AddSingleton<IEmailSender, EmailSender>();
+            services.AddSingleton<IGeolocator, Geolocator>();
 
             return services;
         }

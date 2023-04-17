@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace MABS.Infrastructure.Data.Configuration.FacilityConfigurations
 {
-    public class CountryConfiguration : IEntityTypeConfiguration<Country>
+    public class CityConfiguration : IEntityTypeConfiguration<Country>
     {
         public void Configure(EntityTypeBuilder<Country> builder)
         {

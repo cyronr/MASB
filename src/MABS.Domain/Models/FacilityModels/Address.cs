@@ -19,6 +19,8 @@ namespace MABS.Domain.Models.FacilityModels
         public string PostalCode { get; set; }
         public Country Country { get; set; }
         public Facility Facility { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
 
         public override string ToString()
         {

@@ -18,26 +18,35 @@ namespace MABS.Infrastructure.Elasticsearch
             _elastic = elastic;
         }
 
-        public async Task<List<ElasticDoctor>> SearchAsync(string searchText, int from, int size)
+        public async Task<List<ElasticDoctor>> SearchAsync(string? searchText, int? specialtyId)
         {
             var result = await _elastic.SearchAsync<ElasticDoctor>(s => s
                 .Index("doctors")
                 .Query(q => q
-                    .MultiMatch(c => c
-                        .Fields(f => f
-                            .Field(p => p.Specalities, 2)
-                            .Field(p => p.LastName, 1.5)
-                            .Field(p => p.FirstName, 1.4)
-                            .Field(p => p.TitleName, 0.8)
-                            .Field(p => p.TitleShortName, 0.5)
-                         )
-                        .Query(searchText)
-                        .Fuzziness(Fuzziness.Auto)
-                        .Type(TextQueryType.MostFields)
+                    .Bool(b => b
+                        .Must(m => m
+                            .MultiMatch(mm => mm
+                                .Fields(f => f
+                                    .Field("specialities.name", 2)
+                                    .Field("lastName", 1.5)
+                                    .Field("firstName", 1.4)
+                                    .Field("titleShortName", 0.8)
+                                    .Field("titleName", 0.5)
+                                )
+                                .Query(searchText)
+                                .Fuzziness(Fuzziness.Auto)
+                                .Type(TextQueryType.MostFields)
+                            )
+                        )
+                        .Filter(f => f
+                            .Term(t => t
+                                .Field("specalities.id")
+                                .Value(specialtyId)
+                            )
+                        )
                     )
                 )
-                .From(from)
-                .Size(size)
+                .Size(100)
             );
 
             return result.Documents.ToList();

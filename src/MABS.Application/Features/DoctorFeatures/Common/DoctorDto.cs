@@ -1,3 +1,4 @@
+using MABS.Application.Features.FacilityFeatures.Common;
 using MABS.Domain.Models.DoctorModels;
 using System.Text.Json;
 
@@ -11,6 +12,7 @@ namespace MABS.Application.Features.DoctorFeatures.Common
         public DoctorStatus.Status Status { get; set; }
         public TitleDto Title { get; set; }
         public List<SpecialityDto> Specialties { get; set; }
+        public List<FacilityDto> Facilities { get; set; }
 
         public override string ToString()
         {

@@ -4,7 +4,7 @@ using MABS.Domain.Models.DictionaryModels;
 
 namespace MABS.Application.ModelsExtensions.FacilityModelsExtensions
 {
-    public static class CountryExtensions
+    public static class CityExtensions
     {
         public async static Task<Country> GetByIdAsync(this Country country, IFacilityRepository facilityRepository, string id)
         {

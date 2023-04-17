@@ -6,10 +6,9 @@ using MASB.API.Responses.DoctorResponses;
 using MABS.Application.Common.Pagination;
 using MABS.Application.Features.DoctorFeatures.Commands.DeleteDoctor;
 using MABS.Application.Features.DoctorFeatures.Queries.GetDoctorById;
-using MABS.Application.Features.DoctorFeatures.Queries.GetDoctorsBySpecialties;
 using MABS.Application.Features.DoctorFeatures.Queries.GetAllSpecialties;
 using MABS.Application.Features.DoctorFeatures.Queries.GetAllTitles;
-using MABS.Application.Features.DoctorFeatures.Queries.SearchAllDoctorsByText;
+using MABS.Application.Features.DoctorFeatures.Queries.SearchAllDoctors;
 using MABS.Application.Features.DoctorFeatures.Commands.CreateDoctor;
 using MABS.Application.Features.DoctorFeatures.Commands.UpdateDoctor;
 
@@ -30,17 +29,18 @@ namespace MABS.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<PagedList<DoctorResponse>>> SearchAll([FromQuery] PagingParameters pagingParameters, string searchText)
+        [HttpGet("search")]
+        public async Task<ActionResult<PagedList<DoctorResponse>>> SearchAll([FromQuery] PagingParameters pagingParameters, string? searchText, int? specialtyId, int? cityId)
         {
             _logger.LogInformation("Fetching all doctors.");
 
-            var query = new SearchAllDoctorsByTextQuery(pagingParameters, searchText);
+            var query = new SearchAllDoctors(pagingParameters, searchText, specialtyId, cityId);
             var response = await _mediator.Send(query);
 
             _logger.LogInformation($"Returning {response.Count} doctors.");
 
             Response.Headers.Add("X-Pagination", response.GetMetadata());
+
             return Ok(response.Select(d => _mapper.Map<DoctorResponse>(d)).ToList());
         }
 
@@ -55,20 +55,6 @@ namespace MABS.API.Controllers
             _logger.LogInformation($"Returning doctor of Id = {id}.");
 
             return Ok(_mapper.Map<DoctorResponse>(response));
-        }
-
-        [HttpGet("bySpecialties")]
-        public async Task<ActionResult<PagedList<DoctorResponse>>> GetBySpecialtyIds([FromQuery]List<int> ids, [FromQuery] PagingParameters pagingParameters)
-        {
-            _logger.LogInformation($"Fetching doctors for specalties Ids = {String.Join(", ", ids.ToArray())}.");
-
-            var query = new GetDoctorsBySpecialtiesQuery(pagingParameters, ids);
-            var response = await _mediator.Send(query);
-
-            _logger.LogInformation($"Returning {response.Count} doctors.");
-
-            Response.Headers.Add("X-Pagination", response.GetMetadata());
-            return Ok(response.Select(d => _mapper.Map<DoctorResponse>(d)).ToList());
         }
 
         //[Authorize]

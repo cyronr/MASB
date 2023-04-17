@@ -10,5 +10,6 @@ namespace MABS.Domain.Models.ProfileModels
         public string AddInfo { get; set; } = string.Empty;
         public Profile CallerProfile { get; set; }
         public int? CallerProfileId { get; set; }
+        public DateTime Timestamp { get; set; } = DateTime.Now;
     }
 }

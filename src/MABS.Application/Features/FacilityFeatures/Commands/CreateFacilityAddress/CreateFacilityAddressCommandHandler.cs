@@ -9,8 +9,10 @@ using Profile = MABS.Domain.Models.ProfileModels.Profile;
 using MABS.Application.ModelsExtensions.FacilityModelsExtensions;
 using MABS.Application.ModelsExtensions.ProfileModelsExtensions;
 using MABS.Domain.Models.DictionaryModels;
-using MABS.Domain.Models.DoctorModels;
 using MABS.Application.Features.FacilityFeatures.Common;
+using System.Net;
+using MABS.Application.Common.Http;
+using MABS.Application.Common.Geolocation;
 
 namespace MABS.Application.Features.FacilityFeatures.Commands.CreateFacilityAddress
 {
@@ -22,6 +24,7 @@ namespace MABS.Application.Features.FacilityFeatures.Commands.CreateFacilityAddr
         private readonly IFacilityRepository _facilityRepository;
         private readonly ICurrentLoggedProfile _currentLoggedProfile;
         private readonly IProfileRepository _profileRepository;
+        private readonly IGeolocator _geolocator;
 
         public CreateFacilityAddressCommandHandler(
             ILogger<CreateFacilityAddressCommandHandler> logger,
@@ -29,7 +32,8 @@ namespace MABS.Application.Features.FacilityFeatures.Commands.CreateFacilityAddr
             IDbOperation db,
             IFacilityRepository facilityRepository,
             ICurrentLoggedProfile currentLoggedProfile,
-            IProfileRepository profileRepository)
+            IProfileRepository profileRepository,
+            IGeolocator geolocator)
         {
             _logger = logger;
             _mapper = mapper;
@@ -37,6 +41,7 @@ namespace MABS.Application.Features.FacilityFeatures.Commands.CreateFacilityAddr
             _facilityRepository = facilityRepository;
             _currentLoggedProfile = currentLoggedProfile;
             _profileRepository = profileRepository;
+            _geolocator = geolocator;
         }
 
         public async Task<FacilityDto> Handle(CreateFacilityAddressCommand command, CancellationToken cancellationToken)
@@ -52,7 +57,6 @@ namespace MABS.Application.Features.FacilityFeatures.Commands.CreateFacilityAddr
             _logger.LogDebug($"Fetching country with id = {command.CountryId}.");
             var country = await new Country().GetByIdAsync(_facilityRepository, command.CountryId);
 
-            Address address;
             if (!_db.IsActiveTransaction())
             {
                 using (var tran = _db.BeginTransaction())
@@ -127,6 +131,10 @@ namespace MABS.Application.Features.FacilityFeatures.Commands.CreateFacilityAddr
 
             _logger.LogInformation($"Checking if address ({address.ToString()}) already exists.");
             await address.CheckAlreadyExistsAsync(_facilityRepository);
+
+            GeoCoordinates coordinates = await _geolocator.EncodeAddress(address);
+            address.Longitude = coordinates.Longitude;
+            address.Latitude = coordinates.Latitude;
 
             facility.Addresses.Add(address);
             await _db.Save();

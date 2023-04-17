@@ -5,6 +5,6 @@ namespace MABS.Application.Elasticsearch
 {
     public interface IElasticsearchDoctorService
     {
-        Task<List<ElasticDoctor>> SearchAsync(string searchText, int from, int size);
+        Task<List<ElasticDoctor>> SearchAsync(string? searchText, int? specialtyId);
     }
 }
