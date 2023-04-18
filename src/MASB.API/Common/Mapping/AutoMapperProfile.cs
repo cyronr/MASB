@@ -2,6 +2,7 @@ using AutoMapper;
 using MABS.API.Requests.FacilityRequests;
 using MABS.API.Responses.FacilityResponses;
 using MABS.Application.Features.AuthenticationFeatures.Common;
+using MABS.Application.Features.DictionaryFeatures.Common;
 using MABS.Application.Features.DoctorFeatures.Commands.CreateDoctor;
 using MABS.Application.Features.DoctorFeatures.Commands.UpdateDoctor;
 using MABS.Application.Features.DoctorFeatures.Common;
@@ -10,6 +11,7 @@ using MABS.Application.Features.FacilityFeatures.Commands.CreateFacilityAddress;
 using MABS.Application.Features.FacilityFeatures.Common;
 using MASB.API.Requests.AuthenticationResponses;
 using MASB.API.Requests.DoctorRequests;
+using MASB.API.Responses.DictionaryResponses;
 using MASB.API.Responses.DoctorResponses;
 
 namespace MASB.API.Common.Mapping
@@ -18,6 +20,9 @@ namespace MASB.API.Common.Mapping
     {
         public AutoMapperProfile()
         {
+            ///Dictionary mappings
+            CreateMap<CityDto, CityResponse>();
+
             ///Doctor mappings
             CreateMap<DoctorDto, DoctorResponse>();
             CreateMap<CreateDoctorRequest, CreateDoctorCommand>();

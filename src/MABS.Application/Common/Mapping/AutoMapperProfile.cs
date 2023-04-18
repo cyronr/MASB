@@ -1,5 +1,6 @@
 using AutoMapper;
 using MABS.Application.Features.AuthenticationFeatures.Common;
+using MABS.Application.Features.DictionaryFeatures.Common;
 using MABS.Application.Features.DoctorFeatures.Common;
 using MABS.Application.Features.FacilityFeatures.Common;
 using MABS.Application.Features.PatientFeatures.Common;
@@ -15,6 +16,9 @@ namespace MABS.Application.Common.Mapping
     {
         public AutoMapperProfile()
         {
+            ///Dictionaries
+            CreateMap<City, CityDto>();
+
             ///Doctors
             CreateMap<Doctor, DoctorDto>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID))

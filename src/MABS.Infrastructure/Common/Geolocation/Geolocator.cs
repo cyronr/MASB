@@ -3,8 +3,6 @@ using MABS.Application.Common.Http;
 using MABS.Domain.Exceptions;
 using MABS.Domain.Models.FacilityModels;
 using Microsoft.Extensions.Logging;
-using Nest;
-using NetTopologySuite.Geometries;
 using Newtonsoft.Json.Linq;
 
 namespace MABS.Infrastructure.Common.Geolocation
@@ -22,10 +20,13 @@ namespace MABS.Infrastructure.Common.Geolocation
 
         public double CalculateDistanceBetweenPoints(GeoCoordinates point1, GeoCoordinates point2)
         {
-            var geoPoint1 = new Point(point1.Longitude, point1.Latitude);
-            var geoPoint2 = new Point(point2.Longitude, point2.Latitude);
-
-            return Haversine.Distance(geoPoint1, geoPoint2, SpatialReferenceSystem.WGS84);
+            var d1 = point1.Latitude * (Math.PI / 180.0);
+            var num1 = point1.Longitude * (Math.PI / 180.0);
+            var d2 = point2.Latitude * (Math.PI / 180.0);
+            var num2 = point2.Longitude * (Math.PI / 180.0) - num1;
+            var d3 = Math.Pow(Math.Sin((d2 - d1) / 2.0), 2.0) +
+                     Math.Cos(d1) * Math.Cos(d2) * Math.Pow(Math.Sin(num2 / 2.0), 2.0);
+            return 6376500.0 * (2.0 * Math.Atan2(Math.Sqrt(d3), Math.Sqrt(1.0 - d3)));
         }
 
         public async Task<GeoCoordinates> EncodeAddress(Address address)
@@ -47,11 +48,7 @@ namespace MABS.Infrastructure.Common.Geolocation
                 throw new WrongAddressException("Wrong address!", "Address not found");
 
             JArray geocodeData = JArray.Parse(responseData);
-            return new GeoCoordinates
-            {
-                Latitude = (double)geocodeData[0]["lat"],
-                Longitude = (double)geocodeData[0]["lon"]
-            };
+            return new GeoCoordinates((double)geocodeData[0]["lat"], (double)geocodeData[0]["lon"]);
         }
 
         private string GetStringAddress(Address address)

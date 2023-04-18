@@ -8,10 +8,7 @@ using MABS.Application.ModelsExtensions.FacilityModelsExtensions;
 using MABS.Domain.Models.DictionaryModels;
 using MABS.Domain.Models.FacilityModels;
 using MediatR;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Logging;
-using System.Net;
-using System.Reflection.Metadata.Ecma335;
 
 namespace MABS.Application.Features.DoctorFeatures.Queries.SearchAllDoctors
 {
@@ -50,9 +47,8 @@ namespace MABS.Application.Features.DoctorFeatures.Queries.SearchAllDoctors
             if (query.CityId is not null)
             {
                 var city = await new City().GetByIdAsync(_dictionaryRepository, (int)query.CityId);
-                var a = FilterDoctorsByCity(doctors, city);
+                doctors = await FilterDoctorsByCity(doctors, city);
             }
-
 
             return PagedList<DoctorDto>.ToPagedList(
                 doctors,
@@ -65,13 +61,8 @@ namespace MABS.Application.Features.DoctorFeatures.Queries.SearchAllDoctors
         {
             var filteredDoctors = new List<DoctorDto>();
 
-            var cityCoordinates = new GeoCoordinates { Latitude = city.Latitude, Longitude = city.Longitude };
-
-            var addressCoordinates = new GeoCoordinates { Latitude = 51.7647001, Longitude = 19.4753907472024 };
-            double distance = _geolocator.CalculateDistanceBetweenPoints(cityCoordinates, addressCoordinates);
-
-            _logger.LogInformation($"Odległość = {distance}");
-            /*
+            var cityCoordinates = new GeoCoordinates(city.Latitude, city.Longitude);
+            
             foreach (var doctor in doctors)
             {
                 foreach(var doctorFacility in doctor.Facilities)
@@ -79,14 +70,21 @@ namespace MABS.Application.Features.DoctorFeatures.Queries.SearchAllDoctors
                     var facility = await new Facility().GetByUUIDAsync(_facilityRepository, doctorFacility.Id);
                     foreach(var address in facility.Addresses)
                     {
-                        var addressCoordinates = new GeoCoordinates { Latitude = address.Latitude, Longitude = address.Longitude };
+                        var addressCoordinates = new GeoCoordinates(address.Latitude, address.Longitude);
                         double distance = _geolocator.CalculateDistanceBetweenPoints(cityCoordinates, addressCoordinates);
 
-                        _logger.LogInformation($"Odległość = {distance}");
+                        if (distance < 10000)
+                        {
+                            filteredDoctors.Add(doctor);
+                            continue;
+                        }
                     }
+
+                    if (filteredDoctors.FirstOrDefault(d => d.Id == doctor.Id) is not null)
+                        continue;
                 }
             }
-            */
+            
             return filteredDoctors;
         }
     }
