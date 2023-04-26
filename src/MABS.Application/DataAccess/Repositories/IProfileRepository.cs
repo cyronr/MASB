@@ -10,6 +10,8 @@ namespace MABS.Application.DataAccess.Repositories
         void Create(Profile profile);
         void CreateEvent(ProfileEvent profileEvent);
 
+        Task<Guid?> GetFacilityIdByProfileIdAsync(Guid uuid);
+        Task<Guid?> GetPatientIdByProfileIdAsync(Guid uuid);
 
         Task<List<ProfileType>> GetAllTypesAsync();
     }

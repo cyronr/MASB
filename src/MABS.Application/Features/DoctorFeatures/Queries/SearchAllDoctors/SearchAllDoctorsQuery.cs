@@ -4,7 +4,7 @@ using MediatR;
 
 namespace MABS.Application.Features.DoctorFeatures.Queries.SearchAllDoctors
 {
-    public record SearchAllDoctors
+    public record SearchAllDoctorsQuery
     (
         PagingParameters PagingParameters,
         string? SearchText,

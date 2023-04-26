@@ -33,8 +33,8 @@ namespace MABS.Domain.Models.FacilityModels
                 HouseNumber = HouseNumber,
                 FlatNumber = FlatNumber,
                 City = City,
-                PostalCode = PostalCode,
-                Country = Country.Id
+                PostalCode = PostalCode//,
+                //Country = Country.Id
             };
 
             return JsonSerializer.Serialize(address);

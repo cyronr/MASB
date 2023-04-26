@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using MABS.API.Requests.AuthenticationRequests;
-using MABS.Application.Features.DoctorFeatures.Commands.CreateDoctor;
-using MABS.Application.Features.AuthenticationFeatures.Commands.RegisterDoctor;
 using MABS.Application.Features.AuthenticationFeatures.Queries.Login;
 using MASB.API.Requests.AuthenticationRequests;
 using MASB.API.Requests.AuthenticationResponses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MABS.Application.Features.AuthenticationFeatures.Commands.RegisterPatient;
+using MABS.Application.Features.PatientFeatures.Commands.CreatePatient;
+using MABS.Application.Features.AuthenticationFeatures.Commands.RegisterFacility;
+using MABS.Application.Features.FacilityFeatures.Commands.CreateFacility;
 
 namespace MABS.API.Controllers
 {
@@ -38,20 +40,42 @@ namespace MABS.API.Controllers
             return Ok(_mapper.Map<AuthenticationResponse>(response));
         }
 
-        [HttpPost("register/doctor")]
-        public async Task<ActionResult<AuthenticationResponse>> RegisterDoctor(RegisterDoctorProfileRequest request)
+        [HttpPost("register/patient")]
+        public async Task<ActionResult<AuthenticationResponse>> RegisterPatient(RegisterPatientProfileRequest request)
         {
-            _logger.LogInformation($"Registering new doctor profile {request.Email}.");
+            _logger.LogInformation($"Registering new patient profile {request.Email}.");
 
-            var command = new RegisterDoctorCommand(
+            var command = new RegisterPatientCommand(
                 request.Email,
                 request.Password,
                 request.PhoneNumber,
-                _mapper.Map<CreateDoctorCommand>(request.Doctor)
+                new CreatePatientCommand
+                {
+                    Firstname = request.Firstname,
+                    Lastname = request.Lastname
+                }
             );
             var response = await _mediator.Send(command);
 
-            _logger.LogInformation($"Registered new doctor profile for {request.Email} ({response.Profile.Id}).");
+            _logger.LogInformation($"Registered new patient profile for {request.Email} ({response.Profile.Id}).");
+
+            return Created(Request.Path, _mapper.Map<AuthenticationResponse>(response));
+        }
+
+        [HttpPost("register/facility")]
+        public async Task<ActionResult<AuthenticationResponse>> RegisterFacility(RegisterFacilityProfileRequest request)
+        {
+            _logger.LogInformation($"Registering new facility profile {request.Email}.");
+
+            var command = new RegisterFacilityCommand(
+                request.Email,
+                request.Password,
+                request.PhoneNumber,
+                _mapper.Map<CreateFacilityCommand>(request.Facility)
+            );
+            var response = await _mediator.Send(command);
+
+            _logger.LogInformation($"Registered new facility profile for {request.Email} ({response.Profile.Id}).");
 
             return Created(Request.Path, _mapper.Map<AuthenticationResponse>(response));
         }

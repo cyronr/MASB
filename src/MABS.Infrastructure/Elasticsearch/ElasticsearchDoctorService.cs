@@ -18,6 +18,25 @@ namespace MABS.Infrastructure.Elasticsearch
             _elastic = elastic;
         }
 
+
+        public async Task<ElasticDoctor?> FindExact(string firstName, string lastName, List<int> specialtiesIds)
+        {
+            var result = await _elastic.SearchAsync<ElasticDoctor>(s => s
+                .Index("doctors")
+                .Query(q => q
+                    .Bool(b => b
+                        .Must(
+                            m => m.Match(mq => mq.Field(f => f.FirstName).Query(firstName)),
+                            m => m.Match(mq => mq.Field(f => f.LastName).Query(lastName)),
+                            m => m.Terms(mq => mq.Field(f => f.Specalities.Select(s => s.Id)).Terms(specialtiesIds))
+                        )
+                    )
+                )
+            );
+
+            return result.Documents.ToList().SingleOrDefault();
+        }
+
         public async Task<List<ElasticDoctor>> SearchAsync(string? searchText, int? specialtyId)
         {
             var result = await _elastic.SearchAsync<ElasticDoctor>(s => s

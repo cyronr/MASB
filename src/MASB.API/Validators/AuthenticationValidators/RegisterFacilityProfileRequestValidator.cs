@@ -1,4 +1,5 @@
 ﻿using MABS.API.Requests.AuthenticationRequests;
+using MABS.API.Validators.FacilityValidators;
 
 namespace MABS.API.Validators.AuthenticationValidators
 {
@@ -6,7 +7,7 @@ namespace MABS.API.Validators.AuthenticationValidators
     {
         public RegisterFacilityProfileRequestValidator()
         {
-            //RuleFor(obj => obj.Facility).SetValidator(new CreateFacilityDtoValidator());
+            RuleFor(obj => obj.Facility).SetValidator(new CreateFacilityRequestValidator());
         }
     }
 }

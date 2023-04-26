@@ -25,14 +25,6 @@ namespace MABS.API.Validators.AuthenticationValidators
                 .Must(IsPasswordValid)
                 .WithMessage("{PropertyName} is not valid password");
 
-            RuleFor(obj => obj.RepeatedPassword)
-                .NotEmpty()
-                .WithMessage("{PropertyName} must have value")
-                .NotEqual("string")
-                .WithMessage("{PropertyName} must have value")
-                .Must((obj, repeatedPassword) => obj.Password == repeatedPassword)
-                .WithMessage("Passwords must be equal.");
-
             When(obj => !obj.PhoneNumber.IsNullOrEmpty(), () =>
             {
                 RuleFor(obj => obj.PhoneNumber)

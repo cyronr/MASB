@@ -8,6 +8,9 @@ using Profile = MABS.Domain.Models.ProfileModels.Profile;
 using MABS.Domain.Models.PatientModels;
 using MABS.Application.ModelsExtensions.ProfileModelsExtensions;
 using MABS.Application.Features.PatientFeatures.Common;
+using MABS.Domain.Models.DoctorModels;
+using System.Numerics;
+using MABS.Application.Features.DoctorFeatures.Common;
 
 namespace MABS.Application.Features.PatientFeatures.Commands.CreatePatient
 {
@@ -38,14 +41,48 @@ namespace MABS.Application.Features.PatientFeatures.Commands.CreatePatient
 
         public async Task<PatientDto> Handle(CreatePatientCommand command, CancellationToken cancellationToken)
         {
-            Patient patient = new Patient();
-            patient.Firstname = command.Firstname;
-            patient.Lastname = command.Lastname;
-            patient.StatusId = PatientStatus.Status.Active;
-            patient.UUID = Guid.NewGuid();
+            Profile profile;
+            if (command.ProfileId is null)
+                profile = CallerProfile.GetCurrentLoggedProfile(_currentLoggedProfile).GetProfileEntity();
+            else
+                profile = await new Profile().GetByUUIDAsync(_profileRepository, (Guid)command.ProfileId);
 
-            var profile = await new Profile().GetByUUIDAsync(_profileRepository, command.ProfileId);
-            patient.Profile = profile;
+            Patient patient;
+            if (!_db.IsActiveTransaction())
+            {
+                using (var tran = _db.BeginTransaction())
+                {
+                    try
+                    {
+                        patient = await DoCreate(command.Firstname, command.Lastname, profile);
+                        tran.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        tran.Rollback();
+                        throw;
+                    }
+                }
+            }
+            else
+                patient = await DoCreate(command.Firstname, command.Lastname, profile);
+
+            return _mapper.Map<PatientDto>(patient);
+        }
+
+        private async Task<Patient> DoCreate(
+            string firstname,
+            string lastname,
+            Profile profile)
+        {
+            Patient patient = new Patient
+            {
+                UUID = Guid.NewGuid(),
+                StatusId = PatientStatus.Status.Active,
+                Firstname = firstname,
+                Lastname = lastname,
+                Profile = profile
+            };
 
             _patientRepository.Create(patient);
             await _db.Save();
@@ -59,7 +96,7 @@ namespace MABS.Application.Features.PatientFeatures.Commands.CreatePatient
             });
             await _db.Save();
 
-            return _mapper.Map<PatientDto>(patient);
+            return patient;
         }
     }
 }

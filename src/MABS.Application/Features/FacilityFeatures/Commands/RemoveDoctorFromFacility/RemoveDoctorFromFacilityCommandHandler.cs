@@ -47,8 +47,8 @@ namespace MABS.Application.Features.FacilityFeatures.Commands.RemoveDoctorFromFa
             _logger.LogDebug($"Fetching facility with id = {command.FacilityId}.");
             var facility = await new Facility().GetWithDoctorsByUUIDAsync(_facilityRepository, command.FacilityId);
 
-            if (facility.Doctors.FirstOrDefault(d => d.UUID == command.DoctorId) is not null)
-                throw new AlreadyExistsException($"Doctor is already added to this facility.", $"DoctorId = {command.DoctorId}, FacilityId = {command.FacilityId}");
+            if (facility.Doctors.FirstOrDefault(d => d.UUID == command.DoctorId) is null)
+                throw new NotFoundException($"Ten lekarz nie jest przypisany do wybranej placówki.", $"DoctorId = {command.DoctorId}, FacilityId = {command.FacilityId}");
 
             _logger.LogDebug($"Fetching doctor with id = {command.DoctorId}.");
             var doctor = await new Doctor().GetByUUIDAsync(_doctorRepository, command.DoctorId);

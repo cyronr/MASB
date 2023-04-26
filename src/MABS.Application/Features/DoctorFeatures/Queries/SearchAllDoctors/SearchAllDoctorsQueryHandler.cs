@@ -12,16 +12,16 @@ using Microsoft.Extensions.Logging;
 
 namespace MABS.Application.Features.DoctorFeatures.Queries.SearchAllDoctors
 {
-    public class SearchAllDoctorsHandler : IRequestHandler<SearchAllDoctors, PagedList<DoctorDto>>
+    public class SearchAllDoctorsQueryHandler : IRequestHandler<SearchAllDoctorsQuery, PagedList<DoctorDto>>
     {
-        private readonly ILogger<SearchAllDoctorsHandler> _logger;
+        private readonly ILogger<SearchAllDoctorsQueryHandler> _logger;
         private readonly IElasticsearchDoctorService _elasticsearch;
         private readonly IFacilityRepository _facilityRepository;
         private readonly IDictionaryRepository _dictionaryRepository;
         private readonly IGeolocator _geolocator;
 
-        public SearchAllDoctorsHandler(
-            ILogger<SearchAllDoctorsHandler> logger,
+        public SearchAllDoctorsQueryHandler(
+            ILogger<SearchAllDoctorsQueryHandler> logger,
             IElasticsearchDoctorService elasticsearch,
             IFacilityRepository facilityRepository,
             IDictionaryRepository dictionaryRepository,
@@ -34,7 +34,7 @@ namespace MABS.Application.Features.DoctorFeatures.Queries.SearchAllDoctors
             _geolocator = geolocator;
         }
 
-        public async Task<PagedList<DoctorDto>> Handle(SearchAllDoctors query, CancellationToken cancellationToken)
+        public async Task<PagedList<DoctorDto>> Handle(SearchAllDoctorsQuery query, CancellationToken cancellationToken)
         {
             _logger.LogDebug($"Fetching doctors with paging parameters = {query.PagingParameters.ToString()}.");
 

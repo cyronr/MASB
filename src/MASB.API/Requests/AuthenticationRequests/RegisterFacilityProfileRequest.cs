@@ -1,7 +1,9 @@
-﻿namespace MABS.API.Requests.AuthenticationRequests
+﻿using MABS.API.Requests.FacilityRequests;
+
+namespace MABS.API.Requests.AuthenticationRequests
 {
     public record RegisterFacilityProfileRequest : RegisterProfileRequest
     {
-        //public CreateFacilityDto Facility { get; set; }
+        public CreateFacilityRequest Facility { get; set; }
     }
 }

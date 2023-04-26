@@ -72,9 +72,8 @@ namespace MABS.Application.Features.FacilityFeatures.Commands.DeleteFacilityAddr
                 }
             };
 
-            return _mapper.Map<FacilityDto>(
-                facility.Addresses.Remove(address)
-            );
+            facility.Addresses.Remove(address);
+            return _mapper.Map<FacilityDto>(facility);
         }
     }
 }

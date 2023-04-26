@@ -3,7 +3,7 @@ using MediatR;
 
 namespace MABS.Application.Features.DoctorFeatures.Commands.CreateDoctor
 {
-    public record CreateDoctorCommand : IRequest<DoctorDto>
+    public record CreateDoctorCommand : IRequest<DoctorDto?>
     {
         public string Firstname { get; set; }
         public string Lastname { get; set; }

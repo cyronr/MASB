@@ -19,6 +19,7 @@ using MASB.API.Responses.DoctorResponses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MABS.Application.Features.FacilityFeatures.Queries.GetFacilityByProfile;
 
 namespace MABS.API.Controllers
 {
@@ -61,6 +62,19 @@ namespace MABS.API.Controllers
             var response = await _mediator.Send(query);
 
             _logger.LogInformation($"Returning facility of Id = {id}.");
+
+            return Ok(_mapper.Map<FacilityResponse>(response));
+        }
+
+        [HttpGet("byProfile/{profileId}")]
+        public async Task<ActionResult<FacilityResponse>> GetByProfileId(Guid profileId)
+        {
+            _logger.LogInformation($"Fetching facility by profile of Id = {profileId}.");
+
+            var query = new GetFacilityByProfileQuery(profileId);
+            var response = await _mediator.Send(query);
+
+            _logger.LogInformation($"Returning facility of Id = {response.Id}.");
 
             return Ok(_mapper.Map<FacilityResponse>(response));
         }
@@ -175,7 +189,7 @@ namespace MABS.API.Controllers
             
             return Created(
                 Request.Path,
-                response.Select(f => _mapper.Map<FacilityResponse>(f)).ToList()
+                response.Select(f => _mapper.Map<DoctorResponse>(f)).ToList()
             );
         }
 
@@ -192,7 +206,7 @@ namespace MABS.API.Controllers
             return Ok(response.Select(f => _mapper.Map<FacilityResponse>(f)).ToList());
         }
 
-        [HttpGet("Dictonaries/Countries")]
+        [HttpGet("dict/countries")]
         public async Task<ActionResult<List<CountryResponse>>> GetCountries()
         {
             _logger.LogInformation("Fetching all countries.");
@@ -204,7 +218,7 @@ namespace MABS.API.Controllers
             return Ok(response.Select(c => _mapper.Map<CountryResponse>(c)).ToList());
         }
 
-        [HttpGet("Dictonaries/StreetTypes")]
+        [HttpGet("dict/streetTypes")]
         public async Task<ActionResult<List<StreetTypeResponse>>> GetStreetTypes()
         {
             _logger.LogInformation("Fetching all street types.");

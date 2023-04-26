@@ -12,11 +12,11 @@ using MABS.Application.Common.MessageSenders;
 using System.Net.Mail;
 using System.Security.Cryptography.X509Certificates;
 
-namespace MABS.Application.Features.AuthenticationFeatures.Commands.RegisterDoctor
+namespace MABS.Application.Features.AuthenticationFeatures.Commands.RegisterPatient
 {
-    public class RegisterDoctorCommandHandler : IRequestHandler<RegisterDoctorCommand, AuthenticationResultDto>
+    public class RegisterPatientCommandHandler : IRequestHandler<RegisterPatientCommand, AuthenticationResultDto>
     {
-        private readonly ILogger<RegisterDoctorCommandHandler> _logger;
+        private readonly ILogger<RegisterPatientCommandHandler> _logger;
         private readonly IMapper _mapper;
         private readonly IDbOperation _db;
         private readonly IProfileRepository _profileRepository;
@@ -25,8 +25,8 @@ namespace MABS.Application.Features.AuthenticationFeatures.Commands.RegisterDoct
         private readonly IMediator _mediator;
         private readonly IEmailSender _emailSender;
 
-        public RegisterDoctorCommandHandler(
-            ILogger<RegisterDoctorCommandHandler> logger,
+        public RegisterPatientCommandHandler(
+            ILogger<RegisterPatientCommandHandler> logger,
             IMapper mapper,
             IDbOperation db,
             IProfileRepository profileRepository,
@@ -45,7 +45,7 @@ namespace MABS.Application.Features.AuthenticationFeatures.Commands.RegisterDoct
             _emailSender = emailSender;
         }
 
-        public async Task<AuthenticationResultDto> Handle(RegisterDoctorCommand command, CancellationToken cancellationToken)
+        public async Task<AuthenticationResultDto> Handle(RegisterPatientCommand command, CancellationToken cancellationToken)
         {
             Profile profile = new Profile();
             using (var tran = _db.BeginTransaction())
@@ -59,7 +59,7 @@ namespace MABS.Application.Features.AuthenticationFeatures.Commands.RegisterDoct
 
                     profile.UUID = Guid.NewGuid();
                     profile.StatusId = ProfileStatus.Status.Prepared;
-                    profile.TypeId = ProfileType.Type.Doctor;
+                    profile.TypeId = ProfileType.Type.Patient;
 
                     _passwordHasher.GeneratePassword(command.Password, out byte[] passwordHasher, out byte[] passwordSalt);
                     profile.PasswordHash = passwordHasher;
@@ -77,8 +77,8 @@ namespace MABS.Application.Features.AuthenticationFeatures.Commands.RegisterDoct
                     });
                     await _db.Save();
 
-                    command.Doctor.ProfileId = profile.UUID;
-                    await _mediator.Send(command.Doctor);
+                    command.Patient.ProfileId = profile.UUID;
+                    await _mediator.Send(command.Patient);
 
                     tran.Commit();
                 }
@@ -110,7 +110,7 @@ namespace MABS.Application.Features.AuthenticationFeatures.Commands.RegisterDoct
         {
             subject = "Nowe konto w serwisie MABS.";
             body = @$"
-            Witaj {profile.Doctor.Firstname} {profile.Doctor.Lastname}! <br />
+            Witaj {profile.Patient.Firstname} {profile.Patient.Lastname}! <br />
             <br />
             Potwierdzamy stworzenie nowego konta w serwisie MABS. <br />
             <br />

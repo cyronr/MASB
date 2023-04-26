@@ -40,8 +40,9 @@ namespace MABS.Application.Common.Mapping
             CreateMap<Patient, PatientDto>().ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID));
 
             ///Profiles
-            CreateMap<ProfileEntity, ProfileDto>().ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID));
-
+            CreateMap<ProfileEntity, ProfileDto>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID))
+                .ForMember(d => d.ProfileType, opt => opt.MapFrom(s => s.TypeId));
         }
     }
 }

@@ -57,5 +57,33 @@ namespace MABS.Infrastructure.DataAccess.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public async Task<Guid?> GetFacilityIdByProfileIdAsync(Guid uuid)
+        {
+            var profile = await _context.Profiles
+                .Include(p => p.Status)
+                .Include(p => p.Type)
+                .Include(p => p.Facility)
+                .FirstOrDefaultAsync(p => p.StatusId != ProfileStatus.Status.Deleted && p.TypeId == ProfileType.Type.Facility && p.UUID == uuid);
+
+            if (profile is not null)
+                return profile.Facility.UUID;
+            else
+                return null;
+        }
+
+        public async Task<Guid?> GetPatientIdByProfileIdAsync(Guid uuid)
+        {
+            var profile = await _context.Profiles
+                .Include(p => p.Status)
+                .Include(p => p.Type)
+                .Include(p => p.Patient)
+                .FirstOrDefaultAsync(p => p.StatusId != ProfileStatus.Status.Deleted && p.TypeId == ProfileType.Type.Patient && p.UUID == uuid);
+
+            if (profile is not null)
+                return profile.Patient.UUID;
+            else
+                return null;
+        }
     }
 }

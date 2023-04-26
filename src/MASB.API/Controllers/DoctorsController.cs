@@ -11,6 +11,7 @@ using MABS.Application.Features.DoctorFeatures.Queries.GetAllTitles;
 using MABS.Application.Features.DoctorFeatures.Queries.SearchAllDoctors;
 using MABS.Application.Features.DoctorFeatures.Commands.CreateDoctor;
 using MABS.Application.Features.DoctorFeatures.Commands.UpdateDoctor;
+using MABS.Application.Features.DoctorFeatures.Queries.FindExactDoctor;
 
 namespace MABS.API.Controllers
 {
@@ -34,7 +35,7 @@ namespace MABS.API.Controllers
         {
             _logger.LogInformation("Fetching all doctors.");
 
-            var query = new SearchAllDoctors(pagingParameters, searchText, specialtyId, cityId);
+            var query = new SearchAllDoctorsQuery(pagingParameters, searchText, specialtyId, cityId);
             var response = await _mediator.Send(query);
 
             _logger.LogInformation($"Returning {response.Count} doctors.");
@@ -42,6 +43,19 @@ namespace MABS.API.Controllers
             Response.Headers.Add("X-Pagination", response.GetMetadata());
 
             return Ok(response.Select(d => _mapper.Map<DoctorResponse>(d)).ToList());
+        }
+
+        [HttpGet("find")]
+        public async Task<ActionResult<DoctorResponse>> FindExact(string firstName, string lastName, [FromQuery]List<int> specialtiesIds)
+        {
+            _logger.LogInformation("FInding exact doctor.");
+
+            var query = new FindExactDoctorQuery(firstName, lastName, specialtiesIds);
+            var response = await _mediator.Send(query);
+
+            _logger.LogInformation($"Returning doctor.");
+
+            return Ok(_mapper.Map<DoctorResponse>(response));
         }
 
         [HttpGet("{id}")]
@@ -97,7 +111,7 @@ namespace MABS.API.Controllers
             return NoContent();
         }
 
-        [HttpGet("dictonaries/specialties")]
+        [HttpGet("dict/specialties")]
         public async Task<ActionResult<List<SpecialtyResponse>>> GetSpecialities()
         {
             _logger.LogInformation("Fetching all specialities.");
@@ -110,7 +124,7 @@ namespace MABS.API.Controllers
             return Ok(response.Select(s => _mapper.Map<SpecialtyResponse>(s)).ToList());
         }
 
-        [HttpGet("dictonaries/titles")]
+        [HttpGet("dict/titles")]
         public async Task<ActionResult<List<TitleResponse>>> GetTitles()
         {
             _logger.LogInformation("Fetching all titles.");
