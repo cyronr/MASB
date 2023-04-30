@@ -3,6 +3,7 @@ using MABS.Domain.Models.DoctorModels;
 using MABS.Domain.Models.FacilityModels;
 using MABS.Domain.Models.PatientModels;
 using MABS.Domain.Models.ProfileModels;
+using MABS.Domain.Models.ScheduleModels;
 using MABS.Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -52,6 +53,11 @@ namespace MABS.Infrastructure.Data
         public DbSet<ProfileEvent> ProfileEvents { get; set; }
         public DbSet<ProfileEventType> ProfileEventType { get; set; }
 
+        //Schedules
+        public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<ScheduleStatus> ScheduleStatus { get; set; }
+        public DbSet<ScheduleEvent> ScheduleEvents { get; set; }
+        public DbSet<ScheduleEventType> ScheduleEventType { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

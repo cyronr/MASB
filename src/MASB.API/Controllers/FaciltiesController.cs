@@ -121,7 +121,7 @@ namespace MABS.API.Controllers
             return NoContent();
         }
 
-        [HttpPost("{facilityId}/Addresses")]
+        [HttpPost("{facilityId}/addresses")]
         public async Task<ActionResult<FacilityResponse>> CreateAddress(Guid facilityId, CreateAddressRequest request)
         {
             _logger.LogInformation($"Creating address for facility ({facilityId}) with data = {request.ToString()}.");
@@ -136,7 +136,7 @@ namespace MABS.API.Controllers
             return Created(Request.Path, _mapper.Map<FacilityResponse>(response));
         }
 
-        [HttpPut("{facilityId}/Addresses")]
+        [HttpPut("{facilityId}/addresses")]
         public async Task<ActionResult<FacilityResponse>> UpdateAddress(Guid facilityId, UpdateAddressRequest request)
         {
             _logger.LogInformation($"Updating address for facility ({facilityId}) with data = {request.ToString()}.");
@@ -151,7 +151,7 @@ namespace MABS.API.Controllers
             return Ok(_mapper.Map<FacilityResponse>(response));
         }
 
-        [HttpDelete("{facilityId}/Addresses/{addressId}")]
+        [HttpDelete("{facilityId}/addresses/{addressId}")]
         public async Task<ActionResult<FacilityResponse>> DeleteAddress(Guid facilityId, Guid addressId)
         {
             _logger.LogInformation($"Deleting address = {addressId} from facility with id = {facilityId}.");
@@ -164,7 +164,7 @@ namespace MABS.API.Controllers
             return Ok(_mapper.Map<FacilityResponse>(response));
         }
 
-        [HttpGet("{facilityId}/Doctors")]
+        [HttpGet("{facilityId}/doctors")]
         public async Task<ActionResult<List<DoctorResponse>>> GetDoctors([FromQuery] PagingParameters pagingParameters, Guid facilityId)
         {
             _logger.LogInformation($"Fetching list of doctors for facility ({facilityId}).");
@@ -173,11 +173,12 @@ namespace MABS.API.Controllers
             var response = await _mediator.Send(query);
 
             _logger.LogInformation($"Returning {response.Count} doctors for facility ({facilityId}).");
-            
-            return Ok(response); 
+
+            Response.Headers.Add("X-Pagination", response.GetMetadata());
+            return Ok(response.Select(f => _mapper.Map<DoctorResponse>(f)).ToList()); 
         }
 
-        [HttpPost("{facilityId}/Doctors/{doctorId}")]
+        [HttpPost("{facilityId}/doctors/{doctorId}")]
         public async Task<ActionResult<List<DoctorResponse>>> AddDoctor([FromQuery] PagingParameters pagingParameters, Guid facilityId, Guid doctorId)
         {
             _logger.LogInformation($"Adding doctor ({doctorId}) to facility ({facilityId}) with data.");
@@ -186,24 +187,26 @@ namespace MABS.API.Controllers
             var response = await _mediator.Send(command);
 
             _logger.LogInformation($"Added doctor ({doctorId}) to facility ({facilityId}) with data.");
-            
+
+            Response.Headers.Add("X-Pagination", response.GetMetadata());
             return Created(
                 Request.Path,
                 response.Select(f => _mapper.Map<DoctorResponse>(f)).ToList()
             );
         }
 
-        [HttpDelete("{facilityId}/Doctors/{doctorId}")]
+        [HttpDelete("{facilityId}/doctors/{doctorId}")]
         public async Task<ActionResult<List<DoctorResponse>>> RemoveDoctor([FromQuery] PagingParameters pagingParameters, Guid facilityId, Guid doctorId)
         {
             _logger.LogInformation($"Adding doctor ({doctorId}) to facility ({facilityId}) with data.");
 
             var command = new RemoveDoctorFromFacilityCommand(pagingParameters, facilityId, doctorId);
             var response = await _mediator.Send(command);
-            
+
             _logger.LogInformation($"Added doctor ({doctorId}) to facility ({facilityId}) with data.");
-            
-            return Ok(response.Select(f => _mapper.Map<FacilityResponse>(f)).ToList());
+
+            Response.Headers.Add("X-Pagination", response.GetMetadata());
+            return Ok(response.Select(f => _mapper.Map<DoctorResponse>(f)).ToList());
         }
 
         [HttpGet("dict/countries")]

@@ -4,10 +4,12 @@ using MABS.Application.Features.DictionaryFeatures.Common;
 using MABS.Application.Features.DoctorFeatures.Common;
 using MABS.Application.Features.FacilityFeatures.Common;
 using MABS.Application.Features.PatientFeatures.Common;
+using MABS.Application.Features.ScheduleFeatures.Common;
 using MABS.Domain.Models.DictionaryModels;
 using MABS.Domain.Models.DoctorModels;
 using MABS.Domain.Models.FacilityModels;
 using MABS.Domain.Models.PatientModels;
+using MABS.Domain.Models.ScheduleModels;
 using ProfileEntity = MABS.Domain.Models.ProfileModels.Profile;
 
 namespace MABS.Application.Common.Mapping
@@ -43,6 +45,11 @@ namespace MABS.Application.Common.Mapping
             CreateMap<ProfileEntity, ProfileDto>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID))
                 .ForMember(d => d.ProfileType, opt => opt.MapFrom(s => s.TypeId));
+
+            ///Schedules
+            CreateMap<Schedule, ScheduleDto>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID))
+                .ForMember(d => d.Status, opt => opt.MapFrom(s => s.StatusId));
         }
     }
 }

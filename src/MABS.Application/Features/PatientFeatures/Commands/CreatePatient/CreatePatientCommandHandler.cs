@@ -8,9 +8,6 @@ using Profile = MABS.Domain.Models.ProfileModels.Profile;
 using MABS.Domain.Models.PatientModels;
 using MABS.Application.ModelsExtensions.ProfileModelsExtensions;
 using MABS.Application.Features.PatientFeatures.Common;
-using MABS.Domain.Models.DoctorModels;
-using System.Numerics;
-using MABS.Application.Features.DoctorFeatures.Common;
 
 namespace MABS.Application.Features.PatientFeatures.Commands.CreatePatient
 {
