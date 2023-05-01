@@ -12,6 +12,10 @@ using MABS.Application.Features.DoctorFeatures.Queries.SearchAllDoctors;
 using MABS.Application.Features.DoctorFeatures.Commands.CreateDoctor;
 using MABS.Application.Features.DoctorFeatures.Commands.UpdateDoctor;
 using MABS.Application.Features.DoctorFeatures.Queries.FindExactDoctor;
+using Nest;
+using MABS.Application.Features.DoctorFeatures.Queries.GetTimeSlots;
+using MABS.Application.Features.DoctorFeatures.Common;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MABS.API.Controllers
 {
@@ -71,7 +75,7 @@ namespace MABS.API.Controllers
             return Ok(_mapper.Map<DoctorResponse>(response));
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<DoctorResponse>> Create(CreateDoctorRequest request)
         {
@@ -85,6 +89,7 @@ namespace MABS.API.Controllers
             return base.Created(Request.Path, _mapper.Map<DoctorResponse>(response));
         }
 
+        [Authorize]
         [HttpPut]
         public async Task<ActionResult<DoctorResponse>> Update(UpdateDoctorRequest request)
         {
@@ -98,6 +103,7 @@ namespace MABS.API.Controllers
             return base.Ok(_mapper.Map<DoctorResponse>(response));
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
@@ -109,6 +115,19 @@ namespace MABS.API.Controllers
             _logger.LogInformation($"Deleted doctor with id = {id}.");
 
             return NoContent();
+        }
+
+        [HttpGet("{id}/timeSlots")]
+        public async Task<ActionResult<List<TimeSlot>>> GetTimeSlots(Guid id, Guid facilityId)
+        {
+            _logger.LogInformation($"Getting time slots for doctor with id = {id} and facility with id = {facilityId}.");
+
+            var query = new GetTimeSlotsQuery(id, facilityId);
+            var results = await _mediator.Send(query);
+
+            _logger.LogInformation($"Returning {results.Count} time slots for doctor with id = {id} and facility with id = {facilityId}.");
+
+            return Ok(results.OrderBy(r => r.Date).ThenBy(r => r.Time));
         }
 
         [HttpGet("dict/specialties")]

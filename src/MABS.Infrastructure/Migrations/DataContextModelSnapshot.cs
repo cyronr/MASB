@@ -52,6 +52,145 @@ namespace MABSAPI.Migrations
                     b.ToTable("DoctorsSpecialties");
                 });
 
+            modelBuilder.Entity("MABS.Domain.Models.AppointmentModels.Appointment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ConfirmationCode")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ScheduleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("Time")
+                        .HasColumnType("time");
+
+                    b.Property<Guid>("UUID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PatientId");
+
+                    b.HasIndex("ScheduleId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("Appointments");
+                });
+
+            modelBuilder.Entity("MABS.Domain.Models.AppointmentModels.AppointmentEvent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AddInfo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AppointmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CallerProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId");
+
+                    b.HasIndex("CallerProfileId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("AppointmentEvents");
+                });
+
+            modelBuilder.Entity("MABS.Domain.Models.AppointmentModels.AppointmentEventType", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppointmentEventType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Created"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Confirmed"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Cancelled"
+                        });
+                });
+
+            modelBuilder.Entity("MABS.Domain.Models.AppointmentModels.AppointmentStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppointmentStatus");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Prepared"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Confirmed"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Cancelled"
+                        });
+                });
+
             modelBuilder.Entity("MABS.Domain.Models.DictionaryModels.City", b =>
                 {
                     b.Property<int>("Id")
@@ -1027,6 +1166,58 @@ namespace MABSAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MABS.Domain.Models.AppointmentModels.Appointment", b =>
+                {
+                    b.HasOne("MABS.Domain.Models.PatientModels.Patient", "Patient")
+                        .WithMany("Appointments")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MABS.Domain.Models.ScheduleModels.Schedule", "Schedule")
+                        .WithMany()
+                        .HasForeignKey("ScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MABS.Domain.Models.AppointmentModels.AppointmentStatus", "Status")
+                        .WithMany("Appointments")
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("Schedule");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("MABS.Domain.Models.AppointmentModels.AppointmentEvent", b =>
+                {
+                    b.HasOne("MABS.Domain.Models.AppointmentModels.Appointment", "Appointment")
+                        .WithMany("Events")
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MABS.Domain.Models.ProfileModels.Profile", "CallerProfile")
+                        .WithMany()
+                        .HasForeignKey("CallerProfileId");
+
+                    b.HasOne("MABS.Domain.Models.AppointmentModels.AppointmentEventType", "Type")
+                        .WithMany("Events")
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Appointment");
+
+                    b.Navigation("CallerProfile");
+
+                    b.Navigation("Type");
+                });
+
             modelBuilder.Entity("MABS.Domain.Models.DoctorModels.Doctor", b =>
                 {
                     b.HasOne("MABS.Domain.Models.ProfileModels.Profile", "Profile")
@@ -1295,6 +1486,21 @@ namespace MABSAPI.Migrations
                     b.Navigation("Type");
                 });
 
+            modelBuilder.Entity("MABS.Domain.Models.AppointmentModels.Appointment", b =>
+                {
+                    b.Navigation("Events");
+                });
+
+            modelBuilder.Entity("MABS.Domain.Models.AppointmentModels.AppointmentEventType", b =>
+                {
+                    b.Navigation("Events");
+                });
+
+            modelBuilder.Entity("MABS.Domain.Models.AppointmentModels.AppointmentStatus", b =>
+                {
+                    b.Navigation("Appointments");
+                });
+
             modelBuilder.Entity("MABS.Domain.Models.DictionaryModels.Country", b =>
                 {
                     b.Navigation("Addresses");
@@ -1349,6 +1555,8 @@ namespace MABSAPI.Migrations
 
             modelBuilder.Entity("MABS.Domain.Models.PatientModels.Patient", b =>
                 {
+                    b.Navigation("Appointments");
+
                     b.Navigation("Events");
                 });
 

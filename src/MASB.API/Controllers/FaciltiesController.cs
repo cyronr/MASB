@@ -66,6 +66,7 @@ namespace MABS.API.Controllers
             return Ok(_mapper.Map<FacilityResponse>(response));
         }
 
+        [Authorize]
         [HttpGet("byProfile/{profileId}")]
         public async Task<ActionResult<FacilityResponse>> GetByProfileId(Guid profileId)
         {
@@ -94,7 +95,7 @@ namespace MABS.API.Controllers
             return Created(Request.Path, _mapper.Map<FacilityResponse>(response));
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPut]
         public async Task<ActionResult<FacilityResponse>> Update(UpdateFacilityRequest request)
         {
@@ -108,6 +109,7 @@ namespace MABS.API.Controllers
             return Ok(_mapper.Map<FacilityResponse>(response));
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
@@ -121,6 +123,7 @@ namespace MABS.API.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpPost("{facilityId}/addresses")]
         public async Task<ActionResult<FacilityResponse>> CreateAddress(Guid facilityId, CreateAddressRequest request)
         {
@@ -136,6 +139,7 @@ namespace MABS.API.Controllers
             return Created(Request.Path, _mapper.Map<FacilityResponse>(response));
         }
 
+        [Authorize]
         [HttpPut("{facilityId}/addresses")]
         public async Task<ActionResult<FacilityResponse>> UpdateAddress(Guid facilityId, UpdateAddressRequest request)
         {
@@ -151,6 +155,7 @@ namespace MABS.API.Controllers
             return Ok(_mapper.Map<FacilityResponse>(response));
         }
 
+        [Authorize]
         [HttpDelete("{facilityId}/addresses/{addressId}")]
         public async Task<ActionResult<FacilityResponse>> DeleteAddress(Guid facilityId, Guid addressId)
         {
@@ -178,6 +183,7 @@ namespace MABS.API.Controllers
             return Ok(response.Select(f => _mapper.Map<DoctorResponse>(f)).ToList()); 
         }
 
+        [Authorize]
         [HttpPost("{facilityId}/doctors/{doctorId}")]
         public async Task<ActionResult<List<DoctorResponse>>> AddDoctor([FromQuery] PagingParameters pagingParameters, Guid facilityId, Guid doctorId)
         {
@@ -195,6 +201,7 @@ namespace MABS.API.Controllers
             );
         }
 
+        [Authorize]
         [HttpDelete("{facilityId}/doctors/{doctorId}")]
         public async Task<ActionResult<List<DoctorResponse>>> RemoveDoctor([FromQuery] PagingParameters pagingParameters, Guid facilityId, Guid doctorId)
         {

@@ -1,3 +1,4 @@
+using MABS.Domain.Models.AppointmentModels;
 using MABS.Domain.Models.DictionaryModels;
 using MABS.Domain.Models.DoctorModels;
 using MABS.Domain.Models.FacilityModels;
@@ -58,6 +59,12 @@ namespace MABS.Infrastructure.Data
         public DbSet<ScheduleStatus> ScheduleStatus { get; set; }
         public DbSet<ScheduleEvent> ScheduleEvents { get; set; }
         public DbSet<ScheduleEventType> ScheduleEventType { get; set; }
+
+        //Appointments
+        public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<AppointmentStatus> AppointmentStatus { get; set; }
+        public DbSet<AppointmentEvent> AppointmentEvents { get; set; }
+        public DbSet<AppointmentEventType> AppointmentEventType { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

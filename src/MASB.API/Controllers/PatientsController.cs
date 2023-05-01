@@ -4,6 +4,7 @@ using MABS.Application.Features.PatientFeatures.Commands.UpdatePatient;
 using MABS.Application.Features.PatientFeatures.Queries.GetPatientByProfile;
 using MASB.API.Responses.PatientResponses;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MASB.API.Controllers
@@ -24,6 +25,7 @@ namespace MASB.API.Controllers
         }
 
 
+        [Authorize]
         [HttpGet("byProfile/{profileId}")]
         public async Task<ActionResult<PatientResponse>> GetByProfileId(Guid profileId)
         {
@@ -37,6 +39,8 @@ namespace MASB.API.Controllers
             return Ok(_mapper.Map<PatientResponse>(response));
         }
 
+
+        [Authorize]
         [HttpPut]
         public async Task<ActionResult<PatientResponse>> Update(UpdatePatientRequest request)
         {

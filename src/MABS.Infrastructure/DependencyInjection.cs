@@ -70,6 +70,7 @@ namespace MABS.Infrastructure
             services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<IProfileRepository, ProfileRepository>();
             services.AddScoped<IScheduleRepository, ScheduleRepository>();
+            services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 
             return services;
         }

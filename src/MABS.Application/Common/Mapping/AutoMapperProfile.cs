@@ -1,10 +1,12 @@
 using AutoMapper;
+using MABS.Application.Features.AppointmentFeatures.Common;
 using MABS.Application.Features.AuthenticationFeatures.Common;
 using MABS.Application.Features.DictionaryFeatures.Common;
 using MABS.Application.Features.DoctorFeatures.Common;
 using MABS.Application.Features.FacilityFeatures.Common;
 using MABS.Application.Features.PatientFeatures.Common;
 using MABS.Application.Features.ScheduleFeatures.Common;
+using MABS.Domain.Models.AppointmentModels;
 using MABS.Domain.Models.DictionaryModels;
 using MABS.Domain.Models.DoctorModels;
 using MABS.Domain.Models.FacilityModels;
@@ -48,6 +50,11 @@ namespace MABS.Application.Common.Mapping
 
             ///Schedules
             CreateMap<Schedule, ScheduleDto>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID))
+                .ForMember(d => d.Status, opt => opt.MapFrom(s => s.StatusId));
+
+            ///Appointments
+            CreateMap<Appointment, AppointmentDto>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID))
                 .ForMember(d => d.Status, opt => opt.MapFrom(s => s.StatusId));
         }

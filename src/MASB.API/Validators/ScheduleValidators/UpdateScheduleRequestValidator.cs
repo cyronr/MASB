@@ -3,7 +3,7 @@ using MABS.API.Requests.ScheduleDetails;
 
 namespace MABS.API.Validators.ScheduleValidators
 {
-    public class UpdateScheduleRequestValidator<T> : AbstractValidator<UpdateScheduleRequest>
+    public class UpdateScheduleRequestValidator: AbstractValidator<UpdateScheduleRequest>
     {
         public UpdateScheduleRequestValidator()
         {
@@ -15,7 +15,15 @@ namespace MABS.API.Validators.ScheduleValidators
                 .NotEmpty()
                 .WithMessage("Brak identyfikatora placówki.");
 
-            /*RuleFor(obj => obj.Schedules).SetValidator(new ScheduleDetailsRequestValidator());*/
+            RuleFor(obj => obj.Schedules)
+                .NotNull()
+                .WithMessage("Brak informacji o harmonogramach.")
+                .NotEmpty()
+                .WithMessage("Brak informacji o harmonogramach.")
+                .ForEach(schedule =>
+                {
+                    schedule.SetValidator(new ScheduleDetailsRequestValidator());
+                });
         }
     }
 }

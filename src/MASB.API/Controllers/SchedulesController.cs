@@ -6,6 +6,7 @@ using MABS.Domain.Models.DoctorModels;
 using MABS.Domain.Models.FacilityModels;
 using MASB.API.Responses.ScheduleResponses;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MASB.API.Controllers;
@@ -26,6 +27,7 @@ public class SchedulesController : ControllerBase
     }
 
 
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<List<ScheduleResponse>>> GetSchedules(Guid facilityId, Guid doctorId)
     {
@@ -39,6 +41,7 @@ public class SchedulesController : ControllerBase
         return Ok(response.Select(s => _mapper.Map<ScheduleResponse>(s)).ToList());
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<List<ScheduleResponse>>> UpdateSchedules(UpdateScheduleRequest request)
     {

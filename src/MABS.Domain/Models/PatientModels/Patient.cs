@@ -1,3 +1,4 @@
+using MABS.Domain.Models.AppointmentModels;
 using MABS.Domain.Models.ProfileModels;
 using System.Text.Json;
 
@@ -15,6 +16,7 @@ namespace MABS.Domain.Models.PatientModels
         public Profile Profile { get; set; }
         public int ProfileId { get; set; }
 
+        public List<Appointment> Appointments { get; set; }
         public override string ToString()
         {
             var patient = new

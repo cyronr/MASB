@@ -42,4 +42,24 @@ public class ScheduleRepository : IScheduleRepository
             )
             .ToListAsync();
     }
+
+    public async Task<List<Schedule>> GetByDoctorAsync(Doctor doctor)
+    {
+        return await _context.Schedules
+            .Where(s =>
+                s.StatusId == ScheduleStatus.Status.Active &&
+                s.Doctor == doctor
+            )
+            .ToListAsync();
+    }
+
+    public async Task<Schedule?> GetByUUIDAsync(Guid uuid)
+    {
+        return await _context.Schedules
+            .Include(p => p.Status)
+            .Include(p => p.Events)
+            .Include(p => p.Doctor)
+            .Include(p => p.Facility)
+            .FirstOrDefaultAsync(p => p.StatusId == ScheduleStatus.Status.Active && p.UUID == uuid);
+    }
 }
