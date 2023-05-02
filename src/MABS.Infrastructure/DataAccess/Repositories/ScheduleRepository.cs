@@ -32,13 +32,13 @@ public class ScheduleRepository : IScheduleRepository
         _context.ScheduleEvents.Add(scheduleEvent);
     }
 
-    public async Task<List<Schedule>> GetByDoctorAndFacilityAsync(Doctor doctor, Facility facility)
+    public async Task<List<Schedule>> GetByDoctorAndAddressAsync(Doctor doctor, Address address)
     {
         return await _context.Schedules
             .Where(s =>
                 s.StatusId == ScheduleStatus.Status.Active &&
                 s.Doctor == doctor &&
-                s.Facility == facility
+                s.Address == address
             )
             .ToListAsync();
     }
@@ -59,7 +59,7 @@ public class ScheduleRepository : IScheduleRepository
             .Include(p => p.Status)
             .Include(p => p.Events)
             .Include(p => p.Doctor)
-            .Include(p => p.Facility)
+            .Include(p => p.Address)
             .FirstOrDefaultAsync(p => p.StatusId == ScheduleStatus.Status.Active && p.UUID == uuid);
     }
 }

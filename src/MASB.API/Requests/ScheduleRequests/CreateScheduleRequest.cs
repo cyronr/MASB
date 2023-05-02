@@ -3,5 +3,5 @@
 public record CreateScheduleRequest : UpsertScheduleRequest
 {
     public Guid DoctorId { get; set; }
-    public Guid FacilityId { get; set; }
+    public Guid AddressId { get; set; }
 }

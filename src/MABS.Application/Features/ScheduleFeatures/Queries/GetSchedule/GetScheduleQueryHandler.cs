@@ -34,13 +34,13 @@ public class GetScheduleQueryHandler : IRequestHandler<GetScheduleQuery, List<Sc
 
     public async Task<List<ScheduleDto>> Handle(GetScheduleQuery query, CancellationToken cancellationToken)
     {
-        _logger.LogDebug($"Fetching facility with id = {query.FacilityId}.");
-        var facility = await new Facility().GetByUUIDAsync(_facilityRepository, query.FacilityId);
+        _logger.LogDebug($"Fetching facility with id = {query.AddressId}.");
+        var address = await new Address().GetByUUIDAsync(_facilityRepository, query.AddressId);
 
         _logger.LogDebug($"Fetching doctor with id = {query.DoctorId}.");
         var doctor = await new Doctor().GetByUUIDAsync(_doctorRepository, query.DoctorId);
 
-        var schedules = await _scheduleRepository.GetByDoctorAndFacilityAsync(doctor, facility);
+        var schedules = await _scheduleRepository.GetByDoctorAndAddressAsync(doctor, address);
         return schedules.Select(s => _mapper.Map<ScheduleDto>(s)).ToList();
     }
 }

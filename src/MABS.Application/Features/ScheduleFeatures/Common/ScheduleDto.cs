@@ -8,7 +8,7 @@ public class ScheduleDto
 {
     public Guid Id { get; set; }
     public Doctor Doctor { get; set; }
-    public Facility Facility { get; set; }
+    public Address Address { get; set; }
     public ScheduleStatus.Status Status { get; set; }
     public DayOfWeek DayOfWeek { get; set; }
     public TimeOnly StartTime { get; set; }

@@ -1,20 +1,16 @@
 ﻿using AutoMapper;
-using Azure;
 using MABS.Application.Features.AppointmentFeatures.Command.CancelAppointment;
 using MABS.Application.Features.AppointmentFeatures.Command.ConfirmAppointment;
 using MABS.Application.Features.AppointmentFeatures.Command.CreateAppointment;
-using MABS.Application.Features.AppointmentFeatures.Queries.GetByDoctorAndFacility;
+using MABS.Application.Features.AppointmentFeatures.Queries.GetByDoctorAndAddress;
 using MABS.Application.Features.AppointmentFeatures.Queries.GetByPatient;
-using MABS.Application.Features.ScheduleFeatures.Queries.GetSchedule;
 using MASB.API.Requests.AppointmentRequests;
 using MASB.API.Requests.AppointmentResponses;
 using MASB.API.Responses.ScheduleResponses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Nest;
 using Swashbuckle.AspNetCore.Annotations;
-using Swashbuckle.AspNetCore.Filters;
 
 namespace MASB.API.Controllers;
 
@@ -38,17 +34,17 @@ public class AppointmentsController : ControllerBase
     }
 
     [Authorize]
-    [HttpGet("byDoctorAndFacility")]
+    [HttpGet("byDoctorAnAddress")]
     [SwaggerOperation(
         Summary = "Get resource by ID",
         Description = "Retrieve a resource by its ID",
         OperationId = "GetResourceById"
     )]
-    public async Task<ActionResult<List<ScheduleResponse>>> GetByDoctorAndFacility(Guid doctorId, Guid facilityId)
+    public async Task<ActionResult<List<ScheduleResponse>>> GetByDoctorAndAddress(Guid doctorId, Guid addressId)
     {
-        _logger.LogInformation($"Fetching appointments for facility = {facilityId} and doctor = {doctorId}.");
+        _logger.LogInformation($"Fetching appointments for facility = {addressId} and doctor = {doctorId}.");
 
-        var query = new GetByDoctorAndFacilityQuery(doctorId, facilityId);
+        var query = new GetByDoctorAndAddressQuery(doctorId, addressId);
         var response = await _mediator.Send(query);
 
         _logger.LogInformation($"Fetched {response.Count} appointments.");

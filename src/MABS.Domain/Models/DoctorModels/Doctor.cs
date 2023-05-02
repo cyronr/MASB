@@ -1,5 +1,6 @@
 using MABS.Domain.Models.FacilityModels;
 using MABS.Domain.Models.ProfileModels;
+using MABS.Domain.Models.ScheduleModels;
 using System.Text.Json;
 
 namespace MABS.Domain.Models.DoctorModels
@@ -18,6 +19,7 @@ namespace MABS.Domain.Models.DoctorModels
         public List<Facility> Facilities { get; set; }
         public Profile Profile { get; set; }
         public int? ProfileId { get; set; }
+        public List<Schedule> Schedules { get; set; }
 
         public override string ToString()
         {

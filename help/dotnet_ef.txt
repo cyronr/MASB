@@ -1,6 +1,6 @@
 cd src\MABS.Infrastructure
 
-dotnet ef migrations add <<Migration_Name>> --startup-project "C:\_Project\MABS.Backend\src\MASB.API\MASB.API.csproj"
-dotnet ef migrations remove --startup-project "C:\_Project\MABS.Backend\src\MASB.API\MASB.API.csproj"
+dotnet ef migrations add <<Migration_Name>> --startup-project "C:\_Project\MABS.API\src\MASB.API\MASB.API.csproj"
+dotnet ef migrations remove --startup-project "C:\_Project\MABS.API\src\MASB.API\MASB.API.csproj"
 
-dotnet ef database update --startup-project "C:\_Project\MABS.Backend\src\MASB.API\MASB.API.csproj"
+dotnet ef database update --startup-project "C:\_Project\MABS.API\src\MASB.API\MASB.API.csproj"

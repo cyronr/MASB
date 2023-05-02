@@ -64,7 +64,7 @@ public class CreateAppointmentCommandHandler : IRequestHandler<CreateAppointment
         _logger.LogDebug($"Fetching schedule with id = {command.ScheduleId}.");
         var schedule = await new Schedule().GetByUUIDAsync(_scheduleRepository, command.ScheduleId);
 
-        if (!await IsTimeSlotAvail(command, schedule.Doctor.UUID, schedule.Facility.UUID))
+        if (!await IsTimeSlotAvail(command, schedule.Doctor.UUID, schedule.Address.UUID))
             throw new ConflictException("Wybrany termin nie jest dostępny");
 
         Appointment appointment;
@@ -87,9 +87,9 @@ public class CreateAppointmentCommandHandler : IRequestHandler<CreateAppointment
         return _mapper.Map<AppointmentDto>(appointment);
     }
 
-    private async Task<bool> IsTimeSlotAvail(CreateAppointmentCommand timeSlot, Guid doctorId, Guid facilityId)
+    private async Task<bool> IsTimeSlotAvail(CreateAppointmentCommand timeSlot, Guid doctorId, Guid addressId)
     {
-        var query = new GetTimeSlotsQuery(doctorId, facilityId);
+        var query = new GetTimeSlotsQuery(doctorId, addressId);
         var results = await _mediator.Send(query);
         
         return results.Any(r =>

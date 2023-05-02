@@ -9,7 +9,7 @@ public class Schedule
     public int Id { get; set; }
     public Guid UUID { get; set; }
     public Doctor Doctor { get; set; }
-    public Facility Facility { get; set; }
+    public Address Address { get; set; }
     public ScheduleStatus.Status StatusId { get; set; }
     public ScheduleStatus Status { get; set; }
     public DayOfWeek DayOfWeek { get; set; }

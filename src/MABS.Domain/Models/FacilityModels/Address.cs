@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using MABS.Domain.Models.DictionaryModels;
+using MABS.Domain.Models.ScheduleModels;
 
 namespace MABS.Domain.Models.FacilityModels
 {
@@ -21,6 +22,7 @@ namespace MABS.Domain.Models.FacilityModels
         public Facility Facility { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public List<Schedule> Schedules { get; set; }
 
         public override string ToString()
         {

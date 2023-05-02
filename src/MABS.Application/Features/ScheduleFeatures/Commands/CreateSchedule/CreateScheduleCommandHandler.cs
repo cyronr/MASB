@@ -50,14 +50,14 @@ public class CreateScheduleCommandHandler : IRequestHandler<CreateScheduleComman
         _logger.LogDebug($"Getting current logged profile.");
         var callerProfile = CallerProfile.GetCurrentLoggedProfile(_currentLoggedProfile).GetProfileEntity();
 
-        _logger.LogDebug($"Fetching facility with id = {command.FacilityId}.");
-        var facility = await new Facility().GetByUUIDAsync(_facilityRepository, command.FacilityId);
+        _logger.LogDebug($"Fetching address with id = {command.AddressId}.");
+        var address = await new Address().GetByUUIDAsync(_facilityRepository, command.AddressId);
 
         _logger.LogDebug($"Fetching doctor with id = {command.DoctorId}.");
         var doctor = await new Doctor().GetByUUIDAsync(_doctorRepository, command.DoctorId);
 
 
-        var currentSchedules = await _scheduleRepository.GetByDoctorAndFacilityAsync(doctor, facility);
+        var currentSchedules = await _scheduleRepository.GetByDoctorAndAddressAsync(doctor, address);
         var existingSchedule = currentSchedules
                 .FirstOrDefault(s =>
                     s.DayOfWeek == command.DayOfWeek &&
@@ -78,7 +78,7 @@ public class CreateScheduleCommandHandler : IRequestHandler<CreateScheduleComman
                 {
                     UUID = Guid.NewGuid(),
                     StatusId = ScheduleStatus.Status.Active,
-                    Facility = facility,
+                    Address = address,
                     Doctor = doctor,
                     DayOfWeek = command.DayOfWeek,
                     StartTime = command.StartTime.StripSeconds(),

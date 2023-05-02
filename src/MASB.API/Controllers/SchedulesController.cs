@@ -29,11 +29,11 @@ public class SchedulesController : ControllerBase
 
     [Authorize]
     [HttpGet]
-    public async Task<ActionResult<List<ScheduleResponse>>> GetSchedules(Guid facilityId, Guid doctorId)
+    public async Task<ActionResult<List<ScheduleResponse>>> GetSchedules(Guid addressId, Guid doctorId)
     {
-        _logger.LogInformation($"Fetching schedules for facility = {facilityId} and doctor = {doctorId}.");
+        _logger.LogInformation($"Fetching schedules for addressId = {addressId} and doctor = {doctorId}.");
 
-        var query = new GetScheduleQuery(doctorId, facilityId);
+        var query = new GetScheduleQuery(doctorId, addressId);
         var response = await _mediator.Send(query);
 
         _logger.LogInformation($"Fetched {response.Count} schedules.");
@@ -45,7 +45,7 @@ public class SchedulesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ScheduleResponse>> Create(CreateScheduleRequest request)
     {
-        _logger.LogInformation($"Creating schedule for facility = {request.FacilityId} and doctor = {request.DoctorId} with data = {request.ToString()}.");
+        _logger.LogInformation($"Creating schedule for address = {request.AddressId} and doctor = {request.DoctorId} with data = {request.ToString()}.");
 
         var command = _mapper.Map<CreateScheduleCommand>(request);
         var response = await _mediator.Send(command);

@@ -6,5 +6,5 @@ namespace MABS.Application.Features.ScheduleFeatures.Queries.GetSchedule;
 public record GetScheduleQuery 
 (
     Guid DoctorId,
-    Guid FacilityId
+    Guid AddressId
 ) : IRequest<List<ScheduleDto>>;

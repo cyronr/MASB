@@ -71,7 +71,7 @@ public class AutoMapperProfile : Profile
         CreateMap<AppointmentDto, AppointmentResponse>()
             .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.Patient.UUID))
             .ForMember(dest => dest.DoctorId, opt => opt.MapFrom(src => src.Schedule.Doctor.UUID))
-            .ForMember(dest => dest.FacilityId, opt => opt.MapFrom(src => src.Schedule.Facility.UUID));
+            .ForMember(dest => dest.AddressId, opt => opt.MapFrom(src => src.Schedule.Address.UUID));
         CreateMap<CreateAppointmentRequest, CreateAppointmentCommand>();
     }   
 }

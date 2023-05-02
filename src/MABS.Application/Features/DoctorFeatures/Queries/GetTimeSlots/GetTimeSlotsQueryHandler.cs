@@ -46,32 +46,32 @@ public class GetTimeSlotsQueryHandler : IRequestHandler<GetTimeSlotsQuery, List<
 
     public async Task<List<TimeSlot>> Handle(GetTimeSlotsQuery query, CancellationToken cancellationToken)
     {
-        _logger.LogDebug($"Fetching facility with id = {query.FacilityId}.");
-        var facility = await new Facility().GetByUUIDAsync(_facilityRepository, query.FacilityId);
+        _logger.LogDebug($"Fetching address with id = {query.AddressId}.");
+        var address = await new Address().GetByUUIDAsync(_facilityRepository, query.AddressId);
 
         _logger.LogDebug($"Fetching doctor with id = {query.DoctorId}.");
         var doctor = await new Doctor().GetByUUIDAsync(_doctorRepository, query.DoctorId);
 
-        var schedules = await GetSchedules(doctor, facility);
+        var schedules = await GetSchedules(doctor, address);
         var timeSlots = GetTimeSlots(schedules);
 
-        SetTimeSlotsAvail(timeSlots, await GetAppointments(doctor, facility));
+        SetTimeSlotsAvail(timeSlots, await GetAppointments(doctor, address));
 
         return timeSlots;
     }
 
-    private async Task<List<ScheduleDto>> GetSchedules(Doctor doctor, Facility facility)
+    private async Task<List<ScheduleDto>> GetSchedules(Doctor doctor, Address address)
     {
-        _logger.LogDebug($"Fetching schedules for doctor with id = {doctor.UUID} and facility with id = {facility.UUID}.");
-        var schedules = await _scheduleRepository.GetByDoctorAndFacilityAsync(doctor, facility);
+        _logger.LogDebug($"Fetching schedules for doctor with id = {doctor.UUID} and address with id = {address.UUID}.");
+        var schedules = await _scheduleRepository.GetByDoctorAndAddressAsync(doctor, address);
 
         return schedules.Select(s => _mapper.Map<ScheduleDto>(s)).ToList();
     }
 
-    private async Task<List<Appointment>> GetAppointments(Doctor doctor, Facility facility)
+    private async Task<List<Appointment>> GetAppointments(Doctor doctor, Address address)
     {
-        _logger.LogDebug($"Fetching appointments for doctor id = {doctor.UUID} and facility id = {facility.UUID}.");
-        var appointments = await _appointmentRepository.GetByDoctorAndFacilityAsync(doctor, facility);
+        _logger.LogDebug($"Fetching appointments for doctor id = {doctor.UUID} and address with id = {address.UUID}.");
+        var appointments = await _appointmentRepository.GetByDoctorAndAddressAsync(doctor, address);
 
         return appointments;
     }

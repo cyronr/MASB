@@ -33,7 +33,7 @@ public class AppointmentRepository : IAppointmentRepository
         _context.AppointmentEvents.Add(appointmentEvent);
     }
 
-    public async Task<List<Appointment>> GetByDoctorAndFacilityAsync(Doctor doctor, Facility facility)
+    public async Task<List<Appointment>> GetByDoctorAndAddressAsync(Doctor doctor, Address address)
     {
         return await _context.Appointments
             .Include(a => a.Schedule)
@@ -41,7 +41,7 @@ public class AppointmentRepository : IAppointmentRepository
             .Where(a => 
                 a.StatusId != AppointmentStatus.Status.Cancelled &&
                 a.Schedule.Doctor == doctor &&
-                a.Schedule.Facility == facility
+                a.Schedule.Address == address
             )
             .ToListAsync();
     }
@@ -71,7 +71,7 @@ public class AppointmentRepository : IAppointmentRepository
             .Include(p => p.Schedule)
                 .ThenInclude(s => s.Doctor)
             .Include(p => p.Schedule)
-                .ThenInclude(s => s.Facility)
+                .ThenInclude(s => s.Address)
             .Include(p => p.Patient)
                 .ThenInclude(pa => pa.Profile)
             .FirstOrDefaultAsync(p => p.UUID == uuid);

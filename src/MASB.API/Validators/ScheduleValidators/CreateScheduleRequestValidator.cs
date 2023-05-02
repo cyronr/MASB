@@ -11,9 +11,9 @@ namespace MABS.API.Validators.ScheduleValidators
                 .NotEmpty()
                 .WithMessage("Brak identyfikatora lekarza.");
 
-            RuleFor(p => p.FacilityId)
+            RuleFor(p => p.AddressId)
                 .NotEmpty()
-                .WithMessage("Brak identyfikatora placówki.");
+                .WithMessage("Brak identyfikatora adresu.");
         }
     }
 }

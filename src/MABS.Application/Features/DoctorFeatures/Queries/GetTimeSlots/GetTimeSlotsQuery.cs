@@ -6,5 +6,5 @@ namespace MABS.Application.Features.DoctorFeatures.Queries.GetTimeSlots;
 public record GetTimeSlotsQuery
 (
     Guid DoctorId,
-    Guid FacilityId
+    Guid AddressId
 ) : IRequest<List<TimeSlot>>;

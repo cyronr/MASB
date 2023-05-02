@@ -6,7 +6,7 @@ namespace MABS.Application.Features.ScheduleFeatures.Commands.CreateSchedule;
 public record CreateScheduleCommand : IRequest<ScheduleDto>
 {
     public Guid DoctorId { get; set; }
-    public Guid FacilityId { get; set; }
+    public Guid AddressId { get; set; }
     public DayOfWeek DayOfWeek { get; set; }
     public TimeOnly StartTime { get; set; }
     public TimeOnly EndTime { get; set; }
