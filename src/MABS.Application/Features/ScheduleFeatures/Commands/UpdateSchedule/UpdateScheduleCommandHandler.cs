@@ -52,6 +52,7 @@ public class UpdateScheduleCommandHandler : IRequestHandler<UpdateScheduleComman
         {
             try
             {
+                schedule.DayOfWeek = command.DayOfWeek;
                 schedule.StartTime = command.StartTime;
                 schedule.EndTime = command.EndTime;
                 schedule.AppointmentDuration = command.AppointmentDuration;

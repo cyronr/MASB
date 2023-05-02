@@ -70,7 +70,7 @@ public class SchedulesController : ControllerBase
     }
 
     [Authorize]
-    [HttpDelete("id")]
+    [HttpDelete("{id}")]
     public async Task<ActionResult<ScheduleResponse>> Delete(Guid id)
     {
         _logger.LogInformation($"Deleting schedule with id = {id}.");
