@@ -94,8 +94,8 @@ namespace MABS.Application.Features.DoctorFeatures.Commands.CreateDoctor
                 Firstname = firstname,
                 Lastname = lastname,
                 Title = title,
-                Specialties = specialties,
-                Profile = profile
+                Specialties = specialties//,
+                //Profile = profile
             };
 
             _doctorRepository.Create(doctor);

@@ -1,13 +1,11 @@
 ﻿using FluentValidation;
-using MABS.API.Requests.ScheduleDetails;
-using MABS.Extensions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using MABS.API.Requests.ScheduleRequests;
 
 namespace MABS.API.Validators.ScheduleValidators
 {
-    public class ScheduleDetailsRequestValidator: AbstractValidator<ScheduleDetailsRequest>
+    public class UpsertScheduleRequestValidator<T> : AbstractValidator<T> where T : UpsertScheduleRequest
     {
-        public ScheduleDetailsRequestValidator()
+        public UpsertScheduleRequestValidator()
         {
             RuleFor(p => p.DayOfWeek)
                 .NotNull()
@@ -32,12 +30,6 @@ namespace MABS.API.Validators.ScheduleValidators
                 .WithMessage("Nie podano daty ważności.")
                 .GreaterThanOrEqualTo(r => r.ValidDateFrom)
                 .WithMessage("Data ważności Do musi być większa od daty ważności Od.");
-
-            RuleFor(p => p.OperationType)
-               .NotNull()
-               .WithMessage("Nie podano wybranego typu operacji.")
-               .IsInEnum()
-               .WithMessage("Nieprawidłowy typu operacji.");
 
         }
     }

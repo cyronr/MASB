@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure;
 using MABS.Application.Features.AppointmentFeatures.Command.CancelAppointment;
 using MABS.Application.Features.AppointmentFeatures.Command.ConfirmAppointment;
 using MABS.Application.Features.AppointmentFeatures.Command.CreateAppointment;
@@ -11,11 +12,18 @@ using MASB.API.Responses.ScheduleResponses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Nest;
+using Swashbuckle.AspNetCore.Annotations;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace MASB.API.Controllers;
 
 [ApiController]
 [Route("api/appointments")]
+[Produces("application/json")]
+[Consumes("application/json")]
+[SwaggerResponse(200, "The resource was found")]
+[SwaggerResponse(404, "The resource was not found")]
 public class AppointmentsController : ControllerBase
 {
     private readonly ILogger<AppointmentsController> _logger;
@@ -31,6 +39,11 @@ public class AppointmentsController : ControllerBase
 
     [Authorize]
     [HttpGet("byDoctorAndFacility")]
+    [SwaggerOperation(
+        Summary = "Get resource by ID",
+        Description = "Retrieve a resource by its ID",
+        OperationId = "GetResourceById"
+    )]
     public async Task<ActionResult<List<ScheduleResponse>>> GetByDoctorAndFacility(Guid doctorId, Guid facilityId)
     {
         _logger.LogInformation($"Fetching appointments for facility = {facilityId} and doctor = {doctorId}.");

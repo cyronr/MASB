@@ -1,8 +1,6 @@
-﻿namespace MABS.API.Requests.ScheduleDetails;
+﻿namespace MABS.API.Requests.ScheduleRequests;
 
-public record UpdateScheduleRequest
+public record UpdateScheduleRequest : UpsertScheduleRequest
 {
-    public Guid DoctorId { get; set; }
-    public Guid FacilityId { get; set; }
-    public List<ScheduleDetailsRequest> Schedules { get; set; }
+    public Guid Id { get; set; }
 }

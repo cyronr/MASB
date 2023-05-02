@@ -55,6 +55,7 @@ builder.Services.AddSwaggerGen(c => {
         Type = SecuritySchemeType.ApiKey
     });
     c.OperationFilter<SecurityRequirementsOperationFilter>();
+    c.EnableAnnotations();
 });
 
 builder.Services.AddCors(options =>

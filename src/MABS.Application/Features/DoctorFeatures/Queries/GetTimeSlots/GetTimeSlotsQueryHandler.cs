@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MABS.Application.DataAccess.Repositories;
-using MABS.Application.Features.AppointmentFeatures.Common;
 using MABS.Application.Features.DoctorFeatures.Common;
 using MABS.Application.Features.ScheduleFeatures.Common;
 using MABS.Application.ModelsExtensions.DoctorModelsExtensions;

@@ -5,7 +5,8 @@
         public enum Type
         {
             Created = 1,
-            Deleted = 2
+            Deleted = 2,
+            Updated = 3
         }
 
         public Type Id { get; set; }

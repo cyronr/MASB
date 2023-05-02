@@ -9,19 +9,19 @@ using MABS.Domain.Models.ScheduleModels;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace MABS.Application.Features.ScheduleFeatures.Commands.UpdateSchedule;
+namespace MABS.Application.Features.ScheduleFeatures.Commands.DeleteSchedule;
 
-public class UpdateScheduleCommandHandler : IRequestHandler<UpdateScheduleCommand, ScheduleDto>
+public class DeleteScheduleCommandHandler : IRequestHandler<DeleteScheduleCommand, ScheduleDto>
 {
-    private readonly ILogger<UpdateScheduleCommandHandler> _logger;
+    private readonly ILogger<DeleteScheduleCommandHandler> _logger;
     private readonly IMapper _mapper;
     private readonly IDbOperation _db;
     private readonly IScheduleRepository _scheduleRepository;
     private readonly ICurrentLoggedProfile _currentLoggedProfile;
     private readonly IAppointmentRepository _appointmentRepository;
 
-    public UpdateScheduleCommandHandler(
-        ILogger<UpdateScheduleCommandHandler> logger,
+    public DeleteScheduleCommandHandler(
+        ILogger<DeleteScheduleCommandHandler> logger,
         IMapper mapper,
         IDbOperation db,
         IScheduleRepository scheduleRepository,
@@ -37,13 +37,13 @@ public class UpdateScheduleCommandHandler : IRequestHandler<UpdateScheduleComman
     }
 
 
-    public async Task<ScheduleDto> Handle(UpdateScheduleCommand command, CancellationToken cancellationToken)
+    public async Task<ScheduleDto> Handle(DeleteScheduleCommand command, CancellationToken cancellationToken)
     {
         _logger.LogDebug($"Getting current logged profile.");
         var callerProfile = CallerProfile.GetCurrentLoggedProfile(_currentLoggedProfile).GetProfileEntity();
 
-        _logger.LogDebug($"Getting schedule with id = {command.Id}.");
-        var schedule = await new Schedule().GetByUUIDAsync(_scheduleRepository, command.Id);
+        _logger.LogDebug($"Getting schedule with id = {command.ScheduleId}.");
+        var schedule = await new Schedule().GetByUUIDAsync(_scheduleRepository, command.ScheduleId);
 
         if (await AreAppointmentsForSchedule(schedule))
             throw new ConflictException("Dla harmonogramu istnieją wizyty.", $"ScheduleId = {schedule.UUID}");
@@ -52,18 +52,13 @@ public class UpdateScheduleCommandHandler : IRequestHandler<UpdateScheduleComman
         {
             try
             {
-                schedule.StartTime = command.StartTime;
-                schedule.EndTime = command.EndTime;
-                schedule.AppointmentDuration = command.AppointmentDuration;
-                schedule.ValidDateFrom = command.ValidDateFrom;
-                schedule.ValidDateTo = command.ValidDateTo;
-
+                schedule.StatusId = ScheduleStatus.Status.Deleted;
                 await _db.Save();
 
                 _scheduleRepository.CreateEvent(new ScheduleEvent
                 {
                     Schedule = schedule,
-                    TypeId = ScheduleEventType.Type.Updated,
+                    TypeId = ScheduleEventType.Type.Deleted,
                     CallerProfile = callerProfile
                 });
                 await _db.Save();

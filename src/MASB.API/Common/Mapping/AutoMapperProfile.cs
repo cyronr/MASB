@@ -1,7 +1,7 @@
 using AutoMapper;
 using MABS.API.Requests.FacilityRequests;
 using MABS.API.Requests.PatientRequests;
-using MABS.API.Requests.ScheduleDetails;
+using MABS.API.Requests.ScheduleRequests;
 using MABS.API.Responses.FacilityResponses;
 using MABS.Application.Features.AppointmentFeatures.Command.CreateAppointment;
 using MABS.Application.Features.AppointmentFeatures.Common;
@@ -17,6 +17,7 @@ using MABS.Application.Features.FacilityFeatures.Commands.UpdateFacilityAddress;
 using MABS.Application.Features.FacilityFeatures.Common;
 using MABS.Application.Features.PatientFeatures.Commands.UpdatePatient;
 using MABS.Application.Features.PatientFeatures.Common;
+using MABS.Application.Features.ScheduleFeatures.Commands.CreateSchedule;
 using MABS.Application.Features.ScheduleFeatures.Commands.UpdateSchedule;
 using MABS.Application.Features.ScheduleFeatures.Common;
 using MASB.API.Requests.AppointmentRequests;
@@ -62,9 +63,7 @@ public class AutoMapperProfile : Profile
 
         ///Schedule mappings
         CreateMap<ScheduleDto, ScheduleResponse>();
-        CreateMap<ScheduleDetailsRequest, ScheduleDetails>()
-            .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => src.StartTime.ToTimeSpan()))
-            .ForMember(dest => dest.EndTime, opt => opt.MapFrom(src => src.EndTime.ToTimeSpan()));
+        CreateMap<CreateScheduleRequest, CreateScheduleCommand>();
         CreateMap<UpdateScheduleRequest, UpdateScheduleCommand>();
 
 

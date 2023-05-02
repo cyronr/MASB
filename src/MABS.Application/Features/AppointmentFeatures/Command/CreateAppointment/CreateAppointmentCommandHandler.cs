@@ -12,11 +12,9 @@ using MABS.Application.ModelsExtensions.ScheduleModelsExtensions;
 using MABS.Domain.Exceptions;
 using MABS.Domain.Models.AppointmentModels;
 using MABS.Domain.Models.PatientModels;
-using MABS.Domain.Models.ProfileModels;
 using MABS.Domain.Models.ScheduleModels;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using Profile = MABS.Domain.Models.ProfileModels.Profile;
 
 namespace MABS.Application.Features.AppointmentFeatures.Command.CreateAppointment;
