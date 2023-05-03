@@ -3,6 +3,7 @@ using MABS.Application.Features.AppointmentFeatures.Command.CancelAppointment;
 using MABS.Application.Features.AppointmentFeatures.Command.ConfirmAppointment;
 using MABS.Application.Features.AppointmentFeatures.Command.CreateAppointment;
 using MABS.Application.Features.AppointmentFeatures.Queries.GetByDoctorAndAddress;
+using MABS.Application.Features.AppointmentFeatures.Queries.GetByIdQuery;
 using MABS.Application.Features.AppointmentFeatures.Queries.GetByPatient;
 using MASB.API.Requests.AppointmentRequests;
 using MASB.API.Requests.AppointmentResponses;
@@ -34,13 +35,27 @@ public class AppointmentsController : ControllerBase
     }
 
     [Authorize]
+    [HttpGet("{id}")]
+    public async Task<ActionResult<AppointmentResponse>> Get(Guid id)
+    {
+        _logger.LogInformation($"Fetching appointments with id = {id}.");
+
+        var query = new GetByIdQuery(id);
+        var response = await _mediator.Send(query);
+
+        _logger.LogInformation($"Fetched appointment with id = {id}.");
+
+        return Ok(_mapper.Map<AppointmentResponse>(response));
+    }
+
+    [Authorize]
     [HttpGet("byDoctorAnAddress")]
     [SwaggerOperation(
         Summary = "Get resource by ID",
         Description = "Retrieve a resource by its ID",
         OperationId = "GetResourceById"
     )]
-    public async Task<ActionResult<List<ScheduleResponse>>> GetByDoctorAndAddress(Guid doctorId, Guid addressId)
+    public async Task<ActionResult<List<AppointmentResponse>>> GetByDoctorAndAddress(Guid doctorId, Guid addressId)
     {
         _logger.LogInformation($"Fetching appointments for facility = {addressId} and doctor = {doctorId}.");
 
@@ -49,12 +64,12 @@ public class AppointmentsController : ControllerBase
 
         _logger.LogInformation($"Fetched {response.Count} appointments.");
 
-        return Ok(response.Select(s => _mapper.Map<ScheduleResponse>(s)).ToList());
+        return Ok(response.Select(s => _mapper.Map<AppointmentResponse>(s)).ToList());
     }
 
     [Authorize]
     [HttpGet("byPatient")]
-    public async Task<ActionResult<List<ScheduleResponse>>> GetByPatient(Guid patientId)
+    public async Task<ActionResult<List<AppointmentResponse>>> GetByPatient(Guid patientId)
     {
         _logger.LogInformation($"Fetching appointments for patient = {patientId}.");
 
@@ -63,7 +78,7 @@ public class AppointmentsController : ControllerBase
 
         _logger.LogInformation($"Fetched {response.Count} appointments.");
 
-        return Ok(response.Select(s => _mapper.Map<ScheduleResponse>(s)).ToList());
+        return Ok(response.Select(s => _mapper.Map<AppointmentResponse>(s)).ToList());
     }
 
     [Authorize]

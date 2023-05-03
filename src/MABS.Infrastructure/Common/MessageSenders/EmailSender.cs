@@ -34,7 +34,6 @@ namespace MABS.Infrastructure.Common.MessageSenders
             })
             {
                 message.From = new MailAddress(_smtpConfig.SendFrom);
-                //message.
 
                 try
                 {
