@@ -16,6 +16,8 @@ using Nest;
 using MABS.Application.Features.DoctorFeatures.Queries.GetTimeSlots;
 using MABS.Application.Features.DoctorFeatures.Common;
 using Microsoft.AspNetCore.Authorization;
+using MABS.Application.Features.DoctorFeatures.Queries.GetAddresses;
+using Azure;
 
 namespace MABS.API.Controllers
 {
@@ -100,7 +102,7 @@ namespace MABS.API.Controllers
 
             _logger.LogInformation($"Updated doctor of Id = {response.Id}.");
 
-            return base.Ok(_mapper.Map<DoctorResponse>(response));
+            return Ok(_mapper.Map<DoctorResponse>(response));
         }
 
         [Authorize]
@@ -118,16 +120,29 @@ namespace MABS.API.Controllers
         }
 
         [HttpGet("{id}/timeSlots")]
-        public async Task<ActionResult<List<TimeSlot>>> GetTimeSlots(Guid id, Guid facilityId)
+        public async Task<ActionResult<List<TimeSlot>>> GetTimeSlots(Guid id, Guid addressId)
         {
-            _logger.LogInformation($"Getting time slots for doctor with id = {id} and facility with id = {facilityId}.");
+            _logger.LogInformation($"Getting time slots for doctor with id = {id} and address with id = {addressId}.");
 
-            var query = new GetTimeSlotsQuery(id, facilityId);
+            var query = new GetTimeSlotsQuery(id, addressId);
             var results = await _mediator.Send(query);
 
-            _logger.LogInformation($"Returning {results.Count} time slots for doctor with id = {id} and facility with id = {facilityId}.");
+            _logger.LogInformation($"Returning {results.Count} time slots for doctor with id = {id} and address with id = {addressId}.");
 
             return Ok(results.OrderBy(r => r.Date).ThenBy(r => r.Time));
+        }
+
+        [HttpGet("{id}/addresses")]
+        public async Task<ActionResult<List<AddressResponse>>> GetAddresses(Guid id)
+        {
+            _logger.LogInformation($"Getting addresses for doctor with id = {id}");
+
+            var query = new GetAddressesQuery(id);
+            var results = await _mediator.Send(query);
+
+            _logger.LogInformation($"Returning {results.Count} addresses for doctor with id = {id}");
+
+            return Ok(results.Select(d => _mapper.Map<AddressResponse>(d)).ToList());
         }
 
         [HttpGet("dict/specialties")]

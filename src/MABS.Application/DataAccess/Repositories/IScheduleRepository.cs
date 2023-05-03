@@ -8,6 +8,7 @@ public interface IScheduleRepository
 {
     Task<Schedule?> GetByUUIDAsync(Guid uuid);
     Task<List<Schedule>> GetByDoctorAsync(Doctor doctor);
+    Task<List<Schedule>> GetByAddressAsync(Address address);
     Task<List<Schedule>> GetByDoctorAndAddressAsync(Doctor doctor, Address address);
     void Create(Schedule schedule);
     void CreateEvent(ScheduleEvent scheduleEvent);

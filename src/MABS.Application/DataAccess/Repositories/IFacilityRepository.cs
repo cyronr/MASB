@@ -1,4 +1,5 @@
 using MABS.Domain.Models.DictionaryModels;
+using MABS.Domain.Models.DoctorModels;
 using MABS.Domain.Models.FacilityModels;
 
 namespace MABS.Application.DataAccess.Repositories
@@ -12,6 +13,7 @@ namespace MABS.Application.DataAccess.Repositories
         void Create(Facility facility);
         void CreateEvent(FacilityEvent facilityEvent);
         Task<Address?> GetAddressByUUIDAsync(Guid uuid);
+        Task<List<Address>> GetAddressesByDoctorAsync(Doctor doctor);
         Task<Address?> GetAddressByPropertiesAsync(string streetName, int houseNumber, int? flatNumber, string city, string postalCode, Country country);
         Task<Country?> GetCountryByIdAsync(string id);
         Task<List<Country>> GetAllCountriesAsync();

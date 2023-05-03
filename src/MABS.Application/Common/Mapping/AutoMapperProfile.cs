@@ -34,7 +34,10 @@ namespace MABS.Application.Common.Mapping
 
             ///Facilities
             CreateMap<Facility, FacilityDto>().ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID));
+            CreateMap<Facility, DoctorFacilityDto>().ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID));
             CreateMap<Address, AddressDto>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID));
+            CreateMap<Address, DoctorAddressDto>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID));
             CreateMap<AddressStreetType, StreetTypeDto>();
             CreateMap<AddressStreetType, StreetTypeExtendedDto>();

@@ -5,7 +5,6 @@ using MABS.Application.DataAccess.Repositories;
 using MABS.Application.Features.FacilityFeatures.Common;
 using MABS.Application.ModelsExtensions.FacilityModelsExtensions;
 using MABS.Domain.Exceptions;
-using MABS.Domain.Models.DoctorModels;
 using MABS.Domain.Models.FacilityModels;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -19,19 +18,22 @@ namespace MABS.Application.Features.FacilityFeatures.Commands.DeleteFacilityAddr
         private readonly IDbOperation _db;
         private readonly IFacilityRepository _facilityRepository;
         private readonly ICurrentLoggedProfile _currentLoggedProfile;
+        private readonly IScheduleRepository _scheduleRepository;
 
         public DeleteFacilityAddressCommandHandler(
             ILogger<DeleteFacilityAddressCommandHandler> logger,
             IMapper mapper,
             IDbOperation db,
             IFacilityRepository facilityRepository,
-            ICurrentLoggedProfile currentLoggedProfile)
+            ICurrentLoggedProfile currentLoggedProfile,
+            IScheduleRepository scheduleRepository)
         {
             _logger = logger;
             _mapper = mapper;
             _db = db;
             _facilityRepository = facilityRepository;
             _currentLoggedProfile = currentLoggedProfile;
+            _scheduleRepository = scheduleRepository;
         }
 
 
@@ -45,7 +47,10 @@ namespace MABS.Application.Features.FacilityFeatures.Commands.DeleteFacilityAddr
             _logger.LogDebug($"Fetching facility's address with id = {command.AddressId}.");
             var address = facility.Addresses.Find(a => a.UUID == command.AddressId);
             if (address is null)
-                throw new NotFoundException("Address not found.");
+                throw new NotFoundException("Adres o podanym identyfikatorze nie został istnieje");
+
+            if (await AreSchdulesForAddress(address))
+                throw new ConflictException("Istnieją aktywne harmonogramy dla wybranego adresu");
 
             using (var tran = _db.BeginTransaction())
             {
@@ -74,6 +79,14 @@ namespace MABS.Application.Features.FacilityFeatures.Commands.DeleteFacilityAddr
 
             facility.Addresses.Remove(address);
             return _mapper.Map<FacilityDto>(facility);
+        }
+
+
+        private async Task<bool> AreSchdulesForAddress(Address address)
+        {
+            _logger.LogDebug($"Fetching schedules for address = {address.Id}");
+            var schedules = await _scheduleRepository.GetByAddressAsync(address);
+            return schedules.Any();
         }
     }
 }

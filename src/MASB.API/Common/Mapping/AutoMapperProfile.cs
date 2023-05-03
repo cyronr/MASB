@@ -46,12 +46,16 @@ public class AutoMapperProfile : Profile
         CreateMap<UpdateDoctorRequest, UpdateDoctorCommand>();
         CreateMap<TitleExtendedDto, TitleResponse>();
         CreateMap<SpecialityExtendedDto, SpecialtyResponse>();
+        CreateMap<DoctorAddressDto, AddressResponse>();
+
 
         ///Authentication mappings
         CreateMap<AuthenticationResultDto, AuthenticationResponse>();
 
         ///Facility mappings
         CreateMap<FacilityDto, FacilityResponse>();
+        CreateMap<DoctorFacilityDto, FacilityResponse>()
+            .ForMember(dest => dest.Addresses, opt => opt.Ignore());
         CreateMap<CreateFacilityRequest, CreateFacilityCommand>();
         CreateMap<UpdateFacilityRequest, UpdateFacilityCommand>();
         CreateMap<CreateAddressRequest, CreateFacilityAddressCommand>();

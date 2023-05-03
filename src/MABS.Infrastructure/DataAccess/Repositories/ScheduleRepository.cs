@@ -5,6 +5,7 @@ using MABS.Domain.Models.ScheduleModels;
 using MABS.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Numerics;
 
 namespace MABS.Infrastructure.DataAccess.Repositories;
 
@@ -30,6 +31,16 @@ public class ScheduleRepository : IScheduleRepository
     {
         _logger.LogInformation($"Saving to database event {scheduleEvent.TypeId} for schedule with id = {scheduleEvent.Schedule.Id}.");
         _context.ScheduleEvents.Add(scheduleEvent);
+    }
+
+    public async Task<List<Schedule>> GetByAddressAsync(Address address)
+    {
+        return await _context.Schedules
+            .Where(s =>
+                s.StatusId == ScheduleStatus.Status.Active &&
+                s.Address == address
+            )
+            .ToListAsync();
     }
 
     public async Task<List<Schedule>> GetByDoctorAndAddressAsync(Doctor doctor, Address address)

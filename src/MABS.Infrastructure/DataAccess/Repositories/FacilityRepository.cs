@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using MABS.Domain.Models.DictionaryModels;
 using MABS.Infrastructure.Data;
 using MABS.Application.DataAccess.Repositories;
-using System.Diagnostics.Metrics;
 
 namespace MABS.Infrastructure.DataAccess.Repositories
 {
@@ -116,6 +115,20 @@ namespace MABS.Infrastructure.DataAccess.Repositories
                 .FirstOrDefaultAsync(a =>
                     a.StatusId == AddressStatus.Status.Active && a.UUID == uuid
             );
+        }
+
+        public async Task<List<Address>> GetAddressesByDoctorAsync(Doctor doctor)
+        {
+            return await _context.Addresses
+                .Include(a => a.StreetType)
+                .Include(a => a.Country)
+                .Include(f => f.Facility)
+                .Where(a =>
+                    a.StatusId == AddressStatus.Status.Active &&
+                    a.Facility.StatusId != FacilityStatus.Status.Deleted &&
+                    a.Facility.Doctors.Contains(doctor)
+                )
+                .ToListAsync();
         }
     }
 }
