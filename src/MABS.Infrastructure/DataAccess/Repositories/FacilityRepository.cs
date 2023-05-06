@@ -111,7 +111,9 @@ namespace MABS.Infrastructure.DataAccess.Repositories
         public async Task<Address?> GetAddressByUUIDAsync(Guid uuid)
         {
             return await _context.Addresses
+                .Include(a => a.StreetType)
                 .Include(a => a.Country)
+                .Include(a => a.Facility)
                 .FirstOrDefaultAsync(a =>
                     a.StatusId == AddressStatus.Status.Active && a.UUID == uuid
             );

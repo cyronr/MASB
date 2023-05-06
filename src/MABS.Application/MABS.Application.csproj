@@ -24,6 +24,8 @@
 
   <ItemGroup>
     <Folder Include="Features\DictionaryFeatures\Commands\" />
+    <Folder Include="Features\ProfileFeatures\Common\" />
+    <Folder Include="Features\ProfileFeatures\Queries\" />
   </ItemGroup>
 
 </Project>

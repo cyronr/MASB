@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using MABS.Application.Common.Pagination;
 using MABS.Application.DataAccess.Repositories;
 using MABS.Application.Features.AppointmentFeatures.Common;
 using MABS.Application.ModelsExtensions.DoctorModelsExtensions;
 using MABS.Application.ModelsExtensions.FacilityModelsExtensions;
+using MABS.Domain.Models.AppointmentModels;
 using MABS.Domain.Models.DoctorModels;
 using MABS.Domain.Models.FacilityModels;
 using MediatR;
@@ -10,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace MABS.Application.Features.AppointmentFeatures.Queries.GetByDoctorAndAddress;
 
-public class GetByDoctorAndAddressQueryHandler : IRequestHandler<GetByDoctorAndAddressQuery, List<AppointmentDto>>
+public class GetByDoctorAndAddressQueryHandler : IRequestHandler<GetByDoctorAndAddressQuery, PagedList<AppointmentDto>>
 {
     private readonly ILogger<GetByDoctorAndAddressQueryHandler> _logger;
     private readonly IMapper _mapper;
@@ -33,7 +35,7 @@ public class GetByDoctorAndAddressQueryHandler : IRequestHandler<GetByDoctorAndA
     }
 
 
-    public async Task<List<AppointmentDto>> Handle(GetByDoctorAndAddressQuery query, CancellationToken cancellationToken)
+    public async Task<PagedList<AppointmentDto>> Handle(GetByDoctorAndAddressQuery query, CancellationToken cancellationToken)
     {
         _logger.LogDebug($"Fetching address with id = {query.AddressId}.");
         var address = await new Address().GetByUUIDAsync(_facilityRepository, query.AddressId);
@@ -41,7 +43,11 @@ public class GetByDoctorAndAddressQueryHandler : IRequestHandler<GetByDoctorAndA
         _logger.LogDebug($"Fetching doctor with id = {query.DoctorId}.");
         var doctor = await new Doctor().GetByUUIDAsync(_doctorRepository, query.DoctorId);
 
-        var schedules = await _appointmentRepository.GetByDoctorAndAddressAsync(doctor, address);
-        return schedules.Select(s => _mapper.Map<AppointmentDto>(s)).ToList();
+        var appointments = await _appointmentRepository.GetByDoctorAndAddressAsync(doctor, address);
+        return PagedList<AppointmentDto>.ToPagedList(
+           appointments.Select(s => _mapper.Map<AppointmentDto>(s)).ToList(),
+           query.PagingParameters.PageNumber,
+           query.PagingParameters.PageSize
+       );
     }
 }

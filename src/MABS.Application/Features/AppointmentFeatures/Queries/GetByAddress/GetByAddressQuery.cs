@@ -2,10 +2,10 @@
 using MABS.Application.Features.AppointmentFeatures.Common;
 using MediatR;
 
-namespace MABS.Application.Features.AppointmentFeatures.Queries.GetByPatient;
+namespace MABS.Application.Features.AppointmentFeatures.Queries.GetByAddress;
 
-public record GetByPatientQuery(
-    Guid PatientId,
+public record GetByAddressQuery(
+    Guid AddressId,
     PagingParameters PagingParameters
 ) : IRequest<PagedList<AppointmentDto>>;
 

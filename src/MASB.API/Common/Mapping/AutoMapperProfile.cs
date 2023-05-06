@@ -2,6 +2,7 @@ using AutoMapper;
 using MABS.API.Requests.FacilityRequests;
 using MABS.API.Requests.PatientRequests;
 using MABS.API.Requests.ScheduleRequests;
+using MABS.API.Responses.AppointmentResponses;
 using MABS.API.Responses.FacilityResponses;
 using MABS.Application.Features.AppointmentFeatures.Command.CreateAppointment;
 using MABS.Application.Features.AppointmentFeatures.Common;
@@ -20,6 +21,8 @@ using MABS.Application.Features.PatientFeatures.Common;
 using MABS.Application.Features.ScheduleFeatures.Commands.CreateSchedule;
 using MABS.Application.Features.ScheduleFeatures.Commands.UpdateSchedule;
 using MABS.Application.Features.ScheduleFeatures.Common;
+using MABS.Domain.Models.DoctorModels;
+using MABS.Domain.Models.FacilityModels;
 using MASB.API.Requests.AppointmentRequests;
 using MASB.API.Requests.AppointmentResponses;
 using MASB.API.Requests.AuthenticationResponses;
@@ -74,8 +77,13 @@ public class AutoMapperProfile : Profile
         ///Appointments mappings
         CreateMap<AppointmentDto, AppointmentResponse>()
             .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.Patient.UUID))
-            .ForMember(dest => dest.DoctorId, opt => opt.MapFrom(src => src.Schedule.Doctor.UUID))
-            .ForMember(dest => dest.AddressId, opt => opt.MapFrom(src => src.Schedule.Address.UUID));
+            .ForMember(dest => dest.Doctor, opt => opt.MapFrom(src => src.Schedule.Doctor))
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Schedule.Address))
+            .ForMember(dest => dest.Facility, opt => opt.MapFrom(src => src.Schedule.Address.Facility));
         CreateMap<CreateAppointmentRequest, CreateAppointmentCommand>();
+        CreateMap<Doctor, DoctorResponse>()
+            .ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID));
+        CreateMap<Facility, AppointmentFacility>()
+            .ForMember(d => d.Id, opt => opt.MapFrom(s => s.UUID));
     }   
 }

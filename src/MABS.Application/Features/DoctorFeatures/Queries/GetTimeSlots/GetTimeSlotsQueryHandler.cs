@@ -73,7 +73,7 @@ public class GetTimeSlotsQueryHandler : IRequestHandler<GetTimeSlotsQuery, List<
         _logger.LogDebug($"Fetching appointments for doctor id = {doctor.UUID} and address with id = {address.UUID}.");
         var appointments = await _appointmentRepository.GetByDoctorAndAddressAsync(doctor, address);
 
-        return appointments;
+        return appointments.Where(a => a.StatusId != AppointmentStatus.Status.Cancelled).ToList();
     }
 
     private List<TimeSlot> GetTimeSlots(List<ScheduleDto> schedules)

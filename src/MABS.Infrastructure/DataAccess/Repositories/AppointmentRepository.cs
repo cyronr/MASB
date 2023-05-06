@@ -5,8 +5,11 @@ using MABS.Domain.Models.FacilityModels;
 using MABS.Domain.Models.PatientModels;
 using MABS.Domain.Models.ScheduleModels;
 using MABS.Infrastructure.Data;
+using MABSAPI.Migrations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Numerics;
+using static Nest.JoinField;
 
 namespace MABS.Infrastructure.DataAccess.Repositories;
 
@@ -33,24 +36,118 @@ public class AppointmentRepository : IAppointmentRepository
         _context.AppointmentEvents.Add(appointmentEvent);
     }
 
+    public async Task<List<Appointment>> GetByAddressAsync(Address address)
+    {
+        var appointments = await _context.Appointments
+            .Include(p => p.Status)
+            .Include(p => p.Events)
+            .Include(p => p.Schedule)
+                .ThenInclude(s => s.Doctor)
+                    .ThenInclude(d => d.Title)
+            .Include(p => p.Schedule)
+                .ThenInclude(s => s.Doctor)
+                    .ThenInclude(d => d.Specialties)
+            .Include(p => p.Schedule)
+                .ThenInclude(s => s.Address)
+                    .ThenInclude(a => a.StreetType)
+            .Include(p => p.Schedule)
+                .ThenInclude(s => s.Address)
+                    .ThenInclude(a => a.Facility)
+            .Include(p => p.Patient)
+                .ThenInclude(pa => pa.Profile)
+            .Where(s => s.Schedule.Address == address)
+            .ToListAsync();
+
+        return appointments.OrderByDescending(a => a.Events
+                .Where(e => e.TypeId == AppointmentEventType.Type.Created)
+                .Max(e => e.Timestamp)
+            )
+            .ToList();
+    }
+
     public async Task<List<Appointment>> GetByDoctorAndAddressAsync(Doctor doctor, Address address)
     {
-        return await _context.Appointments
-            .Include(a => a.Schedule)
-            .Include(a => a.Events)
+        var appointments = await _context.Appointments
+            .Include(p => p.Status)
+            .Include(p => p.Events)
+            .Include(p => p.Schedule)
+                .ThenInclude(s => s.Doctor)
+                    .ThenInclude(d => d.Title)
+            .Include(p => p.Schedule)
+                .ThenInclude(s => s.Address)
+                    .ThenInclude(a => a.StreetType)
+            .Include(p => p.Schedule)
+                .ThenInclude(s => s.Address)
+                    .ThenInclude(a => a.Facility)
+            .Include(p => p.Patient)
+                .ThenInclude(pa => pa.Profile)
             .Where(a => 
-                a.StatusId != AppointmentStatus.Status.Cancelled &&
                 a.Schedule.Doctor == doctor &&
                 a.Schedule.Address == address
             )
             .ToListAsync();
+
+        return appointments.OrderByDescending(a => a.Events
+                .Where(e => e.TypeId == AppointmentEventType.Type.Created)
+                .Max(e => e.Timestamp)
+            )
+            .ToList();
+    }
+
+    public async Task<List<Appointment>> GetByDoctorAsync(Doctor doctor)
+    {
+        var appointments = await _context.Appointments
+            .Include(p => p.Status)
+            .Include(p => p.Events)
+            .Include(p => p.Schedule)
+                .ThenInclude(s => s.Doctor)
+                    .ThenInclude(d => d.Title)
+            .Include(p => p.Schedule)
+                .ThenInclude(s => s.Address)
+                    .ThenInclude(a => a.StreetType)
+            .Include(p => p.Schedule)
+                .ThenInclude(s => s.Address)
+                    .ThenInclude(a => a.Facility)
+            .Include(p => p.Patient)
+                .ThenInclude(pa => pa.Profile)
+            .Where(s => s.Schedule.Doctor == doctor)
+            .ToListAsync();
+
+        return appointments.OrderByDescending(a => a.Events
+                .Where(e => e.TypeId == AppointmentEventType.Type.Created)
+                .Max(e => e.Timestamp)
+            )
+            .ToList();
     }
 
     public async Task<List<Appointment>> GetByPatientAsync(Patient patient)
     {
-        return await _context.Appointments
+        var appointments = await _context.Appointments
+            .Include(p => p.Status)
+            .Include(p => p.Events)
+            .Include(p => p.Schedule)
+                .ThenInclude(s => s.Doctor)
+                    .ThenInclude(d => d.Title)
+            .Include(p => p.Schedule)
+                .ThenInclude(s => s.Doctor)
+                    .ThenInclude(d => d.Specialties)
+            .Include(p => p.Schedule)
+                .ThenInclude(s => s.Address)
+                    .ThenInclude(a => a.StreetType)
+            .Include(p => p.Schedule)
+                .ThenInclude(s => s.Address)
+                    .ThenInclude(a => a.Facility)
+            .Include(p => p.Patient)
+                .ThenInclude(pa => pa.Profile)
             .Where(s => s.Patient == patient)
+            .OrderBy(a => a.Id)
             .ToListAsync();
+
+        return appointments.OrderByDescending(a => a.Events
+                .Where(e => e.TypeId == AppointmentEventType.Type.Created)
+                .Max(e => e.Timestamp)
+            )
+            .ToList();
     }
 
     public async Task<List<Appointment>> GetByScheduleAsync(Schedule schedule)
@@ -70,8 +167,16 @@ public class AppointmentRepository : IAppointmentRepository
             .Include(p => p.Events)
             .Include(p => p.Schedule)
                 .ThenInclude(s => s.Doctor)
+                    .ThenInclude(d => d.Title)
+            .Include(p => p.Schedule)
+                .ThenInclude(s => s.Doctor)
+                    .ThenInclude(d => d.Specialties)
             .Include(p => p.Schedule)
                 .ThenInclude(s => s.Address)
+                    .ThenInclude(a => a.StreetType)
+            .Include(p => p.Schedule)
+                .ThenInclude(s => s.Address)
+                    .ThenInclude(a => a.Facility)
             .Include(p => p.Patient)
                 .ThenInclude(pa => pa.Profile)
             .FirstOrDefaultAsync(p => p.UUID == uuid);

@@ -10,6 +10,8 @@ public interface IAppointmentRepository
 {
     Task<Appointment?> GetByUUIDAsync(Guid uuid);
     Task<List<Appointment>> GetByPatientAsync(Patient patient);
+    Task<List<Appointment>> GetByDoctorAsync(Doctor doctor);
+    Task<List<Appointment>> GetByAddressAsync(Address address);
     Task<List<Appointment>> GetByDoctorAndAddressAsync(Doctor doctor, Address address);
     Task<List<Appointment>> GetByScheduleAsync(Schedule schedule);
 
