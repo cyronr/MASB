@@ -9,11 +9,22 @@ using MABS.Application.Features.AuthenticationFeatures.Commands.RegisterPatient;
 using MABS.Application.Features.PatientFeatures.Commands.CreatePatient;
 using MABS.Application.Features.AuthenticationFeatures.Commands.RegisterFacility;
 using MABS.Application.Features.FacilityFeatures.Commands.CreateFacility;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace MABS.API.Controllers
 {
     [ApiController]
     [Route("api/auth")]
+    [Produces("application/json")]
+    [Consumes("application/json")]
+    [SwaggerResponse(200, "Sukces. Zwrócono odpowiedź.")]
+    [SwaggerResponse(204, "Sukces. Brak odpowiedzi.")]
+    [SwaggerResponse(400, "Błąd. Niepoprawny request.")]
+    [SwaggerResponse(401, "Błąd. Brak autoryzacji.")]
+    [SwaggerResponse(403, "Błąd. Zabroniono.")]
+    [SwaggerResponse(404, "Błąd. Nie znaleziono obiektu.")]
+    [SwaggerResponse(407, "Błąd. Wystąpił błąd biznesowy.")]
+    [SwaggerResponse(500, "Nieoczekiwany błąd.")]
     public class AuthenticationController : ControllerBase
     {
         private readonly ILogger<AuthenticationController> _logger;
@@ -28,6 +39,11 @@ namespace MABS.API.Controllers
         }
 
         [HttpPost("login")]
+        [SwaggerOperation(
+            Summary = "Zaloguj",
+            Description = "Loguje użytkownika na podstawie przekazanego w JSON obiektu LoginRequest." +
+                "Zwraca szczegóły zidentyfikowanego profilu oraz token autoryzacyjny (JWT)."
+        )]
         public async Task<ActionResult<AuthenticationResponse>> Login(LoginRequest request)
         {
             _logger.LogInformation($"Logging {request.Email}.");
@@ -41,6 +57,11 @@ namespace MABS.API.Controllers
         }
 
         [HttpPost("register/patient")]
+        [SwaggerOperation(
+            Summary = "Zarejestruj pacjenta",
+            Description = "Rejestruje nowy profil pacjenta na podstawie przekazanego w JSON obiektu RegisterPatientProfileRequest." +
+                "Zwraca szczegóły zidentyfikowanego profilu oraz token autoryzacyjny (JWT)."
+        )]
         public async Task<ActionResult<AuthenticationResponse>> RegisterPatient(RegisterPatientProfileRequest request)
         {
             _logger.LogInformation($"Registering new patient profile {request.Email}.");
@@ -63,6 +84,11 @@ namespace MABS.API.Controllers
         }
 
         [HttpPost("register/facility")]
+        [SwaggerOperation(
+            Summary = "Zarejestruj placówkę medyczną",
+            Description = "Rejestruje nowy profil placówki medycznej na podstawie przekazanego w JSON obiektu RegisterFacilityProfileRequest." +
+                "Zwraca szczegóły zidentyfikowanego profilu oraz token autoryzacyjny (JWT)."
+        )]
         public async Task<ActionResult<AuthenticationResponse>> RegisterFacility(RegisterFacilityProfileRequest request)
         {
             _logger.LogInformation($"Registering new facility profile {request.Email}.");

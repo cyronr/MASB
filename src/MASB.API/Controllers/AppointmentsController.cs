@@ -10,7 +10,6 @@ using MABS.Application.Features.AppointmentFeatures.Queries.GetByIdQuery;
 using MABS.Application.Features.AppointmentFeatures.Queries.GetByPatient;
 using MASB.API.Requests.AppointmentRequests;
 using MASB.API.Requests.AppointmentResponses;
-using MASB.API.Responses.ScheduleResponses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,8 +21,14 @@ namespace MASB.API.Controllers;
 [Route("api/appointments")]
 [Produces("application/json")]
 [Consumes("application/json")]
-[SwaggerResponse(200, "The resource was found")]
-[SwaggerResponse(404, "The resource was not found")]
+[SwaggerResponse(200, "Sukces. Zwrócono odpowiedź.")]
+[SwaggerResponse(204, "Sukces. Brak odpowiedzi.")]
+[SwaggerResponse(400, "Błąd. Niepoprawny request.")]
+[SwaggerResponse(401, "Błąd. Brak autoryzacji.")]
+[SwaggerResponse(403, "Błąd. Zabroniono.")]
+[SwaggerResponse(404, "Błąd. Nie znaleziono obiektu.")]
+[SwaggerResponse(407, "Błąd. Wystąpił błąd biznesowy.")]
+[SwaggerResponse(500, "Nieoczekiwany błąd.")]
 public class AppointmentsController : ControllerBase
 {
     private readonly ILogger<AppointmentsController> _logger;
@@ -39,6 +44,10 @@ public class AppointmentsController : ControllerBase
 
     [Authorize]
     [HttpGet("{id}")]
+    [SwaggerOperation(
+        Summary = "Pobierz wizytę na podstawie Id",
+        Description = "Zwraca szczegóły wizyty na podstawie podanego Id (UUID). Wymaga autoryzacji."
+    )]
     public async Task<ActionResult<AppointmentResponse>> Get(Guid id)
     {
         _logger.LogInformation($"Fetching appointments with id = {id}.");
@@ -54,8 +63,10 @@ public class AppointmentsController : ControllerBase
     [Authorize]
     [HttpGet("doctor/{doctorId}/address/{addressId}")]
     [SwaggerOperation(
-        Summary = "Get resource by ID",
-        Description = "Retrieve a resource by its ID"
+        Summary = "Pobierz listę wizytę dla lekarza i adresu",
+        Description = "Zwraca listę wizyt na podstawie Id lekarza oraz Id adresu. " +
+            "Dodatkowo obługuje paginację, przyjmując parametry PageNumber i PageSize oraz zwracając szczegóły w nagłówku X-Pagination." +
+            "Wymaga autoryzacji."
     )]
     public async Task<ActionResult<List<AppointmentResponse>>> GetByDoctorAndAddress(Guid doctorId, Guid addressId, [FromQuery] PagingParameters pagingParameters)
     {
@@ -72,6 +83,12 @@ public class AppointmentsController : ControllerBase
 
     [Authorize]
     [HttpGet("patient/{id}")]
+    [SwaggerOperation(
+        Summary = "Pobierz listę wizytę dla pacjenta",
+        Description = "Zwraca listę wizyt na podstawie Id pacjenta. " +
+            "Dodatkowo obługuje paginację, przyjmując parametry PageNumber i PageSize oraz zwracając szczegóły w nagłówku X-Pagination." +
+            "Wymaga autoryzacji."
+    )]
     public async Task<ActionResult<List<AppointmentResponse>>> GetByPatient(Guid id, [FromQuery] PagingParameters pagingParameters)
     {
         _logger.LogInformation($"Fetching appointments for patient = {id}.");
@@ -87,6 +104,12 @@ public class AppointmentsController : ControllerBase
 
     [Authorize]
     [HttpGet("doctor/{id}")]
+    [SwaggerOperation(
+        Summary = "Pobierz listę wizytę dla lekarza",
+        Description = "Zwraca listę wizyt na podstawie Id lekarza. " +
+            "Dodatkowo obługuje paginację, przyjmując parametry PageNumber i PageSize oraz zwracając szczegóły w nagłówku X-Pagination." +
+            "Wymaga autoryzacji."
+    )]
     public async Task<ActionResult<List<AppointmentResponse>>> GetByDoctor(Guid id, [FromQuery] PagingParameters pagingParameters)
     {
         _logger.LogInformation($"Fetching appointments for doctor = {id}.");
@@ -102,6 +125,12 @@ public class AppointmentsController : ControllerBase
 
     [Authorize]
     [HttpGet("address/{id}")]
+    [SwaggerOperation(
+        Summary = "Pobierz listę wizytę dla adresu",
+        Description = "Zwraca listę wizyt na podstawie Id adresu. " +
+            "Dodatkowo obługuje paginację, przyjmując parametry PageNumber i PageSize oraz zwracając szczegóły w nagłówku X-Pagination." +
+            "Wymaga autoryzacji."
+    )]
     public async Task<ActionResult<List<AppointmentResponse>>> GetByAddress(Guid id, [FromQuery] PagingParameters pagingParameters)
     {
         _logger.LogInformation($"Fetching appointments for address = {id}.");
@@ -117,6 +146,10 @@ public class AppointmentsController : ControllerBase
 
     [Authorize]
     [HttpPost]
+    [SwaggerOperation(
+        Summary = "Stwórz wizytę",
+        Description = "Tworzy nową wizytę na podstawie przekazanego w JSON obiektu CreateAppointmentRequest. Wymaga autoryzacji."
+    )]
     public async Task<ActionResult<AppointmentResponse>> Create(CreateAppointmentRequest request)
     {
         _logger.LogInformation($"Creating Appointment with data = {request.ToString()}.");
@@ -131,6 +164,10 @@ public class AppointmentsController : ControllerBase
 
     [Authorize]
     [HttpPost("{id}/confirm")]
+    [SwaggerOperation(
+        Summary = "Potiwedź wizytę",
+        Description = "Potwierdza wizytę na podstawie Id wizyty. Wymaga autoryzacji."
+    )]
     public async Task<ActionResult<AppointmentResponse>> Confirm(Guid id, int confirmationCode)
     {
         _logger.LogInformation($"Confirming Appointment with id = {id}.");
@@ -145,6 +182,10 @@ public class AppointmentsController : ControllerBase
 
     [Authorize]
     [HttpPost("{id}/cancel")]
+    [SwaggerOperation(
+        Summary = "Anuluj wizytę",
+        Description = "Anuluje wizytę na podstawie Id wizyty. Wymaga autoryzacji."
+    )]
     public async Task<ActionResult<AppointmentResponse>> Cancel(Guid id)
     {
         _logger.LogInformation($"Canceling Appointment with id = {id}.");

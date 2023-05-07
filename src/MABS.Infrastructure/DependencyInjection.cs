@@ -32,7 +32,7 @@ namespace MABS.Infrastructure
             services.ConfigureCommonDependencyInjection();
 
             services.AddDbContext<DataContext>();
-            services.AddElasticSearch();
+            services.AddElasticSearch(configuration);
 
             return services;
         }
@@ -46,11 +46,11 @@ namespace MABS.Infrastructure
             return services;
         }
 
-        private static IServiceCollection AddElasticSearch(this IServiceCollection services)
+        private static IServiceCollection AddElasticSearch(this IServiceCollection services, ConfigurationManager configuration)
         {
             services.AddSingleton<IElasticClient>(sp =>
             {
-                var pool = new SingleNodeConnectionPool(new Uri("http://localhost:9200"));
+                var pool = new SingleNodeConnectionPool(new Uri(configuration.GetValue<string>("Elasticsearch:Server")));
                 var settings = new ConnectionSettings(pool)
                     .EnableApiVersioningHeader();
 

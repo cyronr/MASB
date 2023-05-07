@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace MASB.API.Controllers;
 
@@ -9,6 +10,14 @@ namespace MASB.API.Controllers;
 [Route("api/profiles")]
 [Produces("application/json")]
 [Consumes("application/json")]
+[SwaggerResponse(200, "Sukces. Zwrócono odpowiedź.")]
+[SwaggerResponse(204, "Sukces. Brak odpowiedzi.")]
+[SwaggerResponse(400, "Błąd. Niepoprawny request.")]
+[SwaggerResponse(401, "Błąd. Brak autoryzacji.")]
+[SwaggerResponse(403, "Błąd. Zabroniono.")]
+[SwaggerResponse(404, "Błąd. Nie znaleziono obiektu.")]
+[SwaggerResponse(407, "Błąd. Wystąpił błąd biznesowy.")]
+[SwaggerResponse(500, "Nieoczekiwany błąd.")]
 public class ProfilesController : ControllerBase
 {
     private readonly ILogger<ProfilesController> _logger;
@@ -21,6 +30,10 @@ public class ProfilesController : ControllerBase
 
     [Authorize]
     [HttpDelete("{id}")]
+    [SwaggerOperation(
+        Summary = "Usuń profil",
+        Description = "Usuwa profil użytkownika na podstawie podanego Id (UUID). Wymaga autoryzacji."
+    )]
     public async Task<ActionResult> DeleteProfile(Guid id)
     {
         _logger.LogInformation($"Deleting profile with id = {id}.");

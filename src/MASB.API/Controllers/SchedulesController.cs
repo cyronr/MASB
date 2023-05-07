@@ -8,11 +8,22 @@ using MASB.API.Responses.ScheduleResponses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace MASB.API.Controllers;
 
 [ApiController]
 [Route("api/schedules")]
+[Produces("application/json")]
+[Consumes("application/json")]
+[SwaggerResponse(200, "Sukces. Zwrócono odpowiedź.")]
+[SwaggerResponse(204, "Sukces. Brak odpowiedzi.")]
+[SwaggerResponse(400, "Błąd. Niepoprawny request.")]
+[SwaggerResponse(401, "Błąd. Brak autoryzacji.")]
+[SwaggerResponse(403, "Błąd. Zabroniono.")]
+[SwaggerResponse(404, "Błąd. Nie znaleziono obiektu.")]
+[SwaggerResponse(407, "Błąd. Wystąpił błąd biznesowy.")]
+[SwaggerResponse(500, "Nieoczekiwany błąd.")]
 public class SchedulesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -29,6 +40,10 @@ public class SchedulesController : ControllerBase
 
     [Authorize]
     [HttpGet]
+    [SwaggerOperation(
+        Summary = "Pobierz listę harmonogramów",
+        Description = "Zwraca listę harmonogramów pracy na podstawie Id lekarza oraz Id adresu. Wymaga autoryzacji."
+    )]
     public async Task<ActionResult<List<ScheduleResponse>>> GetSchedules(Guid addressId, Guid doctorId)
     {
         _logger.LogInformation($"Fetching schedules for addressId = {addressId} and doctor = {doctorId}.");
@@ -43,6 +58,10 @@ public class SchedulesController : ControllerBase
 
     [Authorize]
     [HttpPost]
+    [SwaggerOperation(
+        Summary = "Stwóz harmonogram",
+        Description = "Tworzy nowy harmonogram pracy na podstawie przekazanego w JSON obiektu CreateScheduleRequest. Wymaga autoryzacji."
+    )]
     public async Task<ActionResult<ScheduleResponse>> Create(CreateScheduleRequest request)
     {
         _logger.LogInformation($"Creating schedule for address = {request.AddressId} and doctor = {request.DoctorId} with data = {request.ToString()}.");
@@ -57,6 +76,10 @@ public class SchedulesController : ControllerBase
 
     [Authorize]
     [HttpPut]
+    [SwaggerOperation(
+        Summary = "Aktualizuj harmonogram",
+        Description = "Aktualizuje harmonogram pracy na podstawie przekazanego w JSON obiektu UpdateScheduleRequest. Wymaga autoryzacji."
+    )]
     public async Task<ActionResult<ScheduleResponse>> Update(UpdateScheduleRequest request)
     {
         _logger.LogInformation($"Updating schedule with data = {request.ToString()}.");
@@ -71,6 +94,10 @@ public class SchedulesController : ControllerBase
 
     [Authorize]
     [HttpDelete("{id}")]
+    [SwaggerOperation(
+        Summary = "Usuń harmonogram",
+        Description = "Usuwa harmonogram pracy na podstawie Id harmonogramu (UUID). Wymaga autoryzacji."
+    )]
     public async Task<ActionResult<ScheduleResponse>> Delete(Guid id)
     {
         _logger.LogInformation($"Deleting schedule with id = {id}.");
