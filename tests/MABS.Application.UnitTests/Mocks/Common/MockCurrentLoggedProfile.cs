@@ -1,4 +1,4 @@
-﻿namespace MABS.Application.UnitTests.Mocks;
+﻿namespace MABS.Application.UnitTests.Mocks.Common;
 public static class MockCurrentLoggedProfile
 {
     public static Mock<ICurrentLoggedProfile> GetAdminProfile(Guid? uuid = null)

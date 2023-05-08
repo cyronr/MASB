@@ -1,7 +1,10 @@
 ﻿using MABS.Application.Features.DoctorFeatures.Commands.DeleteDoctor;
 using MABS.Application.Features.DoctorFeatures.Common;
+using MABS.Application.UnitTests.Mocks.Common;
+using MABS.Application.UnitTests.Mocks.DataAccess;
+using MABS.Application.UnitTests.Mocks.DataAccess.Repositories;
 
-namespace MABS.Application.UnitTests.Tests.DoctorFeatures.Commands;
+namespace MABS.Application.UnitTests.Tests.DoctorsFeatures.Commands;
 
 public class DeleteDoctorCommandHandlerTests
 {
@@ -14,7 +17,7 @@ public class DeleteDoctorCommandHandlerTests
     private readonly DeleteDoctorCommandHandler _handler;
 
     public DeleteDoctorCommandHandlerTests()
-	{
+    {
         _logger = new LoggerFactory().CreateLogger<DeleteDoctorCommandHandler>();
         _mapper = new MapperConfiguration(
             c => c.AddProfile<AutoMapperProfile>()
@@ -55,5 +58,5 @@ public class DeleteDoctorCommandHandlerTests
         Func<Task> act = async () => { await _handler.Handle(new DeleteDoctorCommand(Guid.NewGuid()), CancellationToken.None); };
         await act.Should().ThrowAsync<NotFoundException>();
     }
- 
+
 }

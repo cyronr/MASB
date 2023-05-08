@@ -1,4 +1,4 @@
-﻿namespace MABS.Application.UnitTests.Mocks;
+﻿namespace MABS.Application.UnitTests.Mocks.DataAccess.Repositories;
 
 public static class MockDoctorRepositorySetup
 {
@@ -53,6 +53,8 @@ public static class MockDoctorRepositorySetup
             });
 
         mockRepo.Setup(r => r.GetAllSpecialtiesAsync()).ReturnsAsync(mockSpecialties);
+
+        mockRepo.Setup(r => r.SetElasticsearchSyncNeeded(It.IsAny<long>())).Verifiable();
 
         return mockRepo;
     }

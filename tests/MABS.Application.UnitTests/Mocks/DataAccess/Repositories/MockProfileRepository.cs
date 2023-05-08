@@ -1,4 +1,4 @@
-﻿namespace MABS.Application.UnitTests.Mocks;
+﻿namespace MABS.Application.UnitTests.Mocks.DataAccess.Repositories;
 
 public class MockProfileRepository
 {
@@ -9,7 +9,7 @@ public class MockProfileRepository
         return new Mock<IProfileRepository>().SetupRepository(mockProfiles);
     }
 
-    private static List<Profile> PrepareListOfMockProfiles()
+    public static List<Profile> PrepareListOfMockProfiles()
     {
         return new List<Profile>
         {

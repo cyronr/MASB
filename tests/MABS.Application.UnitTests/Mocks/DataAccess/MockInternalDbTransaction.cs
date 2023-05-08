@@ -1,4 +1,4 @@
-﻿namespace MABS.Application.UnitTests.Mocks;
+﻿namespace MABS.Application.UnitTests.Mocks.DataAccess;
 public static class MockInternalDbTransaction
 {
     public static Mock<IInternalDbTransaction> GetInternalDbTransaction()

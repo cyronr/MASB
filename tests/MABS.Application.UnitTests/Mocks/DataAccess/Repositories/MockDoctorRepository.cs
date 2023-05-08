@@ -1,4 +1,4 @@
-﻿namespace MABS.Application.UnitTests.Mocks;
+﻿namespace MABS.Application.UnitTests.Mocks.DataAccess.Repositories;
 
 public static class MockDoctorRepository
 {

@@ -1,7 +1,10 @@
 ﻿using MABS.Application.Features.DoctorFeatures.Commands.UpdateDoctor;
 using MABS.Application.Features.DoctorFeatures.Common;
+using MABS.Application.UnitTests.Mocks.Common;
+using MABS.Application.UnitTests.Mocks.DataAccess;
+using MABS.Application.UnitTests.Mocks.DataAccess.Repositories;
 
-namespace MABS.Application.UnitTests.Tests.DoctorFeatures.Commands;
+namespace MABS.Application.UnitTests.Tests.DoctorsFeatures.Commands;
 
 public class UpdateDoctorCommandHandlerTests
 {
@@ -14,7 +17,7 @@ public class UpdateDoctorCommandHandlerTests
     private readonly UpdateDoctorCommandHandler _handler;
 
     public UpdateDoctorCommandHandlerTests()
-	{
+    {
         _logger = new LoggerFactory().CreateLogger<UpdateDoctorCommandHandler>();
         _mapper = new MapperConfiguration(
             c => c.AddProfile<AutoMapperProfile>()
