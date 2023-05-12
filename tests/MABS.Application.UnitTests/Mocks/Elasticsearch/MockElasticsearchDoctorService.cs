@@ -28,7 +28,7 @@ public class MockElasticsearchDoctorService
                 TitleShortName = "Dr.",
                 TitleName = "Doctor",
                 Specalities =
-                {,
+                {
                     mockSpecalties.Single(t => t.Id == 1),
                     mockSpecalties.Single(t => t.Id == 2)
                 },
@@ -92,7 +92,8 @@ public class MockElasticsearchDoctorService
                     mockFacilities.Single(f => f.Name == "Fac3"),
                     mockFacilities.Single(f => f.Name == "Fac4")
                 }
-            };
+            }
+        };
     }
 
     private static List<ElasticFacility> PrepareListOfMockFacilities()

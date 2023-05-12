@@ -68,7 +68,8 @@ public class MockProfileRepository
                     Name = "Facility"
                 },
                 Email = "mock_facility@mabs.com",
-                PhoneNumber = "123456789"
+                PhoneNumber = "123456789",
+                Facility = MockFacilityRepository.PrepareListOfFacilities().Single(f => f.UUID == Guid.Parse(Consts.Active_Facility_UUID))
             },
             new Profile
             {

@@ -68,13 +68,11 @@ public static class MockFacilityRepositorySetup
         ).ReturnsAsync((string streetName, int houseNumber, int? flatNumber, string city, string postalCode, Country country) => {
 
             return mockAddresses.FirstOrDefault(a =>
-                a.StatusId == AddressStatus.Status.Active &&
                 a.StreetName == streetName &&
                 a.HouseNumber == houseNumber &&
                 a.FlatNumber == flatNumber &&
                 a.City == city &&
-                a.PostalCode == postalCode &&
-                a.Country.Equals(country)
+                a.PostalCode == postalCode
             );
         });
 

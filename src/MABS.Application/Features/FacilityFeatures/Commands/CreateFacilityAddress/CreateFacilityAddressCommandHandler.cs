@@ -10,8 +10,6 @@ using MABS.Application.ModelsExtensions.FacilityModelsExtensions;
 using MABS.Application.ModelsExtensions.ProfileModelsExtensions;
 using MABS.Domain.Models.DictionaryModels;
 using MABS.Application.Features.FacilityFeatures.Common;
-using System.Net;
-using MABS.Application.Common.Http;
 using MABS.Application.Common.Geolocation;
 
 namespace MABS.Application.Features.FacilityFeatures.Commands.CreateFacilityAddress

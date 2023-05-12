@@ -23,13 +23,23 @@ public static class MockProfileRepositorySetup
         mockRepo.Setup(r => r.GetFacilityIdByProfileIdAsync(It.IsAny<Guid>()))
             .ReturnsAsync((Guid uuid) =>
             {
-                return mockProfiles.FirstOrDefault(d => d.Facility.UUID == uuid && d.StatusId != ProfileStatus.Status.Deleted).UUID;
+                var facProfiles = mockProfiles.Where(p => p.Facility is not null).ToList();
+                var facProfile = facProfiles.FirstOrDefault(d => d.Facility.UUID == uuid && d.StatusId != ProfileStatus.Status.Deleted);
+                 if (facProfile is not null)
+                 {
+                     return facProfile.Facility.UUID;
+                 }
+                 else
+                 {
+                     return null;
+                 }
             });
 
         mockRepo.Setup(r => r.GetPatientIdByProfileIdAsync(It.IsAny<Guid>()))
             .ReturnsAsync((Guid uuid) =>
             {
-                return mockProfiles.FirstOrDefault(d => d.Patient.UUID == uuid && d.StatusId != ProfileStatus.Status.Deleted).UUID;
+                return Guid.NewGuid();
+               /* return mockProfiles.FirstOrDefault(d => d.Patient.UUID == uuid && d.StatusId != ProfileStatus.Status.Deleted).UUID;*/
             });
 
         mockRepo.Setup(r => r.Create(It.IsAny<Profile>()))

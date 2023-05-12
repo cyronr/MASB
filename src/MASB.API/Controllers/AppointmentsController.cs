@@ -8,6 +8,7 @@ using MABS.Application.Features.AppointmentFeatures.Queries.GetByDoctor;
 using MABS.Application.Features.AppointmentFeatures.Queries.GetByDoctorAndAddress;
 using MABS.Application.Features.AppointmentFeatures.Queries.GetByIdQuery;
 using MABS.Application.Features.AppointmentFeatures.Queries.GetByPatient;
+using MABS.Extensions;
 using MASB.API.Requests.AppointmentRequests;
 using MASB.API.Requests.AppointmentResponses;
 using MediatR;
@@ -54,6 +55,9 @@ public class AppointmentsController : ControllerBase
 
         var query = new GetByIdQuery(id);
         var response = await _mediator.Send(query);
+
+        Char a = 'a';
+        a.ToInt32();
 
         _logger.LogInformation($"Fetched appointment with id = {id}.");
 

@@ -20,7 +20,7 @@ public static class MockDoctorRepository
         return new Mock<IDoctorRepository>().SetupRepository(mockDoctors, mockTitles, mockSpecialties);
     }
 
-    private static List<Doctor> PrepareListOfMockDoctors()
+    public static List<Doctor> PrepareListOfMockDoctors()
     {
         List<Title> mockTitles = PrepareListOfMockTitles();
         List<Specialty> mockSpecalties = PrepareListOfMockSpecialties();

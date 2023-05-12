@@ -15,4 +15,4 @@ namespace MABS.Application.Common.Middleware.Exceptions
             return JsonSerializer.Serialize(this);
         }
     }
-}
+}                

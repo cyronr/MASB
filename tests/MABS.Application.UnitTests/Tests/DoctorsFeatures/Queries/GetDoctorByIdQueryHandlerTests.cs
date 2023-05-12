@@ -20,21 +20,13 @@ public class GetDoctorByIdQueryHandlerTests
     }
 
     [Fact]
-    public async Task CheckReturnType()
-    {
-        var handler = new GetDoctorByIdQueryHandler(_logger, _mapper, _mockDoctorRepsitory.Object);
-        var result = await handler.Handle(new GetDoctorByIdQuery(Guid.Parse(Consts.Active_Doctor_UUID)), CancellationToken.None);
-
-        result.Should().BeOfType<DoctorDto>();
-    }
-
-    [Fact]
-    public async Task ShouldFind()
+    public async Task ShouldReturnDoctorDto()
     {
         var handler = new GetDoctorByIdQueryHandler(_logger, _mapper, _mockDoctorRepsitory.Object);
         var result = await handler.Handle(new GetDoctorByIdQuery(Guid.Parse(Consts.Active_Doctor_UUID)), CancellationToken.None);
 
         result.Should().NotBeNull();
+        result.Should().BeOfType<DoctorDto>();
     }
 
     [Fact]
