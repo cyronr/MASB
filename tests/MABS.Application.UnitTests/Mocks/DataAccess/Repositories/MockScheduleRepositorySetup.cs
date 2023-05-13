@@ -23,19 +23,23 @@ public static class MockScheduleRepositorySetup
         mockRepo.Setup(r => r.GetByDoctorAsync(It.IsAny<Doctor>()))
             .ReturnsAsync((Doctor doctor) =>
             {
-                return mockSchedules.Where(d => d.Doctor.Id == doctor.Id && d.StatusId != ScheduleStatus.Status.Deleted).ToList();
+                var mockDoctorSchedules = mockSchedules.Where(s => s.Doctor is not null);
+                return mockDoctorSchedules.Where(d => d.Doctor.Id == doctor.Id && d.StatusId != ScheduleStatus.Status.Deleted).ToList();
             });
 
         mockRepo.Setup(r => r.GetByAddressAsync(It.IsAny<Address>()))
             .ReturnsAsync((Address address) =>
             {
-                return mockSchedules.Where(d => d.Address.Id == address.Id && d.StatusId != ScheduleStatus.Status.Deleted).ToList();
+                var mockAddrressSchedules = mockSchedules.Where(s => s.Address is not null);
+                return mockAddrressSchedules.Where(d => d.Address.Id == address.Id && d.StatusId != ScheduleStatus.Status.Deleted).ToList();
             });
 
         mockRepo.Setup(r => r.GetByDoctorAndAddressAsync(It.IsAny<Doctor>(), It.IsAny<Address>()))
             .ReturnsAsync((Doctor doctor, Address address) =>
             {
-                return mockSchedules.Where(d =>
+                var mockAddrressAndDoctorsSchedules = mockSchedules.Where(s => s.Address is not null && s.Doctor is not null);
+
+                return mockAddrressAndDoctorsSchedules.Where(d =>
                     d.Doctor.Id == doctor.Id &&
                     d.Address.Id == address.Id && 
                     d.StatusId != ScheduleStatus.Status.Deleted

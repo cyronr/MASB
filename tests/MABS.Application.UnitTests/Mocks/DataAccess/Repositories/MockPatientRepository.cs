@@ -13,14 +13,12 @@ public static class MockPatientRepository
 
     public static List<Patient> PrepareListOfMockPatients()
     {
-        var patientProfile = MockProfileRepository.PrepareListOfMockProfiles().Single(p => p.TypeId == ProfileType.Type.Patient);
-
         return new List<Patient>
         {
             new Patient
             {
                 Id = 1,
-                UUID = Guid.NewGuid(),
+                UUID = Guid.Parse(Consts.Active_Patient_UUID),
                 StatusId = PatientStatus.Status.Active,
                 Status = new PatientStatus
                 {
@@ -28,9 +26,11 @@ public static class MockPatientRepository
                     Name = "Active"
                 },
                 Firstname = "Mock_Firstname_1",
-                Lastname = "Mock_Lastname_1",   
-                Profile = patientProfile,
-                ProfileId = patientProfile.Id
+                Lastname = "Mock_Lastname_1",
+                Profile = new Profile
+                {
+                    Email = "mock@mock.mabs"
+                }
             },
             new Patient
             {
@@ -43,9 +43,7 @@ public static class MockPatientRepository
                     Name = "Active"
                 },
                 Firstname = "Mock_Firstname_2",
-                Lastname = "Mock_Lastname_2",
-                Profile = patientProfile,
-                ProfileId = patientProfile.Id
+                Lastname = "Mock_Lastname_2"
             },
             new Patient
             {
@@ -58,9 +56,7 @@ public static class MockPatientRepository
                     Name = "Active"
                 },
                 Firstname = "Mock_Firstname_3",
-                Lastname = "Mock_Lastname_3",
-                Profile = patientProfile,
-                ProfileId = patientProfile.Id
+                Lastname = "Mock_Lastname_3"
             }
         };
     }

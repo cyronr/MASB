@@ -21,25 +21,30 @@ public static class MockAppointmentRepositorySetup
         mockRepo.Setup(r => r.GetByPatientAsync(It.IsAny<Patient>()))
             .ReturnsAsync((Patient patient) =>
             {
-                return mockAppointments.Where(a => a.Patient.Id == patient.Id).ToList();
+                var patAppointments = mockAppointments.Where(a => a.Patient is not null);
+                return patAppointments.Where(a => a.Patient.Id == patient.Id).ToList();
             });
 
         mockRepo.Setup(r => r.GetByDoctorAsync(It.IsAny<Doctor>()))
             .ReturnsAsync((Doctor doctor) =>
             {
-                return mockAppointments.Where(a => a.Schedule.Doctor.Id == doctor.Id).ToList();
+                var docAppointments = mockAppointments.Where(a => a.Schedule is not null);
+                return docAppointments.Where(a => a.Schedule.Doctor.Id == doctor.Id).ToList();
             });
 
         mockRepo.Setup(r => r.GetByAddressAsync(It.IsAny<Address>()))
             .ReturnsAsync((Address address) =>
             {
-                return mockAppointments.Where(a => a.Schedule.Address.Id == address.Id).ToList();
+                var addressAppointments = mockAppointments.Where(a => a.Schedule is not null);
+                return addressAppointments.Where(a => a.Schedule.Address.Id == address.Id).ToList();
             });
 
         mockRepo.Setup(r => r.GetByDoctorAndAddressAsync(It.IsAny<Doctor>(), It.IsAny<Address>()))
             .ReturnsAsync((Doctor doctor, Address address) =>
             {
-                return mockAppointments.Where(a => 
+                var addressAndDoctorsAppointments = mockAppointments.Where(a => a.Schedule is not null);
+
+                return addressAndDoctorsAppointments.Where(a => 
                     a.Schedule.Doctor.Id == doctor.Id &&
                     a.Schedule.Address.Id == address.Id
                 ).ToList();
@@ -48,7 +53,9 @@ public static class MockAppointmentRepositorySetup
         mockRepo.Setup(r => r.GetByScheduleAsync(It.IsAny<Schedule>()))
             .ReturnsAsync((Schedule schedule) =>
             {
-                return mockAppointments.Where(a => a.Schedule.Id == schedule.Id).ToList();
+                var scheduleAppointments = mockAppointments.Where(a => a.Schedule is not null);
+
+                return scheduleAppointments.Where(a => a.Schedule.Id == schedule.Id).ToList();
             });
 
 

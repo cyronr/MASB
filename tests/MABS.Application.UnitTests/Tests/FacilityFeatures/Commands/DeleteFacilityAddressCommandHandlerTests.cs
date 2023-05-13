@@ -40,10 +40,19 @@ public class DeleteFacilityAddressCommandHandlerTests
     [Fact]
     public async Task DeleteAndValidateOutput()
     {
-        var command = new DeleteFacilityAddressCommand(Guid.Parse(Consts.Active_Facility_UUID), Guid.Parse(Consts.Active_Address_UUID));
+        var command = new DeleteFacilityAddressCommand(Guid.Parse(Consts.Active_Facility_UUID), Guid.Parse(Consts.Active_AddressWithoutSchedules_UUID));
         var result = await _handler.Handle(command, CancellationToken.None);
 
         result.Should().BeOfType<FacilityDto>();
+    }
+
+    [Fact]
+    public async Task DeleteAddressWithSchedules()
+    {
+        var command = new DeleteFacilityAddressCommand(Guid.Parse(Consts.Active_Facility_UUID), Guid.Parse(Consts.Active_Address_UUID));
+
+        Func<Task> act = async () => { await _handler.Handle(command, CancellationToken.None); };
+        await act.Should().ThrowAsync<ConflictException>();
     }
 
     [Fact]

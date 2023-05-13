@@ -10,7 +10,8 @@ global using MABS.Domain.Models.DoctorModels;
 global using Profile = MABS.Domain.Models.ProfileModels.Profile;
 global using MABS.Domain.Models.ProfileModels;
 global using MABS.Domain.Models.FacilityModels;
-
+global using MABS.Domain.Models.ScheduleModels;
+global using MABS.Domain.Models.AppointmentModels;
 
 global using MABS.Application.Common.AppProfile;
 global using MABS.Application.Common.Mapping;

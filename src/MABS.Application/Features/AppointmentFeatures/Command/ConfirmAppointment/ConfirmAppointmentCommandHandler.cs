@@ -9,6 +9,7 @@ using MABS.Application.ModelsExtensions.DoctorModelsExtensions;
 using MABS.Application.ModelsExtensions.FacilityModelsExtensions;
 using MABS.Application.ModelsExtensions.PatientModelsExtensions;
 using MABS.Application.ModelsExtensions.ScheduleModelsExtensions;
+using MABS.Domain.Exceptions;
 using MABS.Domain.Models.AppointmentModels;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -51,6 +52,15 @@ public class ConfirmAppointmentCommandHandler : IRequestHandler<ConfirmAppointme
 
         _logger.LogDebug($"Fetching appointment with id = {command.AppointmentId}.");
         var appointment = await new Appointment().GetByUUIDAsync(_appointmentRepository, command.AppointmentId);
+
+        if (appointment.StatusId == AppointmentStatus.Status.Confirmed)
+            throw new ConflictException("Wizyta została już potwierdzona.");
+
+        if (appointment.StatusId == AppointmentStatus.Status.Cancelled)
+            throw new ConflictException("Wizyta została anulowana.");
+
+        if (appointment.ConfirmationCode != command.ConfirmationCode)
+            throw new ConflictException("Nieporawny kod potwierdzający.");
 
         using (var tran = _db.BeginTransaction())
         {

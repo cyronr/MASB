@@ -109,7 +109,7 @@ public static class MockFacilityRepository
             new Address
             {
                 Id = 2,
-                UUID = Guid.NewGuid(),
+                UUID = Guid.Parse(Consts.Active_AddressWithoutSchedules_UUID),
                 StatusId = AddressStatus.Status.Active,
                 Status = new AddressStatus
                 {

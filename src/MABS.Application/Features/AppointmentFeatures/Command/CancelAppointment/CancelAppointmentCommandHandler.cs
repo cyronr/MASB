@@ -9,6 +9,7 @@ using MABS.Application.ModelsExtensions.DoctorModelsExtensions;
 using MABS.Application.ModelsExtensions.FacilityModelsExtensions;
 using MABS.Application.ModelsExtensions.PatientModelsExtensions;
 using MABS.Application.ModelsExtensions.ScheduleModelsExtensions;
+using MABS.Domain.Exceptions;
 using MABS.Domain.Models.AppointmentModels;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -51,6 +52,9 @@ public class CancelAppointmentCommandHandler : IRequestHandler<CancelAppointment
 
         _logger.LogDebug($"Fetching appointment with id = {command.AppointmentId}.");
         var appointment = await new Appointment().GetByUUIDAsync(_appointmentRepository, command.AppointmentId);
+
+        if (appointment.StatusId == AppointmentStatus.Status.Cancelled)
+            throw new ConflictException("Wizyta jest już anulowana.");
 
         using (var tran = _db.BeginTransaction())
         {

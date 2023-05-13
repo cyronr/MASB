@@ -88,7 +88,8 @@ public class MockProfileRepository
                     Name = "Patient"
                 },
                 Email = "mock_patient@mabs.com",
-                PhoneNumber = "123456789"
+                PhoneNumber = "123456789",
+                Patient = MockPatientRepository.PrepareListOfMockPatients().Single(f => f.UUID == Guid.Parse(Consts.Active_Patient_UUID))
             }
         };
     }
